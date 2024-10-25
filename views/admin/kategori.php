@@ -289,46 +289,38 @@ $email = isset($_SESSION['email']) ? htmlspecialchars($_SESSION['email']) : 'gue
 
 
                   <!-- Modal Ubah -->
-                  <div
-                    class="modal fade"
-                    id="editRowModal"
-                    tabindex="-1"
-                    role="dialog"
-                    aria-hidden="true">
+                  <div class="modal fade" id="editRowModal" tabindex="-1" role="dialog" aria-hidden="true">
                     <div class="modal-dialog" role="document">
                       <div class="modal-content">
                         <div class="modal-header border-0">
                           <h5 class="modal-title">
                             <span class="fw-mediumbold"> Edit Kategori</span>
                           </h5>
-                          <button
-                            type="button"
-                            class="close"
-                            data-bs-dismiss="modal"
-                            aria-label="Close">
+                          <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                           </button>
                         </div>
                         <div class="modal-body">
-                          <form>
+                          <form id="editKategoriForm">
+                            <input type="hidden" name="kategori_id" id="edit_kategori_id" />
                             <div class="row">
                               <div class="col-sm-12">
                                 <div class="form-group form-group-default">
                                   <label>Nama Kategori Divisi</label>
-                                  <input
-                                    id=""
-                                    type="text"
-                                    class="form-control"
-                                    placeholder="fill name" />
+                                  <input id="edit_nama_divisi" type="text" name="nama_divisi" class="form-control" placeholder="Isi Nama Divisi" required />
                                 </div>
                               </div>
                               <div class="col-md-12">
                                 <div class="form-group form-group-default">
-                                  <label for="role">Status</label>
-                                  <select id="role" class="form-control">
-                                    <option value="">Select Status</option>
-                                    <option value="admin">Plt</option>
-                                    <option value="manager">Definitif</option>
+                                  <label for="edit_status">Status</label>
+                                  <select id="edit_status" name="status" class="form-control" required>
+                                    <option value="">Pilih Status</option>
+                                    <?php
+                                    $statusOptions = fetchStatusOptions($koneksi);
+                                    foreach ($statusOptions as $status) {
+                                      echo "<option value='" . htmlspecialchars($status) . "'>" . htmlspecialchars($status) . "</option>";
+                                    }
+                                    ?>
                                   </select>
                                 </div>
                               </div>
@@ -336,65 +328,53 @@ $email = isset($_SESSION['email']) ? htmlspecialchars($_SESSION['email']) : 'gue
                           </form>
                         </div>
                         <div class="modal-footer border-0">
-                          <button
-                            type="button"
-                            id=""
-                            class="btn btn-primary">
-                            Simpan
-                          </button>
-                          <button
-                            type="button"
-                            class="btn btn-danger"
-                            data-bs-dismiss="modal">
-                            Batal
-                          </button>
+                          <button type="submit" id="saveEditKategori" class="btn btn-primary" onclick="updateKategori()">Simpan</button>
+                          <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Batal</button>
                         </div>
                       </div>
                     </div>
                   </div>
 
 
-                  <?php
 
+                  <?php
                   // Function to fetch all categories from the database
                   function fetchCategories($koneksi)
                   {
-                    // Prepare the SQL query to select categories and count the number of users
-                    $sql = "SELECT kp.nama_divisi, kp.status, COUNT(u.user_id) AS jumlah_user
+                    $sql = "SELECT kp.kategori_id, kp.nama_divisi, kp.status, COUNT(u.user_id) AS jumlah_user
             FROM kategori_program kp
             LEFT JOIN user u ON kp.kategori_id = u.kategori_id
             GROUP BY kp.kategori_id";
 
                     $result = $koneksi->query($sql);
 
-                    // Check if there are categories in the database
                     if ($result->num_rows > 0) {
-                      // Loop through each category and output the data into table rows
                       while ($row = $result->fetch_assoc()) {
                         echo "<tr>
-                <td>" . htmlspecialchars($row['nama_divisi']) . "</td>
-                <td>" . htmlspecialchars($row['status']) . "</td>
-                <td>" . htmlspecialchars($row['jumlah_user']) . "</td>
-                <td>
-                    <div class='form-button-action'>
-                        <button class='btn btn-warning me-2 btn-round' style='width: 100px;' data-bs-toggle='modal'
-                                data-bs-target='#editRowModal' onclick='populateEditModal(" . json_encode($row) . ")'>
-                            <i class='fa fa-edit'></i> Ubah
-                        </button>
-                        <button class='btn btn-danger btn-round' style='width: 100px'>
-                            <i class='fa fa-trash'></i> Hapus
-                        </button>
-                    </div>
-                </td>
-            </tr>";
+                    <td>" . htmlspecialchars($row['nama_divisi']) . "</td>
+                    <td>" . htmlspecialchars($row['status']) . "</td>
+                    <td>" . htmlspecialchars($row['jumlah_user']) . "</td>
+                    <td>
+                        <div class='form-button-action'>
+                            <button class='btn btn-warning me-2 btn-round' style='width: 100px;' 
+                                    data-bs-toggle='modal' data-bs-target='#editRowModal' 
+                                    onclick='populateEditModal(" . json_encode($row) . ")'>
+                                <i class='fa fa-edit'></i> Ubah
+                            </button>
+                            <button class='btn btn-danger btn-round' style='width: 100px'>
+                                <i class='fa fa-trash'></i> Hapus
+                            </button>
+                        </div>
+                    </td>
+                </tr>";
                       }
                     } else {
                       echo "<tr><td colspan='4'>No categories found</td></tr>";
                     }
                   }
+
                   ?>
 
-                  <!-- HTML Table Code -->
                   <!-- HTML Table Code -->
                   <div class="table-responsive">
                     <table id="add-row" class="display table table-striped table-hover">
@@ -511,6 +491,65 @@ $email = isset($_SESSION['email']) ? htmlspecialchars($_SESSION['email']) : 'gue
       });
     });
   </script>
+
+  <script>
+    $(document).ready(function() {
+      $('#addKategoriForm').submit(function(e) {
+        e.preventDefault(); // Prevent form from submitting the usual way
+
+        $.ajax({
+          url: '../../models/CategoryModel.php', // File backend untuk handle insert
+          type: 'POST',
+          data: $(this).serialize(), // Kirim data form
+          success: function(response) {
+            if (response === 'success') {
+              alert('Kategori berhasil ditambah');
+              location.reload(); // Reload halaman untuk memperbarui tabel
+            } else {
+              alert('Gagal menambah kategori: ' + response); // Tampilkan error dari server
+            }
+          },
+          error: function(xhr, status, error) {
+            alert('AJAX error: ' + error); // Menampilkan error jika terjadi kesalahan dalam proses AJAX
+          }
+        });
+      });
+    });
+  </script>
+
+  <script>
+    function populateEditModal(data) {
+      $('#edit_kategori_id').val(data.kategori_id);
+      $('#edit_nama_divisi').val(data.nama_divisi);
+      $('#edit_status').val(data.status); // Pastikan ini diisi dengan benar
+    }
+
+    function updateKategori() {
+      var kategori_id = $('#edit_kategori_id').val();
+      var nama_divisi = $('#edit_nama_divisi').val();
+      var status = $('#edit_status').val();
+
+      $.ajax({
+        url: 'update_kategori.php', // Path ke file PHP untuk update
+        type: 'POST',
+        data: {
+          kategori_id: kategori_id,
+          nama_divisi: nama_divisi,
+          status: status
+        },
+        success: function(response) {
+          if (response == 'success') {
+            alert("Kategori berhasil diperbarui!");
+            $('#editRowModal').modal('hide'); // Tutup modal setelah berhasil diubah
+            fetchCategories(); // Panggil fungsi untuk mengambil data terbaru
+          } else {
+            alert("Gagal memperbarui kategori!");
+          }
+        }
+      });
+    }
+  </script>
+
 
 </body>
 
