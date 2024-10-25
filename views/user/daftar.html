@@ -14,7 +14,6 @@
     />
     <link rel="stylesheet" href="/assets/css/style.css">
 
-
 <!-- Fonts and icons -->
 <script src="/assets/js/plugin/webfont/webfont.min.js"></script>
 <script>
@@ -31,7 +30,7 @@
 </script>
 
 <!-- Load Font Awesome 6 -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
 
 <!-- CSS Files -->
 <link rel="stylesheet" href="/assets/css/bootstrap.min.css" />
@@ -101,23 +100,16 @@
                   <p>Dashboard</p>
                 </a>
               </li>
-
-              <li class="nav-item">
-                <a href="users.html">
-                  <i class="fas fa-user-group"></i>
-                  <p>Users</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="kategori.html">
-                  <i class="fas fa-border-all"></i>
-                  <p>Kategori Program</p>
-                </a>
-              </li>
-              <li class="nav-item  active">
+              <li class="nav-item active">
                 <a href="daftar.html">
                   <i class="fa-sharp fa-solid fa-clipboard-list"></i>
                   <p>Daftar KAK</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="draft.html">
+                  <i class="fa-solid fa-file-pen"></i>
+                  <p>Draft KAK</p>
                 </a>
               </li>
               <li class="nav-item">
@@ -205,7 +197,7 @@
                       </li>
                       <li>
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="faq.html">FAQ</a>
+                        <a class="dropdown-item" href="faq.php">FAQ</a>
                       </li>
                     </div>
                   </ul>
@@ -247,8 +239,8 @@
                   </div>
                   <div class="card-body">
 
-                    <!-- Modal Ubah -->
-                    <div class="modal fade" id="editRowModal" tabindex="-1" role="dialog" aria-hidden="true">
+                    <!-- Modal Detail -->
+                    <div class="modal fade" id="detailRowModal" tabindex="-1" role="dialog" aria-hidden="true">
                         <div class="modal-dialog" role="document">
                           <div class="modal-content">
                             <div class="modal-header border-0">
@@ -389,10 +381,7 @@
 
                     <!-- START TABLE -->
                     <div class="table-responsive">
-                      <table
-                        id="add-row"
-                        class="display table table-striped table-hover"
-                      >
+                      <table id="add-row" class="display table table-striped table-hover">
                         <thead>
                           <tr>
                             <th>No Doc</th>
@@ -427,11 +416,59 @@
                             <td>15-02-2024</td>
                             <td>
                               <div class="form-button-action">
-                                <button class="btn btn-dark btn-round me-2" style="width: 100px;" data-bs-toggle="modal"
-                                data-bs-target="#editRowModal">
-                                    <i class="fas fa-eye"></i> Detail
+                                <button
+                                  class="btn btn-dark btn-round me-2"
+                                  style="width: 100px;"
+                                  data-bs-toggle="modal"
+                                  data-bs-target="#detailRowModal"
+                                >
+                                  <i class="fas fa-eye"></i> Detail
                                 </button>
-                            </div>
+                              </div>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td>KAK-002/2024</td>
+                            <td>Pembelian server baru</td>
+                            <td>Divisi IT</td>
+                            <td>
+                              <span class="status status-pending">Pending</span>
+                            </td>
+                            <td>10-03-2024</td>
+                            <td>12-03-2024</td>
+                            <td>
+                              <div class="form-button-action">
+                                <button
+                                  class="btn btn-dark btn-round me-2"
+                                  style="width: 100px;"
+                                  data-bs-toggle="modal"
+                                  data-bs-target="#detailRowModal"
+                                >
+                                  <i class="fas fa-eye"></i> Detail
+                                </button>
+                              </div>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td>KAK-003/2024</td>
+                            <td>Perbaikan jaringan kantor</td>
+                            <td>Divisi Infrastruktur</td>
+                            <td>
+                              <span class="status status-ditolak">Ditolak</span>
+                            </td>
+                            <td>01-04-2024</td>
+                            <td>05-04-2024</td>
+                            <td>
+                              <div class="form-button-action">
+                                <button
+                                  class="btn btn-dark btn-round me-2"
+                                  style="width: 100px;"
+                                  data-bs-toggle="modal"
+                                  data-bs-target="#detailRowModal"
+                                >
+                                  <i class="fas fa-eye"></i> Detail
+                                </button>
+                              </div>
                             </td>
                           </tr>
                         </tbody>
