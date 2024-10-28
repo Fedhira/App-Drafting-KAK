@@ -10,6 +10,11 @@
   <link rel="icon" href="assets/img/kaiadmin/favicon.ico" type="image/x-icon" />
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
 
+  <!-- SweetAlert -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
   <style>
     .container {
       width: 100%;
@@ -119,6 +124,31 @@
       this.classList.toggle("fa-eye-slash");
     });
   </script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const status = urlParams.get('status');
+
+      if (status === 'success') {
+        Swal.fire({
+          icon: 'success',
+          title: 'Login Berhasil!',
+          text: 'Anda berhasil masuk.',
+          confirmButtonText: 'OK'
+        });
+      } else if (status === 'error') {
+        Swal.fire({
+          icon: 'error',
+          title: 'Login Gagal!',
+          text: 'Email atau password salah. Silakan coba lagi.',
+          confirmButtonText: 'OK'
+        });
+      }
+    });
+  </script>
+
+
 </body>
 
 </html>

@@ -34,6 +34,9 @@ require 'controllers/cek.php';
     });
   </script>
 
+  <!-- Include SweetAlert if not already included -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
   <!-- Load Font Awesome 6 -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
@@ -111,11 +114,12 @@ require 'controllers/cek.php';
               </a>
             </li>
             <li class="nav-item">
-              <a href="views/logout.php">
+              <a href="#" onclick="logoutConfirm(event)">
                 <i class="fas fa-right-from-bracket"></i>
                 <p>Logout</p>
               </a>
             </li>
+
           </ul>
         </div>
       </div>
@@ -363,6 +367,25 @@ require 'controllers/cek.php';
 
   <!-- Kaiadmin JS -->
   <script src="assets/js/kaiadmin.min.js"></script>
+
+  <script>
+    function logoutConfirm(event) {
+      event.preventDefault(); // Prevent default link behavior
+      Swal.fire({
+        title: 'Are you sure?',
+        text: "Do you really want to logout?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, logout!'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          window.location.href = 'views/logout.php'; // Redirect to logout
+        }
+      });
+    }
+  </script>
 
 </body>
 

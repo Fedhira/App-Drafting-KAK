@@ -37,6 +37,10 @@ require '../cek.php';
     });
   </script>
 
+  <!-- SweetAlert -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
   <!-- Load Font Awesome 6 -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
@@ -114,7 +118,7 @@ require '../cek.php';
               </a>
             </li>
             <li class="nav-item">
-              <a href="../logout.php">
+              <a href="#" onclick="logoutConfirm(event)">
                 <i class="fas fa-right-from-bracket"></i>
                 <p>Logout</p>
               </a>
@@ -275,16 +279,19 @@ require '../cek.php';
               <div class="card-header">
                 <div class="d-flex align-items-center">
                   <!-- Date Picker From and To -->
-                  <div class="d-flex">
-                    <div class="input-group me-4">
-                      <span class="input-group-text">From</span>
-                      <input type="date" class="form-control" placeholder="From" />
+                  <form method="GET" action="">
+                    <div class="d-flex">
+                      <div class="input-group me-4">
+                        <span class="input-group-text">From</span>
+                        <input type="date" class="form-control" name="fromDate" />
+                      </div>
+                      <div class="input-group me-4">
+                        <span class="input-group-text">To</span>
+                        <input type="date" class="form-control" name="toDate" />
+                      </div>
+                      <button type="submit" class="btn btn-primary btn-round  me-2" style="width: 167px;">Filter</button>
                     </div>
-                    <div class="input-group me-4">
-                      <span class="input-group-text">To</span>
-                      <input type="date" class="form-control" placeholder="To" />
-                    </div>
-                  </div>
+                  </form>
                 </div>
               </div>
               <div class="card-body">
@@ -420,6 +427,27 @@ require '../cek.php';
         },
       });
     });
+  </script>
+
+  <script>
+    function logoutConfirm(event) {
+      event.preventDefault(); // Prevents the default link action
+
+      Swal.fire({
+        title: 'Are you sure you want to logout?',
+        text: "You will be logged out of the system.",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, logout'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          // Redirect to logout.php if confirmed
+          window.location.href = '../../login.php';
+        }
+      });
+    }
   </script>
 </body>
 

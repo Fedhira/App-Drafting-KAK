@@ -36,6 +36,10 @@ require '../cek.php';
     });
   </script>
 
+  <!-- SweetAlert -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
   <!-- Load Font Awesome 6 -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
@@ -132,7 +136,7 @@ require '../cek.php';
               </a>
             </li>
             <li class="nav-item">
-              <a href="../logout.php">
+              <a href="#" onclick="logoutConfirm(event)">
                 <i class="fas fa-right-from-bracket"></i>
                 <p>Logout</p>
               </a>
@@ -370,14 +374,9 @@ require '../cek.php';
                                     onclick='populateEditModal(" . json_encode($row) . ")'>
                                 <i class='fa fa-edit'></i> Ubah
                             </button>
-                            <form method='POST' action='../../models/CategoryModel.php' style='display:inline;'>
-                            <input type='hidden' name='kategori_id' value='" . $row['kategori_id'] . "' />
-                            <input type='hidden' name='kategori_id' value='" . $row['kategori_id'] . "' />
-                            <input type='hidden' name='action' value='delete' /> <!-- Action field -->
-                            <button class='btn btn-danger btn-round' style='width: 100px' onclick='return confirm(\"Are you sure you want to delete this user?\");'>
+                            <button class='btn btn-danger btn-round' style='width: 100px;' 
+                                    onclick='confirmDeleteKategori(" . $row['kategori_id'] . ")'>
                                 <i class='fa fa-trash'></i> Hapus
-                            </button>
-                        </form>
                         </div>
                     </td>
                 </tr>";
@@ -536,6 +535,103 @@ require '../cek.php';
       document.getElementById('edit_kategori_id').value = data.kategori_id;
       document.getElementById('edit_nama_divisi').value = data.nama_divisi;
       document.getElementById('edit_status').value = data.status;
+    }
+  </script>
+
+  <script>
+    function confirmDeleteKategori(kategori_id) {
+      Swal.fire({
+        title: 'Are you sure?',
+        text: "Do you really want to delete this category?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          // Lakukan form submit untuk hapus data
+          let form = document.createElement('form');
+          form.method = 'POST';
+          form.action = '../../models/CategoryModel.php';
+
+          let inputAction = document.createElement('input');
+          inputAction.type = 'hidden';
+          inputAction.name = 'action';
+          inputAction.value = 'delete';
+          form.appendChild(inputAction);
+
+          let inputKategoriId = document.createElement('input');
+          inputKategoriId.type = 'hidden';
+          inputKategoriId.name = 'kategori_id';
+          inputKategoriId.value = kategori_id;
+          form.appendChild(inputKategoriId);
+
+          document.body.appendChild(form);
+          form.submit();
+        }
+      });
+    }
+  </script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const status = urlParams.get('status');
+      const action = urlParams.get('action');
+
+      if (status === 'success') {
+        if (action === 'add') {
+          Swal.fire({
+            icon: 'success',
+            title: 'Berhasil!',
+            text: 'Kategori berhasil ditambahkan.',
+            confirmButtonText: 'OK'
+          });
+        } else if (action === 'update') {
+          Swal.fire({
+            icon: 'success',
+            title: 'Berhasil!',
+            text: 'Kategori berhasil diupdate.',
+            confirmButtonText: 'OK'
+          });
+        } else if (action === 'delete') {
+          Swal.fire({
+            icon: 'success',
+            title: 'Berhasil!',
+            text: 'Kategori berhasil dihapus.',
+            confirmButtonText: 'OK'
+          });
+        }
+      } else if (status === 'error') {
+        Swal.fire({
+          icon: 'error',
+          title: 'Gagal!',
+          text: 'Terjadi kesalahan saat memproses permintaan.',
+          confirmButtonText: 'OK'
+        });
+      }
+    });
+  </script>
+
+  <script>
+    function logoutConfirm(event) {
+      event.preventDefault(); // Prevents the default link action
+
+      Swal.fire({
+        title: 'Are you sure you want to logout?',
+        text: "You will be logged out of the system.",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, logout'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          // Redirect to logout.php if confirmed
+          window.location.href = '../../login.php';
+        }
+      });
     }
   </script>
 

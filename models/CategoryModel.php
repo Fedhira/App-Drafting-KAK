@@ -2,6 +2,7 @@
 include $_SERVER['DOCUMENT_ROOT'] . '/App-Drafting-KAK/database/config.php';
 include $_SERVER['DOCUMENT_ROOT'] . '/App-Drafting-KAK/controllers/UserController.php';
 
+
 // Fungsi untuk menambahkan kategori
 function addKategori($koneksi, $nama_divisi, $status)
 {
@@ -13,9 +14,11 @@ function addKategori($koneksi, $nama_divisi, $status)
     $stmt->bind_param("ss", $nama_divisi, $status);
 
     if ($stmt->execute()) {
-        return true;
+        header("Location: ../views/admin/kategori.php?status=success&action=add");
+        exit();
     } else {
-        return false;
+        header("Location: ../views/admin/kategori.php?status=error&action=add");
+        exit();
     }
 
     $stmt->close();
@@ -32,9 +35,11 @@ function updateKategori($koneksi, $kategori_id, $nama_divisi, $status)
     $stmt->bind_param("ssi", $nama_divisi, $status, $kategori_id);
 
     if ($stmt->execute()) {
-        return true;
+        header("Location: ../views/admin/kategori.php?status=success&action=update");
+        exit();
     } else {
-        return false;
+        header("Location: ../views/admin/kategori.php?status=error&action=update");
+        exit();
     }
 
     $stmt->close();
@@ -51,9 +56,11 @@ function deleteKategori($koneksi, $kategori_id)
     $stmt->bind_param("i", $kategori_id);
 
     if ($stmt->execute()) {
-        return true;
+        header("Location: ../views/admin/kategori.php?status=success&action=delete");
+        exit();
     } else {
-        return false;
+        header("Location: ../views/admin/kategori.php?status=error&action=delete");
+        exit();
     }
 
     $stmt->close();
@@ -68,48 +75,30 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $kategori_id = $_POST['kategori_id'] ?? null;
 
         // Tambah Kategori
-        if ($action == 'add') {
-            if ($nama_divisi && $status) {
-                if (addKategori($koneksi, $nama_divisi, $status)) {
-                    header("Location: ../views/admin/kategori.php");
-                    exit();
-                } else {
-                    echo "<script>alert('Gagal menambahkan kategori!'); window.location.href='../views/admin/kategori.php';</script>";
-                }
-            } else {
-                echo "<script>alert('Semua field harus diisi!'); window.location.href='../views/admin/kategori.php';</script>";
-            }
+        if ($action == 'add' && $nama_divisi && $status) {
+            addKategori($koneksi, $nama_divisi, $status);
         }
 
         // Update Kategori
-        elseif ($action == 'update' && $kategori_id) {
-            if ($nama_divisi && $status) {
-                if (updateKategori($koneksi, $kategori_id, $nama_divisi, $status)) {
-                    header("Location: ../views/admin/kategori.php");
-                    exit();
-                } else {
-                    echo "<script>alert('Gagal mengupdate kategori!'); window.location.href='../views/admin/kategori.php';</script>";
-                }
-            } else {
-                echo "<script>alert('Semua field harus diisi!'); window.location.href='../views/admin/kategori.php';</script>";
-            }
+        elseif ($action == 'update' && $kategori_id && $nama_divisi && $status) {
+            updateKategori($koneksi, $kategori_id, $nama_divisi, $status);
         }
 
         // Hapus Kategori
         elseif ($action == 'delete' && $kategori_id) {
-            if (deleteKategori($koneksi, $kategori_id)) {
-                header("Location: ../views/admin/kategori.php");
-                exit();
-            } else {
-                echo "<script>alert('Gagal menghapus kategori!'); window.location.href='../views/admin/kategori.php';</script>";
-            }
+            deleteKategori($koneksi, $kategori_id);
+        } else {
+            header("Location: ../views/admin/kategori.php?status=error&action=$action");
+            exit();
         }
     } else {
-        echo "<script>alert('Aksi tidak valid!'); window.location.href='../views/admin/kategori.php';</script>";
+        header("Location: ../views/admin/kategori.php?status=error&action=unknown");
+        exit();
     }
 
     $koneksi->close();
 }
+
 
 // Fungsi untuk mengambil status yang tersedia di tabel kategori_program
 function fetchStatusOptions($koneksi)

@@ -35,6 +35,11 @@ require '../cek.php';
     });
   </script>
 
+  <!-- SweetAlert -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
   <!-- Load Font Awesome 6 -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
@@ -131,7 +136,7 @@ require '../cek.php';
               </a>
             </li>
             <li class="nav-item">
-              <a href="../logout.php">
+              <a href="#" onclick="logoutConfirm(event)">
                 <i class="fas fa-right-from-bracket"></i>
                 <p>Logout</p>
               </a>
@@ -205,7 +210,7 @@ require '../cek.php';
                     </li>
                     <li>
                       <div class="dropdown-divider"></div>
-                      <a class="dropdown-item" href="faq.html">FAQ</a>
+                      <a class="dropdown-item" href="faq.php">FAQ</a>
                     </li>
                   </div>
                 </ul>
@@ -245,7 +250,7 @@ require '../cek.php';
                           <span class="input-group-text">To</span>
                           <input type="date" class="form-control" name="toDate" />
                         </div>
-                        <button type="submit" class="btn btn-primary">Filter</button>
+                        <button type="submit" class="btn btn-primary btn-round  me-2" style="width: 167px;">Filter</button>
                       </div>
                     </form>
                   </div>
@@ -287,14 +292,13 @@ require '../cek.php';
                                   <select id="role" name="role" class="form-control" required>
                                     <option value="">Pilih Role</option>
                                     <?php
-                                    // Fetch all roles from 'users' table
+                                    // Fetch all roles from the database
                                     $roles = mysqli_query($koneksi, "SELECT DISTINCT role FROM user");
 
                                     // Check if the query was successful
                                     if ($roles) {
                                       // Loop through the result and create an option for each role
                                       while ($data = mysqli_fetch_array($roles)) {
-                                        // Assuming 'role' is the field name in your 'users' table
                                         echo "<option value='" . htmlspecialchars($data['role']) . "'>" . htmlspecialchars($data['role']) . "</option>";
                                       }
                                     } else {
@@ -303,6 +307,8 @@ require '../cek.php';
                                     }
                                     ?>
                                   </select>
+
+
                                 </div>
                               </div>
 
@@ -484,30 +490,26 @@ require '../cek.php';
                       // Loop through each user and output the data into table rows
                       while ($row = $result->fetch_assoc()) {
                         echo "<tr>
-                    <td>" . htmlspecialchars($row['username']) . "</td>
-                    <td>" . htmlspecialchars($row['email']) . "</td>
-                    <td>" . htmlspecialchars($row['nik']) . "</td>
-                    <td>" . htmlspecialchars($row['role']) . "</td>
-                    <td>" . htmlspecialchars($row['created_at']) . "</td>
-                    <td>" . htmlspecialchars($row['updated_at']) . "</td>
-                    <td>
-                        <div class='form-button-action'>
-                            <button class='btn btn-warning btn-round me-2' style='width: 100px;' 
-                                    data-bs-toggle='modal' data-bs-target='#editRowModal' 
-                                    onclick='populateEditModal(" . json_encode($row) . ")'>
-                                <i class='fa fa-edit'></i> Ubah
-                            </button>
-                            <form method='POST' action='../../models/UserModel.php' style='display:inline;'>
-                                <input type='hidden' name='user_id' value='" . $row['user_id'] . "' />
-                                <input type='hidden' name='action' value='delete' />
+                        <td>" . htmlspecialchars($row['username']) . "</td>
+                        <td>" . htmlspecialchars($row['email']) . "</td>
+                        <td>" . htmlspecialchars($row['nik']) . "</td>
+                        <td>" . htmlspecialchars($row['role']) . "</td>
+                        <td>" . htmlspecialchars($row['created_at']) . "</td>
+                        <td>" . htmlspecialchars($row['updated_at']) . "</td>
+                        <td>
+                            <div class='form-button-action'>
+                                <button class='btn btn-warning btn-round me-2' style='width: 100px;' 
+                                        data-bs-toggle='modal' data-bs-target='#editRowModal' 
+                                        onclick='populateEditModal(" . json_encode($row) . ")'>
+                                    <i class='fa fa-edit'></i> Ubah
+                                </button>
                                 <button class='btn btn-danger btn-round' style='width: 100px' 
-                                        onclick='return confirm(\"Are you sure you want to delete this user?\");'>
+                                        onclick='confirmDelete(" . $row['user_id'] . ")'>
                                     <i class='fa fa-trash'></i> Hapus
                                 </button>
-                            </form>
-                        </div>
-                    </td>
-                </tr>";
+                            </div>
+                        </td>
+                    </tr>";
                       }
                     } else {
                       echo "<tr><td colspan='7'>No users found</td></tr>";
@@ -651,6 +653,105 @@ require '../cek.php';
       // document.getElementById('editUpdatedAt').value = user.updated_at; // Untuk tampilan konfirmasi
     }
   </script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      window.confirmDelete = function(userId) {
+        Swal.fire({
+          title: 'Are you sure?',
+          text: "You won't be able to revert this!",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            // Submit form for deletion
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = '../../models/UserModel.php';
+
+            const userIdInput = document.createElement('input');
+            userIdInput.type = 'hidden';
+            userIdInput.name = 'user_id';
+            userIdInput.value = userId;
+
+            const actionInput = document.createElement('input');
+            actionInput.type = 'hidden';
+            actionInput.name = 'action';
+            actionInput.value = 'delete';
+
+            form.appendChild(userIdInput);
+            form.appendChild(actionInput);
+
+            document.body.appendChild(form);
+            form.submit();
+          }
+        });
+      };
+    });
+  </script>
+
+  <script>
+    // Cek URL parameter
+    const urlParams = new URLSearchParams(window.location.search);
+    const status = urlParams.get('status');
+    const action = urlParams.get('action');
+
+    // Tampilkan SweetAlert berdasarkan status dan action
+    if (status === 'success' && action === 'add') {
+      Swal.fire({
+        icon: 'success',
+        title: 'Berhasil!',
+        text: 'Data berhasil ditambahkan.',
+        confirmButtonText: 'OK'
+      });
+    } else if (status === 'success' && action === 'update') {
+      Swal.fire({
+        icon: 'success',
+        title: 'Berhasil!',
+        text: 'Data berhasil diubah.',
+        confirmButtonText: 'OK'
+      });
+    } else if (status === 'error' && action === 'add') {
+      Swal.fire({
+        icon: 'error',
+        title: 'Gagal!',
+        text: 'Terjadi kesalahan saat menambahkan data.',
+        confirmButtonText: 'OK'
+      });
+    } else if (status === 'error' && action === 'update') {
+      Swal.fire({
+        icon: 'error',
+        title: 'Gagal!',
+        text: 'Terjadi kesalahan saat mengubah data.',
+        confirmButtonText: 'OK'
+      });
+    }
+  </script>
+
+  <script>
+    function logoutConfirm(event) {
+      event.preventDefault(); // Prevents the default link action
+
+      Swal.fire({
+        title: 'Are you sure you want to logout?',
+        text: "You will be logged out of the system.",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, logout'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          // Redirect to logout.php if confirmed
+          window.location.href = '../../login.php';
+        }
+      });
+    }
+  </script>
+
 
 </body>
 
