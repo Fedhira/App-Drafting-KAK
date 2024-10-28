@@ -1,5 +1,4 @@
 <?php
-session_start();
 
 // Jika belum login, redirect ke login
 if (!isset($_SESSION['log']) || $_SESSION['log'] !== 'True') {

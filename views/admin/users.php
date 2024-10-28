@@ -1,12 +1,7 @@
 <?php
 require '../../database/config.php';
+require '../../controllers/UserController.php';
 require '../cek.php';
-if (session_status() === PHP_SESSION_NONE) {
-  session_start();
-}
-// Check if the user is logged in
-$username = isset($_SESSION['username']) ? htmlspecialchars($_SESSION['username']) : 'Guest';
-$email = isset($_SESSION['email']) ? htmlspecialchars($_SESSION['email']) : 'guest@example.com'; // Default email
 ?>
 
 <!DOCTYPE html>
@@ -124,7 +119,7 @@ $email = isset($_SESSION['email']) ? htmlspecialchars($_SESSION['email']) : 'gue
               </a>
             </li>
             <li class="nav-item">
-              <a href="daftar.html">
+              <a href="daftar.php">
                 <i class="fa-sharp fa-solid fa-clipboard-list"></i>
                 <p>Daftar KAK</p>
               </a>
@@ -292,13 +287,27 @@ $email = isset($_SESSION['email']) ? htmlspecialchars($_SESSION['email']) : 'gue
                                 <div class="form-group form-group-default">
                                   <label for="role">Role</label>
                                   <select id="role" name="role" class="form-control" required>
-                                    <option value="">Select Role</option>
-                                    <option value="admin">Admin</option>
-                                    <option value="user">User</option>
-                                    <option value="supervisor">Supervisor</option>
+                                    <option value="">Pilih Role</option>
+                                    <?php
+                                    // Fetch all roles from 'users' table
+                                    $roles = mysqli_query($koneksi, "SELECT DISTINCT role FROM user");
+
+                                    // Check if the query was successful
+                                    if ($roles) {
+                                      // Loop through the result and create an option for each role
+                                      while ($data = mysqli_fetch_array($roles)) {
+                                        // Assuming 'role' is the field name in your 'users' table
+                                        echo "<option value='" . htmlspecialchars($data['role']) . "'>" . htmlspecialchars($data['role']) . "</option>";
+                                      }
+                                    } else {
+                                      // Handle the case where the query failed
+                                      echo "<option value=''>Failed to retrieve roles</option>";
+                                    }
+                                    ?>
                                   </select>
                                 </div>
                               </div>
+
                               <div class="col-md-6">
                                 <div class="form-group form-group-default">
                                   <label>NIK</label>
@@ -390,10 +399,23 @@ $email = isset($_SESSION['email']) ? htmlspecialchars($_SESSION['email']) : 'gue
                                 <div class="form-group form-group-default">
                                   <label for="role">Role</label>
                                   <select id="editRole" name="role" class="form-control" required>
-                                    <option value="">Select Role</option>
-                                    <option value="admin">Admin</option>
-                                    <option value="user">User</option>
-                                    <option value="supervisor">Supervisor</option>
+                                    <option value="">Pilih Role</option>
+                                    <?php
+                                    // Fetch all roles from 'users' table
+                                    $roles = mysqli_query($koneksi, "SELECT DISTINCT role FROM user");
+
+                                    // Check if the query was successful
+                                    if ($roles) {
+                                      // Loop through the result and create an option for each role
+                                      while ($data = mysqli_fetch_array($roles)) {
+                                        // Assuming 'role' is the field name in your 'users' table
+                                        echo "<option value='" . htmlspecialchars($data['role']) . "'>" . htmlspecialchars($data['role']) . "</option>";
+                                      }
+                                    } else {
+                                      // Handle the case where the query failed
+                                      echo "<option value=''>Failed to retrieve roles</option>";
+                                    }
+                                    ?>
                                   </select>
                                 </div>
                               </div>
@@ -427,6 +449,12 @@ $email = isset($_SESSION['email']) ? htmlspecialchars($_SESSION['email']) : 'gue
                                   </select>
                                 </div>
                               </div>
+                              <!-- <div class="col-md-12">
+                                <div class="form-group form-group-default">
+                                  <label>Tanggal Diperbarui</label>
+                                  <input type="text" id="editUpdatedAt" class="form-control" disabled />
+                                </div>
+                              </div> -->
                             </div>
                             <div class="modal-footer border-0">
                               <button type="submit" class="btn btn-primary">Simpan</button>
@@ -437,8 +465,6 @@ $email = isset($_SESSION['email']) ? htmlspecialchars($_SESSION['email']) : 'gue
                       </div>
                     </div>
                   </div>
-
-
 
 
                   <?php
@@ -549,8 +575,7 @@ $email = isset($_SESSION['email']) ? htmlspecialchars($_SESSION['email']) : 'gue
   <script src="../../assets/js/plugin/datatables/datatables.min.js"></script>
   <!-- Kaiadmin JS -->
   <script src="../../assets/js/kaiadmin.min.js"></script>
-  <!-- Kaiadmin DEMO methods, don't include it in your project! -->
-  <script src="../../assets/js/setting-demo2.js"></script>
+
   <script>
     $(document).ready(function() {
       $("#basic-datatables").DataTable({});
@@ -617,9 +642,7 @@ $email = isset($_SESSION['email']) ? htmlspecialchars($_SESSION['email']) : 'gue
       document.getElementById('editRole').value = user.role;
       document.getElementById('editNIK').value = user.nik;
       document.getElementById('editKategori').value = user.kategori_id;
-      // You can leave created_at empty or not display it, as it should not be editable
-      // document.getElementById('editCreatedAt').value = user.created_at; // if needed
-      // document.getElementById('editUpdatedAt').value = user.updated_at; // if needed, but usually auto-set
+      // document.getElementById('editUpdatedAt').value = user.updated_at; // Untuk tampilan konfirmasi
     }
   </script>
 

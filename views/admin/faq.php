@@ -117,7 +117,7 @@ $email = isset($_SESSION['email']) ? htmlspecialchars($_SESSION['email']) : 'gue
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="daftar.html">
+                            <a href="daftar.php">
                                 <i class="fa-sharp fa-solid fa-clipboard-list"></i>
                                 <p>Daftar KAK</p>
                             </a>

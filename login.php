@@ -1,46 +1,3 @@
-<?php
-if (session_status() === PHP_SESSION_NONE) {
-  session_start();
-}
-
-require 'database/config.php'; // Sesuaikan path
-
-if (isset($_POST['login'])) {
-  $email = mysqli_real_escape_string($koneksi, $_POST['email']);
-  $password = $_POST['password'];
-
-  // Query database untuk cek user
-  $cekdatabase = mysqli_query($koneksi, "SELECT * FROM login WHERE email='$email'");
-  $data = mysqli_fetch_assoc($cekdatabase);
-
-  // Verifikasi password
-  if ($data && password_verify($password, $data['password'])) {
-    // Set session
-    $_SESSION['log'] = 'True';
-    $_SESSION['level'] = $data['level'];
-    $_SESSION['email'] = $email;
-
-    // Redirect sesuai level user
-    switch ($data['level']) {
-      case 'admin':
-        header('Location: ../views/admin/index.php');
-        break;
-      case 'user':
-        header('Location: ../views/user/index.php');
-        break;
-      case 'supervisor':
-        header('Location: ../views/supervisor/index.php');
-        break;
-    }
-    exit();
-  } else {
-    header('Location: ../login.php?error=invalid');
-    exit();
-  }
-}
-?>
-
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -52,7 +9,7 @@ if (isset($_POST['login'])) {
   <title>Drafting KAK - BAKTI</title>
   <link rel="icon" href="assets/img/kaiadmin/favicon.ico" type="image/x-icon" />
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
-  
+
   <style>
     .container {
       width: 100%;
@@ -81,7 +38,11 @@ if (isset($_POST['login'])) {
       <form></form>
     </div>
     <div class="form-container sign-in">
-      <form action="controllers/usercontroller.php" method="POST"> <!-- Updated action -->
+
+      <!-- Updated action -->
+      <form action="controllers/usercontroller.php" method="POST">
+        <!-- Updated action -->
+
         <h1>Sign In</h1>
         <div class="social-icons"></div>
 

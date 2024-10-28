@@ -1,42 +1,7 @@
 <?php
 require '../../database/config.php';
+require '../../controllers/UserController.php';
 require '../cek.php';
-
-// Check if the user is logged in
-$username = isset($_SESSION['username']) ? htmlspecialchars($_SESSION['username']) : 'Guest';
-$email = isset($_SESSION['email']) ? htmlspecialchars($_SESSION['email']) : 'guest@example.com'; // Default email
-
-// Query untuk menghitung jumlah user
-$sql = "SELECT COUNT(*) AS total_users FROM user";
-$result = $koneksi->query($sql);
-
-// Ambil hasil query
-$total_users = 0;
-if ($result->num_rows > 0) {
-  $row = $result->fetch_assoc();
-  $total_users = $row['total_users'];
-}
-
-$sql = "SELECT COUNT(*) AS total_kategori FROM kategori_program";
-$result = $koneksi->query($sql);
-
-// Ambil hasil query
-$total_kategori = 0;
-if ($result->num_rows > 0) {
-  $row = $result->fetch_assoc();
-  $total_kategori = $row['total_kategori'];
-}
-
-// Query untuk menghitung jumlah daftar KAK
-$sql = "SELECT COUNT(*) AS total_kak FROM kak";
-$result = $koneksi->query($sql);
-
-// Ambil hasil query
-$total_kak = 0;
-if ($result->num_rows > 0) {
-  $row = $result->fetch_assoc();
-  $total_kak = $row['total_kak'];
-}
 ?>
 
 <!DOCTYPE html>
@@ -135,7 +100,7 @@ if ($result->num_rows > 0) {
               </a>
             </li>
             <li class="nav-item">
-              <a href="daftar.html">
+              <a href="daftar.php">
                 <i class="fa-sharp fa-solid fa-clipboard-list"></i>
                 <p>Daftar KAK</p>
               </a>
@@ -412,11 +377,6 @@ if ($result->num_rows > 0) {
 
   <!-- Kaiadmin JS -->
   <script src="../../assets/js/kaiadmin.min.js"></script>
-
-  <!-- Kaiadmin DEMO methods, don't include it in your project! -->
-  <script src="../../assets/js/setting-demo.js"></script>
-  <script src="../../assets/js/demo.js"></script>
-
 </body>
 
 </html>

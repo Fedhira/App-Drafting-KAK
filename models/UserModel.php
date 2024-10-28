@@ -51,10 +51,8 @@ function updateUser($koneksi)
         $nik = $_POST['nik'] ?? null;
         $kategori_id = $_POST['kategori_id'] ?? null;
 
-        // Dapatkan waktu sekarang
+        // Waktu sekarang otomatis untuk updated_at
         $updated_at = date('Y-m-d H:i:s');
-        echo "Updated at: " . $updated_at; // Untuk mengecek apakah tanggal dan waktu terisi dengan benar
-
 
         if ($username && $email && $role && $nik && $kategori_id) {
             $query = "UPDATE `user` SET 
@@ -67,21 +65,20 @@ function updateUser($koneksi)
                       WHERE `user_id` = ?";
 
             $stmt = $koneksi->prepare($query);
-            $stmt->bind_param("ssssiis", $username, $email, $role, $nik, $kategori_id, $updated_at, $user_id);
+            $stmt->bind_param("ssssisi", $username, $email, $role, $nik, $kategori_id, $updated_at, $user_id);
 
             if ($stmt->execute()) {
-                header("Location: ../views/admin/users.php");
+                header("Location: ../views/admin/users.php"); // Redirect on success
             } else {
-                echo "ERROR: Query failed: " . $stmt->error; // Tambahkan pesan error untuk membantu debug
+                echo "ERROR: Query failed: " . $stmt->error; // Pesan error untuk debug
             }
-
-
             $stmt->close();
         } else {
             echo "ERROR, all fields are required!";
         }
     }
 }
+
 
 
 // Function to delete a user
@@ -118,3 +115,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         addUser($koneksi);
     }
 }
+
+

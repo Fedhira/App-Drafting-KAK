@@ -3,7 +3,6 @@ require 'database/config.php';
 require 'controllers/cek.php';
 ?>
 
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -100,7 +99,7 @@ require 'controllers/cek.php';
               </a>
             </li>
             <li class="nav-item">
-              <a href="daftar.html">
+              <a href="daftar.php">
                 <i class="fa-sharp fa-solid fa-clipboard-list"></i>
                 <p>Daftar KAK</p>
               </a>
@@ -364,10 +363,6 @@ require 'controllers/cek.php';
 
   <!-- Kaiadmin JS -->
   <script src="assets/js/kaiadmin.min.js"></script>
-
-  <!-- Kaiadmin DEMO methods, don't include it in your project! -->
-  <script src="assets/js/setting-demo.js"></script>
-  <script src="assets/js/demo.js"></script>
 
 </body>
 

@@ -1,20 +1,4 @@
 <?php
-// Cek apakah session sudah aktif
-if (session_status() === PHP_SESSION_NONE) {
-    // Set parameter cookie sebelum session_start()
-    ini_set('session.cookie_samesite', 'Lax');
-    session_set_cookie_params([
-        'lifetime' => 86400,  // Session berlaku 1 hari
-        'path' => '/',
-        'domain' => '',  // Kosongkan atau sesuaikan jika perlu
-        'secure' => false,  // true jika menggunakan HTTPS
-        'httponly' => true  // Cookie hanya bisa diakses oleh HTTP
-    ]);
-
-    // Mulai session
-    session_start();
-}
-
 // Login logic
 if (isset($_POST['login'])) {
     require '../database/config.php'; // Pastikan path benar
@@ -50,4 +34,41 @@ if (isset($_POST['login'])) {
         header('Location: ../login.php?error=invalid');
         exit();
     }
+}
+
+// Check if the user is logged in
+$username = isset($_SESSION['username']) ? htmlspecialchars($_SESSION['username']) : 'Guest';
+$email = isset($_SESSION['email']) ? htmlspecialchars($_SESSION['email']) : 'guest@example.com'; // Default email
+
+
+// Query untuk menghitung jumlah user
+$sql = "SELECT COUNT(*) AS total_users FROM user";
+$result = $koneksi->query($sql);
+
+// Ambil hasil query
+$total_users = 0;
+if ($result->num_rows > 0) {
+    $row = $result->fetch_assoc();
+    $total_users = $row['total_users'];
+}
+
+$sql = "SELECT COUNT(*) AS total_kategori FROM kategori_program";
+$result = $koneksi->query($sql);
+
+// Ambil hasil query
+$total_kategori = 0;
+if ($result->num_rows > 0) {
+    $row = $result->fetch_assoc();
+    $total_kategori = $row['total_kategori'];
+}
+
+// Query untuk menghitung jumlah daftar KAK
+$sql = "SELECT COUNT(*) AS total_kak FROM kak";
+$result = $koneksi->query($sql);
+
+// Ambil hasil query
+$total_kak = 0;
+if ($result->num_rows > 0) {
+    $row = $result->fetch_assoc();
+    $total_kak = $row['total_kak'];
 }

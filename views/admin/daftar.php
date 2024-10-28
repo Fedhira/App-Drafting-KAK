@@ -1,7 +1,6 @@
 <?php
 require '../../database/config.php';
 require '../../controllers/UserController.php';
-require '../../models/CategoryModel.php';
 require '../cek.php';
 ?>
 
@@ -18,6 +17,8 @@ require '../cek.php';
     rel="icon"
     href="../../assets/img/kaiadmin/favicon.ico"
     type="image/x-icon" />
+  <link rel="stylesheet" href="../../assets/css/style.css">
+
 
   <!-- Fonts and icons -->
   <script src="../../assets/js/plugin/webfont/webfont.min.js"></script>
@@ -113,13 +114,13 @@ require '../cek.php';
                 <p>Users</p>
               </a>
             </li>
-            <li class="nav-item active">
-              <a href="kategori.html">
+            <li class="nav-item">
+              <a href="kategori.php">
                 <i class="fas fa-border-all"></i>
                 <p>Kategori Program</p>
               </a>
             </li>
-            <li class="nav-item">
+            <li class="nav-item active">
               <a href="daftar.php">
                 <i class="fa-sharp fa-solid fa-clipboard-list"></i>
                 <p>Daftar KAK</p>
@@ -150,7 +151,7 @@ require '../cek.php';
           <div class="logo-header" data-background-color="light-blue">
             <a href="../index.html" class="logo">
               <img
-                src="../../assets/img/kaiadmin/logo_bakti_light.svg"
+                src="..../../assets/img/kaiadmin/logo_bakti_light.svg"
                 alt="navbar brand"
                 class="navbar-brand"
                 height="20" />
@@ -220,7 +221,7 @@ require '../cek.php';
       <div class="container">
         <div class="page-inner">
           <div class="page-header">
-            <h3 class="fw-bold mb-3">Kelola Kategori Program</h3>
+            <h3 class="fw-bold mb-3">Daftar KAK</h3>
           </div>
           <div class="row">
 
@@ -228,73 +229,25 @@ require '../cek.php';
               <div class="card">
                 <div class="card-header">
                   <div class="d-flex align-items-center">
-                    <button
-                      class="btn btn-primary btn-round me-4"
-                      data-bs-toggle="modal"
-                      data-bs-target="#addRowModal">
-                      <i class="fa fa-plus"></i>
-                      Tambah Kategori
-                    </button>
-                  </div>
-                </div>
-                <div class="card-body">
-                  <!-- Modal Tambah -->
-                  <div class="modal fade" id="addRowModal" tabindex="-1" role="dialog" aria-hidden="true">
-                    <div class="modal-dialog" role="document">
-                      <div class="modal-content">
-                        <div class="modal-header border-0">
-                          <h5 class="modal-title">
-                            <span class="fw-mediumbold"> Tambah Kategori Divisi</span>
-                          </h5>
-                          <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                          </button>
-                        </div>
-                        <div class="modal-body">
-                          <form method="POST" action="../../models/CategoryModel.php">
-                            <input type="hidden" name="action" value="add" /> <!-- Menambahkan input hidden untuk action -->
-                            <div class="row">
-                              <div class="col-sm-12">
-                                <div class="form-group form-group-default">
-                                  <label>Nama Kategori Divisi</label>
-                                  <input type="text" name="nama_divisi" class="form-control" placeholder="fill kategori divisi" required />
-                                </div>
-                              </div>
-                              <div class="col-md-12">
-                                <div class="form-group form-group-default">
-                                  <label>Status</label>
-                                  <select name="status" class="form-control" required>
-                                    <option value="">Pilih Status</option>
-                                    <?php
-                                    // Pastikan variabel $koneksi sudah terdefinisi
-                                    if (isset($koneksi)) {
-                                      $statusOptions = fetchStatusOptions($koneksi);
-                                      if (!empty($statusOptions)) {
-                                        foreach ($statusOptions as $status) {
-                                          echo "<option value='" . htmlspecialchars($status) . "'>" . htmlspecialchars($status) . "</option>";
-                                        }
-                                      } else {
-                                        echo "<option value=''>Tidak ada opsi status</option>";
-                                      }
-                                    } else {
-                                      echo "<option value=''>Koneksi database tidak tersedia</option>";
-                                    }
-                                    ?>
-                                  </select>
-                                </div>
-                              </div>
-                            </div>
-                        </div>
-                        <div class="modal-footer border-0">
-                          <button type="submit" class="btn btn-primary">Tambah</button>
-                          <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Batal</button>
-                        </div>
-                        </form>
+
+                    <!-- Date Picker From and To -->
+                    <div class="d-flex">
+                      <div class="input-group me-4">
+                        <span class="input-group-text">
+                          From
+                        </span>
+                        <input type="date" class="form-control" placeholder="From" />
+                      </div>
+                      <div class="input-group me-4">
+                        <span class="input-group-text">
+                          To
+                        </span>
+                        <input type="date" class="form-control" placeholder="To" />
                       </div>
                     </div>
                   </div>
-
-
+                </div>
+                <div class="card-body">
 
                   <!-- Modal Ubah -->
                   <div class="modal fade" id="editRowModal" tabindex="-1" role="dialog" aria-hidden="true">
@@ -302,119 +255,189 @@ require '../cek.php';
                       <div class="modal-content">
                         <div class="modal-header border-0">
                           <h5 class="modal-title">
-                            <span class="fw-mediumbold"> Edit Kategori</span>
+                            <span class="fw-mediumbold">Detail Daftar KAK</span>
                           </h5>
-                          <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                           </button>
                         </div>
-                        <div class="modal-body">
-                          <form method="POST" action="../../models/CategoryModel.php">
-                            <input type="hidden" name="action" value="update" />
-                            <input type="hidden" name="kategori_id" id="edit_kategori_id" />
+
+                        <!-- Modal Body with Scroll -->
+                        <div class="modal-body" style="max-height: 400px; overflow-y: auto;">
+                          <form>
                             <div class="row">
                               <div class="col-sm-12">
                                 <div class="form-group form-group-default">
-                                  <label>Nama Kategori Divisi</label>
-                                  <input id="edit_nama_divisi" type="text" name="nama_divisi" class="form-control" placeholder="fill kategori divisi" required />
+                                  <label>No Doc</label>
+                                  <input type="text" class="form-control" placeholder="fill" />
                                 </div>
                               </div>
                               <div class="col-md-12">
                                 <div class="form-group form-group-default">
-                                  <label for="edit_status">Status</label>
-                                  <select id="edit_status" name="status" class="form-control" required>
-                                    <option value="">Pilih Status</option>
-                                    <?php
-                                    $statusOptions = fetchStatusOptions($koneksi);
-                                    foreach ($statusOptions as $status) {
-                                      echo "<option value='" . htmlspecialchars($status) . "'>" . htmlspecialchars($status) . "</option>";
-                                    }
-                                    ?>
-                                  </select>
+                                  <label>Judul KAK</label>
+                                  <input type="text" class="form-control" placeholder="fill" />
+                                </div>
+                              </div>
+                              <div class="col-md-12">
+                                <div class="form-group form-group-default">
+                                  <label>Kategori Program</label>
+                                  <input type="text" class="form-control" placeholder="fill" />
+                                </div>
+                              </div>
+                              <div class="col-md-12">
+                                <div class="form-group form-group-default">
+                                  <label>Latar Belakang</label>
+                                  <label>A. Dasar Hukum</label>
+                                  <input type="text" class="form-control" placeholder="fill " />
+                                </div>
+                              </div>
+                              <div class="col-md-12">
+                                <div class="form-group form-group-default">
+                                  <label>B. Gambaran Umum</label>
+                                  <input type="text" class="form-control" placeholder="fill" />
+                                </div>
+                              </div>
+                              <div class="col-md-12">
+                                <div class="form-group form-group-default">
+                                  <label>Tujuan</label>
+                                  <input type="text" class="form-control" placeholder="fill" />
+                                </div>
+                              </div>
+                              <div class="col-md-12">
+                                <div class="form-group form-group-default">
+                                  <label>Target/Sasaran</label>
+                                  <input type="text" class="form-control" placeholder="fill" />
+                                </div>
+                              </div>
+                              <div class="col-md-12">
+                                <div class="form-group form-group-default">
+                                  <label>Unit Kerja Pelaksana</label>
+                                  <input type="text" class="form-control" placeholder="fill" />
+                                </div>
+                              </div>
+                              <div class="col-md-12">
+                                <div class="form-group form-group-default">
+                                  <label>Ruang Lingkup, Lokasi & Fasilitas Penunjang</label>
+                                  <input type="text" class="form-control" placeholder="fill" />
+                                </div>
+                              </div>
+                              <div class="col-md-12">
+                                <div class="form-group form-group-default">
+                                  <label>Produk/Jasa yang dihasilkan (Deliverable)</label>
+                                  <input type="text" class="form-control" placeholder="fill" />
+                                </div>
+                              </div>
+                              <div class="col-md-12">
+                                <div class="form-group form-group-default">
+                                  <label>Waktu Pelaksana</label>
+                                  <input type="text" class="form-control" placeholder="fill" />
+                                </div>
+                              </div>
+                              <div class="col-md-12">
+                                <div class="form-group form-group-default">
+                                  <label>Tenaga Ahli/Terampil</label>
+                                  <input type="text" class="form-control" placeholder="fill" />
+                                </div>
+                              </div>
+                              <div class="col-md-12">
+                                <div class="form-group form-group-default">
+                                  <label>Peralatan</label>
+                                  <input type="text" class="form-control" placeholder="fill" />
+                                </div>
+                              </div>
+                              <div class="col-md-12">
+                                <div class="form-group form-group-default">
+                                  <label>Metode Kerja</label>
+                                  <input type="text" class="form-control" placeholder="fill" />
+                                </div>
+                              </div>
+                              <div class="col-md-12">
+                                <div class="form-group form-group-default">
+                                  <label>Manajemen Resiko</label>
+                                  <input type="text" class="form-control" placeholder="fill" />
+                                </div>
+                              </div>
+                              <div class="col-md-12">
+                                <div class="form-group form-group-default">
+                                  <label>Laporan Pengajuan Pekerjaan</label>
+                                  <input type="text" class="form-control" placeholder="fill" />
+                                </div>
+                              </div>
+                              <div class="col-md-12">
+                                <div class="form-group form-group-default">
+                                  <label>Sumber Dana & Prakiraan Biaya</label>
+                                  <input type="text" class="form-control" placeholder="fill" />
+                                </div>
+                              </div>
+                              <div class="col-md-12">
+                                <div class="form-group form-group-default">
+                                  <label>Penutup</label>
+                                  <input type="text" class="form-control" placeholder="fill" />
                                 </div>
                               </div>
                             </div>
-                            <div class="modal-footer border-0">
-                              <button type="submit" class="btn btn-primary">Simpan</button>
-                              <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Batal</button>
-                            </div>
                           </form>
+                        </div>
+
+                        <!-- Modal Footer with Fixed Buttons -->
+                        <div class="modal-footer border-0">
+                          <button type="button" class="btn btn-primary">Simpan</button>
+                          <button type="button" class="btn btn-danger" data-dismiss="modal">Batal</button>
                         </div>
                       </div>
                     </div>
                   </div>
 
 
-
-                  <?php
-                  // Function to fetch all categories from the database
-                  function fetchCategories($koneksi)
-                  {
-                    $sql = "SELECT kp.kategori_id, kp.nama_divisi, kp.status, COUNT(u.user_id) AS jumlah_user
-            FROM kategori_program kp
-            LEFT JOIN user u ON kp.kategori_id = u.kategori_id
-            GROUP BY kp.kategori_id";
-
-                    $result = $koneksi->query($sql);
-
-                    if ($result->num_rows > 0) {
-                      while ($row = $result->fetch_assoc()) {
-                        echo "<tr>
-                    <td>" . htmlspecialchars($row['nama_divisi']) . "</td>
-                    <td>" . htmlspecialchars($row['status']) . "</td>
-                    <td>" . htmlspecialchars($row['jumlah_user']) . "</td>
-                    <td>
-                        <div class='form-button-action'>
-                            <button class='btn btn-warning me-2 btn-round' style='width: 100px;' 
-                                    data-bs-toggle='modal' data-bs-target='#editRowModal' 
-                                    onclick='populateEditModal(" . json_encode($row) . ")'>
-                                <i class='fa fa-edit'></i> Ubah
-                            </button>
-                            <form method='POST' action='../../models/CategoryModel.php' style='display:inline;'>
-                            <input type='hidden' name='kategori_id' value='" . $row['kategori_id'] . "' />
-                            <input type='hidden' name='kategori_id' value='" . $row['kategori_id'] . "' />
-                            <input type='hidden' name='action' value='delete' /> <!-- Action field -->
-                            <button class='btn btn-danger btn-round' style='width: 100px' onclick='return confirm(\"Are you sure you want to delete this user?\");'>
-                                <i class='fa fa-trash'></i> Hapus
-                            </button>
-                        </form>
-                        </div>
-                    </td>
-                </tr>";
-                      }
-                    } else {
-                      echo "<tr><td colspan='4'>No categories found</td></tr>";
-                    }
-                  }
-
-                  ?>
-
-                  <!-- HTML Table Code -->
+                  <!-- START TABLE -->
                   <div class="table-responsive">
-                    <table id="add-row" class="display table table-striped table-hover">
+                    <table
+                      id="add-row"
+                      class="display table table-striped table-hover">
                       <thead>
                         <tr>
-                          <th>Nama Kategori Divisi</th>
-                          <th>Status</th>
-                          <th>Jumlah User</th> <!-- Ini akan otomatis dihitung dari query -->
+                          <th>No Doc</th>
+                          <th>Judul KAK</th>
+                          <th>Kategori Program</th>
+                          <th>Status Dokumen</th>
+                          <th>Tanggal Dibuat</th>
+                          <th>Tanggal Diperbarui</th>
                           <th style="width: 10%">Aksi</th>
                         </tr>
                       </thead>
                       <tfoot>
                         <tr>
-                          <th>Nama Kategori Divisi</th>
-                          <th>Status</th>
-                          <th>Jumlah User</th>
+                          <th>No Doc</th>
+                          <th>Judul KAK</th>
+                          <th>Kategori Program</th>
+                          <th>Status Dokumen</th>
+                          <th>Tanggal Dibuat</th>
+                          <th>Tanggal Diperbarui</th>
                           <th>Aksi</th>
                         </tr>
                       </tfoot>
                       <tbody>
-                        <?php fetchCategories($koneksi); ?>
+                        <tr>
+                          <td>KAK-001/2024</td>
+                          <td>Pengadaan perangkat lunak</td>
+                          <td>Divisi Pengadaan dan Sistem Informasi</td>
+                          <td>
+                            <span class="status status-disetujui">Disetujui</span>
+                          </td>
+                          <td>12-02-2024</td>
+                          <td>15-02-2024</td>
+                          <td>
+                            <div class="form-button-action">
+                              <button class="btn btn-dark btn-round me-2" style="width: 100px;" data-bs-toggle="modal"
+                                data-bs-target="#editRowModal">
+                                <i class="fas fa-eye"></i> Detail
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
                       </tbody>
                     </table>
                   </div>
-
-
                 </div>
               </div>
             </div>
@@ -505,42 +528,6 @@ require '../cek.php';
       });
     });
   </script>
-
-  <script>
-    $(document).ready(function() {
-      $('#addKategoriForm').submit(function(e) {
-        e.preventDefault(); // Prevent form from submitting the usual way
-
-        $.ajax({
-          url: '../../models/CategoryModel.php', // File backend untuk handle insert
-          type: 'POST',
-          data: $(this).serialize(), // Kirim data form
-          success: function(response) {
-            if (response === 'success') {
-              alert('Kategori berhasil ditambah');
-              location.reload(); // Reload halaman untuk memperbarui tabel
-            } else {
-              alert('Gagal menambah kategori: ' + response); // Tampilkan error dari server
-            }
-          },
-          error: function(xhr, status, error) {
-            alert('AJAX error: ' + error); // Menampilkan error jika terjadi kesalahan dalam proses AJAX
-          }
-        });
-      });
-    });
-  </script>
-
-  <script>
-    function populateEditModal(data) {
-      document.getElementById('edit_kategori_id').value = data.kategori_id;
-      document.getElementById('edit_nama_divisi').value = data.nama_divisi;
-      document.getElementById('edit_status').value = data.status;
-    }
-  </script>
-
-
-
 </body>
 
 </html>
