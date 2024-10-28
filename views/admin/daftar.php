@@ -127,7 +127,7 @@ require '../cek.php';
               </a>
             </li>
             <li class="nav-item">
-              <a href="laporan.html">
+              <a href="laporan.php">
                 <i class="fas fa-file"></i>
                 <p>Laporan</p>
               </a>
@@ -249,15 +249,15 @@ require '../cek.php';
                 </div>
                 <div class="card-body">
 
-                  <!-- Modal Ubah -->
-                  <div class="modal fade" id="editRowModal" tabindex="-1" role="dialog" aria-hidden="true">
+                  <!-- Modal Detail -->
+                  <div class="modal fade" id="detailRowModal" tabindex="-1" role="dialog" aria-hidden="true">
                     <div class="modal-dialog" role="document">
                       <div class="modal-content">
                         <div class="modal-header border-0">
                           <h5 class="modal-title">
                             <span class="fw-mediumbold">Detail Daftar KAK</span>
                           </h5>
-                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                           </button>
                         </div>
@@ -382,7 +382,7 @@ require '../cek.php';
                         <!-- Modal Footer with Fixed Buttons -->
                         <div class="modal-footer border-0">
                           <button type="button" class="btn btn-primary">Simpan</button>
-                          <button type="button" class="btn btn-danger" data-dismiss="modal">Batal</button>
+                          <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Batal</button>
                         </div>
                       </div>
                     </div>
@@ -429,7 +429,7 @@ require '../cek.php';
                           <td>
                             <div class="form-button-action">
                               <button class="btn btn-dark btn-round me-2" style="width: 100px;" data-bs-toggle="modal"
-                                data-bs-target="#editRowModal">
+                                data-bs-target="#detailRowModal">
                                 <i class="fas fa-eye"></i> Detail
                               </button>
                             </div>

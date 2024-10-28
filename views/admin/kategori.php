@@ -114,7 +114,7 @@ require '../cek.php';
               </a>
             </li>
             <li class="nav-item active">
-              <a href="kategori.html">
+              <a href="kategori.php">
                 <i class="fas fa-border-all"></i>
                 <p>Kategori Program</p>
               </a>
@@ -126,7 +126,7 @@ require '../cek.php';
               </a>
             </li>
             <li class="nav-item">
-              <a href="laporan.html">
+              <a href="laporan.php">
                 <i class="fas fa-file"></i>
                 <p>Laporan</p>
               </a>

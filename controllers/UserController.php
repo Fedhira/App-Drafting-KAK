@@ -1,8 +1,15 @@
 <?php
+// Start the session if it's not already active
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+// Include your database connection
+require __DIR__ . '/../database/config.php';
+
+
 // Login logic
 if (isset($_POST['login'])) {
-    require '../database/config.php'; // Pastikan path benar
-
     $email = $_POST['email'];
     $password = $_POST['password'];
 
@@ -16,10 +23,9 @@ if (isset($_POST['login'])) {
         // Simpan data session
         $_SESSION['log'] = 'True';
         $_SESSION['role'] = $data['role'];
-        $_SESSION['email'] = $email;  // Existing line
-        $_SESSION['username'] = $data['username']; // Store username
-        $_SESSION['user_email'] = $data['email']; // Store email
-
+        $_SESSION['email'] = $email;
+        $_SESSION['username'] = $data['username'];
+        $_SESSION['user_email'] = $data['email'];
 
         // Redirect sesuai role user
         if ($data['role'] === 'admin') {
@@ -38,8 +44,7 @@ if (isset($_POST['login'])) {
 
 // Check if the user is logged in
 $username = isset($_SESSION['username']) ? htmlspecialchars($_SESSION['username']) : 'Guest';
-$email = isset($_SESSION['email']) ? htmlspecialchars($_SESSION['email']) : 'guest@example.com'; // Default email
-
+$email = isset($_SESSION['email']) ? htmlspecialchars($_SESSION['email']) : 'guest@example.com';
 
 // Query untuk menghitung jumlah user
 $sql = "SELECT COUNT(*) AS total_users FROM user";
@@ -52,6 +57,7 @@ if ($result->num_rows > 0) {
     $total_users = $row['total_users'];
 }
 
+// Query untuk menghitung jumlah kategori
 $sql = "SELECT COUNT(*) AS total_kategori FROM kategori_program";
 $result = $koneksi->query($sql);
 
@@ -72,3 +78,7 @@ if ($result->num_rows > 0) {
     $row = $result->fetch_assoc();
     $total_kak = $row['total_kak'];
 }
+
+// Get the date filter parameters from the GET request
+$fromDate = isset($_GET['fromDate']) && !empty($_GET['fromDate']) ? $_GET['fromDate'] : null;
+$toDate = isset($_GET['toDate']) && !empty($_GET['toDate']) ? $_GET['toDate'] : null;

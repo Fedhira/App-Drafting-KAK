@@ -125,7 +125,7 @@ require '../cek.php';
               </a>
             </li>
             <li class="nav-item">
-              <a href="laporan.html">
+              <a href="laporan.php">
                 <i class="fas fa-file"></i>
                 <p>Laporan</p>
               </a>
@@ -235,21 +235,19 @@ require '../cek.php';
                       Tambah User
                     </button>
 
-                    <!-- Date Picker From and To -->
-                    <div class="d-flex">
-                      <div class="input-group me-4">
-                        <span class="input-group-text">
-                          From
-                        </span>
-                        <input type="date" class="form-control" placeholder="From" />
+                    <form method="GET" action="users.php">
+                      <div class="d-flex">
+                        <div class="input-group me-4">
+                          <span class="input-group-text">From</span>
+                          <input type="date" class="form-control" name="fromDate" />
+                        </div>
+                        <div class="input-group me-4">
+                          <span class="input-group-text">To</span>
+                          <input type="date" class="form-control" name="toDate" />
+                        </div>
+                        <button type="submit" class="btn btn-primary">Filter</button>
                       </div>
-                      <div class="input-group me-4">
-                        <span class="input-group-text">
-                          To
-                        </span>
-                        <input type="date" class="form-control" placeholder="To" />
-                      </div>
-                    </div>
+                    </form>
                   </div>
                 </div>
                 <div class="card-body">
@@ -449,12 +447,6 @@ require '../cek.php';
                                   </select>
                                 </div>
                               </div>
-                              <!-- <div class="col-md-12">
-                                <div class="form-group form-group-default">
-                                  <label>Tanggal Diperbarui</label>
-                                  <input type="text" id="editUpdatedAt" class="form-control" disabled />
-                                </div>
-                              </div> -->
                             </div>
                             <div class="modal-footer border-0">
                               <button type="submit" class="btn btn-primary">Simpan</button>
@@ -468,49 +460,63 @@ require '../cek.php';
 
 
                   <?php
-                  // Include your database connection
-
-                  // Function to fetch all users from the database
-                  function fetchUsers($koneksi)
+                  // Function to fetch users from the database with optional date filtering
+                  function fetchUsers($koneksi, $fromDate = null, $toDate = null)
                   {
-                    // Prepare the SQL query to select all users
-                    $sql = "SELECT * FROM user"; // Select all fields including user_id
-                    $result = $koneksi->query($sql);
+                    // Start building the SQL query
+                    $sql = "SELECT * FROM user";
+
+                    // Add date filtering if both fromDate and toDate are provided
+                    if ($fromDate && $toDate) {
+                      $sql .= " WHERE DATE(created_at) BETWEEN ? AND ?";
+                      $stmt = $koneksi->prepare($sql);
+                      $stmt->bind_param("ss", $fromDate, $toDate);
+                    } else {
+                      $stmt = $koneksi->prepare($sql);
+                    }
+
+                    // Execute the query
+                    $stmt->execute();
+                    $result = $stmt->get_result();
 
                     // Check if there are users in the database
                     if ($result->num_rows > 0) {
                       // Loop through each user and output the data into table rows
                       while ($row = $result->fetch_assoc()) {
                         echo "<tr>
-                <td>" . $row['username'] . "</td>
-                <td>" . $row['email'] . "</td>
-                <td>" . $row['nik'] . "</td>
-                <td>" . $row['role'] . "</td>
-                <td>" . $row['created_at'] . "</td>
-                <td>" . $row['updated_at'] . "</td>
-                <td>
-                    <div class='form-button-action'>
-                        <button class='btn btn-warning btn-round me-2' style='width: 100px;' 
-                                data-bs-toggle='modal' data-bs-target='#editRowModal' 
-                                onclick='populateEditModal(" . json_encode($row) . ")'>
-                            <i class='fa fa-edit'></i> Ubah
-                        </button>
-                        <form method='POST' action='../../models/UserModel.php' style='display:inline;'>
-                            <input type='hidden' name='user_id' value='" . $row['user_id'] . "' />
-                            <input type='hidden' name='action' value='delete' /> <!-- Action field -->
-                            <button class='btn btn-danger btn-round' style='width: 100px' 
-                                    onclick='return confirm(\"Are you sure you want to delete this user?\");'>
-                                <i class='fa fa-trash'></i> Hapus
+                    <td>" . htmlspecialchars($row['username']) . "</td>
+                    <td>" . htmlspecialchars($row['email']) . "</td>
+                    <td>" . htmlspecialchars($row['nik']) . "</td>
+                    <td>" . htmlspecialchars($row['role']) . "</td>
+                    <td>" . htmlspecialchars($row['created_at']) . "</td>
+                    <td>" . htmlspecialchars($row['updated_at']) . "</td>
+                    <td>
+                        <div class='form-button-action'>
+                            <button class='btn btn-warning btn-round me-2' style='width: 100px;' 
+                                    data-bs-toggle='modal' data-bs-target='#editRowModal' 
+                                    onclick='populateEditModal(" . json_encode($row) . ")'>
+                                <i class='fa fa-edit'></i> Ubah
                             </button>
-                        </form>
-                    </div>
-                </td>
-            </tr>";
+                            <form method='POST' action='../../models/UserModel.php' style='display:inline;'>
+                                <input type='hidden' name='user_id' value='" . $row['user_id'] . "' />
+                                <input type='hidden' name='action' value='delete' />
+                                <button class='btn btn-danger btn-round' style='width: 100px' 
+                                        onclick='return confirm(\"Are you sure you want to delete this user?\");'>
+                                    <i class='fa fa-trash'></i> Hapus
+                                </button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>";
                       }
                     } else {
                       echo "<tr><td colspan='7'>No users found</td></tr>";
                     }
+
+                    // Close the statement
+                    $stmt->close();
                   }
+
                   ?>
 
                   <!-- HTML Table Code -->
@@ -539,7 +545,7 @@ require '../cek.php';
                         </tr>
                       </tfoot>
                       <tbody>
-                        <?php fetchUsers($koneksi); ?>
+                        <?php fetchUsers($koneksi, $fromDate, $toDate); ?>
                       </tbody>
                     </table>
                   </div>

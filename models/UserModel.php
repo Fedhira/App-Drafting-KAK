@@ -1,7 +1,6 @@
 <?php
 include('../database/config.php');
 include('../controllers/UserController.php');
-session_start();
 
 // Set the timezone to Indonesia Western Time (WIB)
 date_default_timezone_set('Asia/Jakarta');
@@ -115,5 +114,3 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         addUser($koneksi);
     }
 }
-
-

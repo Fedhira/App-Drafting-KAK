@@ -123,7 +123,7 @@ $email = isset($_SESSION['email']) ? htmlspecialchars($_SESSION['email']) : 'gue
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="laporan.html">
+                            <a href="laporan.php">
                                 <i class="fas fa-file"></i>
                                 <p>Laporan</p>
                             </a>
