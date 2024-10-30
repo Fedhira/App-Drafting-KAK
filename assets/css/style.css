@@ -316,9 +316,14 @@ h6 {
   }
 
   .status-pending {
-    background-color: #ffc107; /* Warna kuning */
+    background-color: #f7c839; /* Warna kuning */
   }
 
   .status-ditolak {
     background-color: #dc3545; /* Warna merah */
   }
+
+  .status-draft {
+    background-color: #6c757d; /* Gray background for draft */
+    color: white;
+}

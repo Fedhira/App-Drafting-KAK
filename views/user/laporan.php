@@ -1,9 +1,9 @@
 <?php
 require '../../database/config.php';
 require '../../controllers/UserController.php';
+require '../../controllers/DaftarController.php';
 require '../cek.php';
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -17,6 +17,8 @@ require '../cek.php';
     rel="icon"
     href="../../assets/img/kaiadmin/favicon.ico"
     type="image/x-icon" />
+  <link rel="stylesheet" href="../../assets/css/style.css">
+
 
   <!-- Fonts and icons -->
   <script src="../../assets/js/plugin/webfont/webfont.min.js"></script>
@@ -40,7 +42,7 @@ require '../cek.php';
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
   <!-- Load Font Awesome 6 -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
 
   <!-- CSS Files -->
   <link rel="stylesheet" href="../../assets/css/bootstrap.min.css" />
@@ -83,24 +85,11 @@ require '../cek.php';
       <div class="sidebar-wrapper scrollbar scrollbar-inner">
         <div class="sidebar-content">
           <ul class="nav nav-secondary">
-            <li class="nav-item active">
+            <li class="nav-item">
               <a
                 href="index.php">
                 <i class="fas fa-home"></i>
                 <p>Dashboard</p>
-              </a>
-            </li>
-
-            <li class="nav-item">
-              <a href="users.php">
-                <i class="fas fa-user-group"></i>
-                <p>Users</p>
-              </a>
-            </li>
-            <li class="nav-item">
-              <a href="kategori.php">
-                <i class="fas fa-border-all"></i>
-                <p>Kategori Program</p>
               </a>
             </li>
             <li class="nav-item">
@@ -110,6 +99,12 @@ require '../cek.php';
               </a>
             </li>
             <li class="nav-item">
+              <a href="draft.php">
+                <i class="fa-solid fa-file-pen"></i>
+                <p>Draft KAK</p>
+              </a>
+            </li>
+            <li class="nav-item active">
               <a href="laporan.php">
                 <i class="fas fa-file"></i>
                 <p>Laporan</p>
@@ -134,7 +129,7 @@ require '../cek.php';
           <div class="logo-header" data-background-color="light-blue">
             <a href="index.html" class="logo">
               <img
-                src="../../assets/img/kaiadmin/logo_light.svg"
+                src="assets/img/kaiadmin/logo_light.svg"
                 alt="navbar brand"
                 class="navbar-brand"
                 height="20" />
@@ -202,91 +197,13 @@ require '../cek.php';
 
       <div class="container">
         <div class="page-inner">
-          <div
-            class="d-flex align-items-left align-items-md-center flex-column flex-md-row pt-2 pb-4">
+          <div class="d-flex align-items-left align-items-md-center flex-column flex-md-row pt-2 pb-4">
             <div>
-              <h3 class="fw-bold mb-3">Dashboard</h3>
+              <h3 class="fw-bold mb-3">Laporan</h3>
             </div>
           </div>
-          <div class="row">
-            <div class="col-sm-4 col-md-4">
-              <div class="card card-stats card-round">
-                <div class="card-body">
-                  <div class="row align-items-center">
-                    <div class="col-icon">
-                      <div
-                        class="icon-big text-center icon-primary bubble-shadow-small">
-                        <i class="fas fa-user-group"></i>
-                      </div>
-                    </div>
-                    <div class="col col-stats ms-3 ms-sm-0">
-                      <a href="users.php" style="text-decoration: none; color: inherit;">
-                        <div class="numbers">
-                          <p class="card-category">Users</p>
-                          <h4 class="card-title">
-                            <?php echo number_format($total_users); ?> <!-- Format angka dengan pemisah ribuan -->
-                          </h4>
-                        </div>
-                      </a>
-                    </div>
 
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="col-sm-4 col-md-4">
-              <div class="card card-stats card-round">
-                <div class="card-body">
-                  <div class="row align-items-center">
-                    <div class="col-icon">
-                      <div
-                        class="icon-big text-center icon-info bubble-shadow-small">
-                        <i class="fa-sharp fa-solid fa-clipboard-list"></i>
-                      </div>
-                    </div>
-                    <div class="col col-stats ms-3 ms-sm-0">
-                      <a href="daftar.php" style="text-decoration: none; color: inherit;">
-                        <div class="numbers">
-                          <p class="card-category">Daftar KAK</p>
-                          <h4 class="card-title">
-                            <?php echo $total_kak; ?> <!-- Tampilkan jumlah KAK dari database -->
-                          </h4>
-                        </div>
-                      </a>
-                    </div>
-
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="col-sm-4 col-md-4">
-              <div class="card card-stats card-round">
-                <div class="card-body">
-                  <div class="row align-items-center">
-                    <div class="col-icon">
-                      <div
-                        class="icon-big text-center icon-success bubble-shadow-small">
-                        <i class="fas fa-border-all"></i>
-                      </div>
-                    </div>
-                    <div class="col col-stats ms-3 ms-sm-0">
-                      <a href="kategori.php" style="text-decoration: none; color: inherit;">
-                        <div class="numbers">
-                          <p class="card-category">Kategori Program</p>
-                          <h4 class="card-title">
-                            <?php echo $total_kategori; ?> <!-- Tampilkan jumlah kategori dari database -->
-                          </h4>
-                        </div>
-                      </a>
-                    </div>
-
-                  </div>
-                </div>
-              </div>
-            </div>
-
-          </div>
-          <!-- New row for the 4 cards below -->
+          <!-- New row for the 3 cards -->
           <div class="row mt-4">
             <div class="col-sm-4 col-md-4">
               <div class="card card-stats card-round">
@@ -348,8 +265,113 @@ require '../cek.php';
               </div>
             </div>
           </div>
+
+          <!-- New section for the table -->
+          <div class="col-md-12 mt-4">
+            <div class="card">
+              <div class="card-header">
+                <div class="d-flex align-items-center">
+                  <!-- Date Picker From and To -->
+                  <form method="GET" action="laporan.php">
+                    <div class="d-flex">
+                      <div class="input-group me-4">
+                        <span class="input-group-text">From</span>
+                        <input type="date" class="form-control" name="fromDate" value="<?php echo htmlspecialchars($fromDate); ?>" />
+                      </div>
+                      <div class="input-group me-4">
+                        <span class="input-group-text">To</span>
+                        <input type="date" class="form-control" name="toDate" value="<?php echo htmlspecialchars($toDate); ?>" />
+                      </div>
+                      <button type="submit" class="btn btn-primary btn-round me-2" style="width: 167px;">Filter</button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+              <div class="card-body">
+
+                <!-- START TABLE -->
+                <?php
+                // Check if query returned results
+                if ($result && mysqli_num_rows($result) > 0) {
+                ?>
+                  <div class="table-responsive">
+                    <table id="add-row" class="display table table-striped table-hover">
+                      <thead>
+                        <tr>
+                          <th>No Doc</th>
+                          <th>Judul KAK</th>
+                          <th>Kategori Program</th>
+                          <th>Status Dokumen</th>
+                          <th>Tanggal Dibuat</th>
+                          <th>Tanggal Diperbarui</th>
+                          <th style="width: 10%">Aksi</th>
+                        </tr>
+                      </thead>
+                      <tfoot>
+                        <tr>
+                          <th>No Doc</th>
+                          <th>Judul KAK</th>
+                          <th>Kategori Program</th>
+                          <th>Status Dokumen</th>
+                          <th>Tanggal Dibuat</th>
+                          <th>Tanggal Diperbarui</th>
+                          <th>Aksi</th>
+                        </tr>
+                      </tfoot>
+                      <tbody>
+                        <?php
+                        // Fetch and display each row of data
+                        while ($row = mysqli_fetch_assoc($result)) {
+                          // Define the status label class based on the document status
+                          $statusClass = '';
+                          switch ($row['status']) {
+                            case 'approved':
+                              $statusClass = 'status-disetujui';
+                              break;
+                            case 'pending':
+                              $statusClass = 'status-pending';
+                              break;
+                            case 'rejected':
+                              $statusClass = 'status-ditolak';
+                              break;
+                            case 'draft':
+                              $statusClass = 'status-draft';
+                              break;
+                          }
+                          echo "<tr>
+                  <td>{$row['no_doc']}</td>
+                  <td>{$row['judul']}</td>
+                  <td>{$row['kategori_program']}</td>
+                  <td><span class='status {$statusClass}'>" . ucfirst($row['status']) . "</span></td>
+                  <td>{$row['tanggal_dibuat']}</td>
+                  <td>{$row['tanggal_diperbarui']}</td>
+                  <td>
+                    <div class='form-button-action'>
+                            <button class='btn btn-dark btn-round me-2' style='width: 120px;'>
+                              <i class='fas fa-download'></i> PDF
+                            </button>
+                            <button class='btn btn-dark btn-round me-2' style='width: 120px;'>
+                              <i class='fas fa-download'></i> WORD
+                            </button>
+                          </div>
+                  </td>
+                </tr>";
+                        }
+                        ?>
+                      </tbody>
+                    </table>
+                  </div>
+                <?php
+                } else {
+                  echo "<p>No data available</p>";
+                }
+                ?>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
+
 
       <footer class="footer">
         <div class="container-fluid d-flex justify-content-between">
@@ -382,6 +404,52 @@ require '../cek.php';
   <!-- Kaiadmin JS -->
   <script src="../../assets/js/kaiadmin.min.js"></script>
 
+  <!-- Kaiadmin DEMO methods, don't include it in your project! -->
+  <script src="../../assets/js/setting-demo.js"></script>
+  <script src="../../assets/js/demo.js"></script>
+  <script src="../../assets/js/setting-demo2.js"></script>
+  <!-- Datatables -->
+  <script src="../../assets/js/plugin/datatables/datatables.min.js"></script>
+  <!-- Kaiadmin JS -->
+  <script src="../../assets/js/kaiadmin.min.js"></script>
+  <script>
+    $(document).ready(function() {
+      $("#basic-datatables").DataTable({});
+
+      $("#multi-filter-select").DataTable({
+        pageLength: 5,
+        initComplete: function() {
+          this.api()
+            .columns()
+            .every(function() {
+              var column = this;
+              var select = $(
+                  '<select class="form-select"><option value=""></option></select>'
+                )
+                .appendTo($(column.footer()).empty())
+                .on("change", function() {
+                  var val = $.fn.dataTable.util.escapeRegex($(this).val());
+
+                  column
+                    .search(val ? "^" + val + "$" : "", true, false)
+                    .draw();
+                });
+
+              column
+                .data()
+                .unique()
+                .sort()
+                .each(function(d, j) {
+                  select.append(
+                    '<option value="' + d + '">' + d + "</option>"
+                  );
+                });
+            });
+        },
+      });
+    });
+  </script>
+
   <script>
     function logoutConfirm(event) {
       event.preventDefault(); // Prevents the default link action
@@ -402,6 +470,11 @@ require '../cek.php';
       });
     }
   </script>
+</body>
+
+</html>
+
+
 </body>
 
 </html>

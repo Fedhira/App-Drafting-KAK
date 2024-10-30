@@ -1,6 +1,7 @@
 <?php
 require '../../database/config.php';
 require '../../controllers/UserController.php';
+require '../../controllers/DaftarController.php';
 require '../cek.php';
 ?>
 
@@ -224,7 +225,7 @@ require '../cek.php';
                     <div class="col col-stats ms-3 ms-sm-0">
                       <div class="numbers">
                         <p class="card-category">Pending</p>
-                        <h4 class="card-title">2</h4>
+                        <h4 class="card-title"><?php echo $total_pending; ?></h4>
                       </div>
                     </div>
                   </div>
@@ -244,7 +245,7 @@ require '../cek.php';
                     <div class="col col-stats ms-3 ms-sm-0">
                       <div class="numbers">
                         <p class="card-category">Disetujui</p>
-                        <h4 class="card-title">105</h4>
+                        <h4 class="card-title"><?php echo $total_disetujui; ?></h4>
                       </div>
                     </div>
                   </div>
@@ -264,7 +265,7 @@ require '../cek.php';
                     <div class="col col-stats ms-3 ms-sm-0">
                       <div class="numbers">
                         <p class="card-category">Ditolak</p>
-                        <h4 class="card-title">12</h4>
+                        <h4 class="card-title"><?php echo $total_ditolak; ?></h4>
                       </div>
                     </div>
                   </div>
@@ -279,17 +280,17 @@ require '../cek.php';
               <div class="card-header">
                 <div class="d-flex align-items-center">
                   <!-- Date Picker From and To -->
-                  <form method="GET" action="">
+                  <form method="GET" action="laporan.php">
                     <div class="d-flex">
                       <div class="input-group me-4">
                         <span class="input-group-text">From</span>
-                        <input type="date" class="form-control" name="fromDate" />
+                        <input type="date" class="form-control" name="fromDate" value="<?php echo htmlspecialchars($fromDate); ?>" />
                       </div>
                       <div class="input-group me-4">
                         <span class="input-group-text">To</span>
-                        <input type="date" class="form-control" name="toDate" />
+                        <input type="date" class="form-control" name="toDate" value="<?php echo htmlspecialchars($toDate); ?>" />
                       </div>
-                      <button type="submit" class="btn btn-primary btn-round  me-2" style="width: 167px;">Filter</button>
+                      <button type="submit" class="btn btn-primary btn-round me-2" style="width: 167px;">Filter</button>
                     </div>
                   </form>
                 </div>
@@ -297,54 +298,82 @@ require '../cek.php';
               <div class="card-body">
 
                 <!-- START TABLE -->
-                <div class="table-responsive">
-                  <table id="add-row" class="display table table-striped table-hover">
-                    <thead>
-                      <tr>
-                        <th>No Doc</th>
-                        <th>Judul KAK</th>
-                        <th>Kategori Program</th>
-                        <th>Status Dokumen</th>
-                        <th>Tanggal Dibuat</th>
-                        <th>Tanggal Diperbarui</th>
-                        <th style="width: 10%">Aksi</th>
-                      </tr>
-                    </thead>
-                    <tfoot>
-                      <tr>
-                        <th>No Doc</th>
-                        <th>Judul KAK</th>
-                        <th>Kategori Program</th>
-                        <th>Status Dokumen</th>
-                        <th>Tanggal Dibuat</th>
-                        <th>Tanggal Diperbarui</th>
-                        <th>Aksi</th>
-                      </tr>
-                    </tfoot>
-                    <tbody>
-                      <tr>
-                        <td>KAK-001/2024</td>
-                        <td>Pengadaan perangkat lunak</td>
-                        <td>Divisi Pengadaan dan Sistem Informasi</td>
-                        <td>
-                          <span class="status status-disetujui">Disetujui</span>
-                        </td>
-                        <td>12-02-2024</td>
-                        <td>15-02-2024</td>
-                        <td>
-                          <div class="form-button-action">
-                            <button class="btn btn-dark btn-round me-2" style="width: 120px;">
-                              <i class="fas fa-download"></i> PDF
+                <?php
+                // Check if query returned results
+                if ($result && mysqli_num_rows($result) > 0) {
+                ?>
+                  <div class="table-responsive">
+                    <table id="add-row" class="display table table-striped table-hover">
+                      <thead>
+                        <tr>
+                          <th>No Doc</th>
+                          <th>Judul KAK</th>
+                          <th>Kategori Program</th>
+                          <th>Status Dokumen</th>
+                          <th>Tanggal Dibuat</th>
+                          <th>Tanggal Diperbarui</th>
+                          <th style="width: 10%">Aksi</th>
+                        </tr>
+                      </thead>
+                      <tfoot>
+                        <tr>
+                          <th>No Doc</th>
+                          <th>Judul KAK</th>
+                          <th>Kategori Program</th>
+                          <th>Status Dokumen</th>
+                          <th>Tanggal Dibuat</th>
+                          <th>Tanggal Diperbarui</th>
+                          <th>Aksi</th>
+                        </tr>
+                      </tfoot>
+                      <tbody>
+                        <?php
+                        // Fetch and display each row of data
+                        while ($row = mysqli_fetch_assoc($result)) {
+                          // Define the status label class based on the document status
+                          $statusClass = '';
+                          switch ($row['status']) {
+                            case 'approved':
+                              $statusClass = 'status-disetujui';
+                              break;
+                            case 'pending':
+                              $statusClass = 'status-pending';
+                              break;
+                            case 'rejected':
+                              $statusClass = 'status-ditolak';
+                              break;
+                            case 'draft':
+                              $statusClass = 'status-draft';
+                              break;
+                          }
+                          echo "<tr>
+                  <td>{$row['no_doc']}</td>
+                  <td>{$row['judul']}</td>
+                  <td>{$row['kategori_program']}</td>
+                  <td><span class='status {$statusClass}'>" . ucfirst($row['status']) . "</span></td>
+                  <td>{$row['tanggal_dibuat']}</td>
+                  <td>{$row['tanggal_diperbarui']}</td>
+                  <td>
+                   <div class='form-button-action'>
+                            <button class='btn btn-dark btn-round me-2' style='width: 120px;'>
+                              <i class='fas fa-download'></i> PDF
                             </button>
-                            <button class="btn btn-dark btn-round me-2" style="width: 120px;">
-                              <i class="fas fa-download"></i> WORD
+                            <button class='btn btn-dark btn-round me-2' style='width: 120px;'>
+                              <i class='fas fa-download'></i> WORD
                             </button>
                           </div>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
+                  </td>
+                </tr>";
+                        }
+                        ?>
+                      </tbody>
+                    </table>
+                  </div>
+                <?php
+                } else {
+                  echo "<p>No data available</p>";
+                }
+                ?>
               </div>
             </div>
           </div>

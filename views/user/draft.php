@@ -43,7 +43,7 @@ require '../cek.php';
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
   <!-- Load Font Awesome 6 -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
 
   <!-- CSS Files -->
   <link rel="stylesheet" href="../../assets/css/bootstrap.min.css" />
@@ -112,23 +112,16 @@ require '../cek.php';
                 <p>Dashboard</p>
               </a>
             </li>
-
             <li class="nav-item">
-              <a href="users.php">
-                <i class="fas fa-user-group"></i>
-                <p>Users</p>
-              </a>
-            </li>
-            <li class="nav-item">
-              <a href="kategori.php">
-                <i class="fas fa-border-all"></i>
-                <p>Kategori Program</p>
-              </a>
-            </li>
-            <li class="nav-item active">
               <a href="daftar.php">
                 <i class="fa-sharp fa-solid fa-clipboard-list"></i>
                 <p>Daftar KAK</p>
+              </a>
+            </li>
+            <li class="nav-item active">
+              <a href="draft.php">
+                <i class="fa-solid fa-file-pen"></i>
+                <p>Draft KAK</p>
               </a>
             </li>
             <li class="nav-item">
@@ -226,7 +219,7 @@ require '../cek.php';
       <div class="container">
         <div class="page-inner">
           <div class="page-header">
-            <h3 class="fw-bold mb-3">Daftar KAK</h3>
+            <h3 class="fw-bold mb-3">Draft KAK</h3>
           </div>
           <div class="row">
 
@@ -234,9 +227,16 @@ require '../cek.php';
               <div class="card">
                 <div class="card-header">
                   <div class="d-flex align-items-center">
+                    <button
+                      class="btn btn-primary btn-round me-4"
+                      data-bs-toggle="modal"
+                      data-bs-target="#addRowModal" style="width: 167px;">
+                      <i class="fa fa-user-plus"></i>
+                      Tambah KAK
+                    </button>
 
                     <!-- Date Picker From and To -->
-                    <form method="GET" action="daftar.php">
+                    <form method="GET" action="draft.php">
                       <div class="d-flex">
                         <div class="input-group me-4">
                           <span class="input-group-text">From</span>
@@ -251,9 +251,284 @@ require '../cek.php';
                     </form>
                   </div>
                 </div>
-
-
                 <div class="card-body">
+                  <!-- Modal Tambah -->
+                  <div class="modal fade" id="addRowModal" tabindex="-1" role="dialog" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                      <div class="modal-content">
+                        <div class="modal-header border-0">
+                          <h5 class="modal-title">
+                            <span class="fw-mediumbold">Detail Daftar KAK</span>
+                          </h5>
+                          <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+
+                        <!-- Modal Body with Scroll -->
+                        <div class="modal-body" style="max-height: 400px; overflow-y: auto;">
+                          <form>
+                            <div class="row">
+                              <div class="col-sm-12">
+                                <div class="form-group form-group-default">
+                                  <label>No Doc</label>
+                                  <input type="text" class="form-control" placeholder="fill" />
+                                </div>
+                              </div>
+                              <div class="col-md-12">
+                                <div class="form-group form-group-default">
+                                  <label>Judul KAK</label>
+                                  <input type="text" class="form-control" placeholder="fill" />
+                                </div>
+                              </div>
+                              <div class="col-md-12">
+                                <div class="form-group form-group-default">
+                                  <label>Kategori Program</label>
+                                  <input type="text" class="form-control" placeholder="fill" />
+                                </div>
+                              </div>
+                              <div class="col-md-12">
+                                <div class="form-group form-group-default">
+                                  <label>Latar Belakang</label>
+                                  <label>A. Dasar Hukum</label>
+                                  <input type="text" class="form-control" placeholder="fill " />
+                                </div>
+                              </div>
+                              <div class="col-md-12">
+                                <div class="form-group form-group-default">
+                                  <label>B. Gambaran Umum</label>
+                                  <input type="text" class="form-control" placeholder="fill" />
+                                </div>
+                              </div>
+                              <div class="col-md-12">
+                                <div class="form-group form-group-default">
+                                  <label>Tujuan</label>
+                                  <input type="text" class="form-control" placeholder="fill" />
+                                </div>
+                              </div>
+                              <div class="col-md-12">
+                                <div class="form-group form-group-default">
+                                  <label>Target/Sasaran</label>
+                                  <input type="text" class="form-control" placeholder="fill" />
+                                </div>
+                              </div>
+                              <div class="col-md-12">
+                                <div class="form-group form-group-default">
+                                  <label>Unit Kerja Pelaksana</label>
+                                  <input type="text" class="form-control" placeholder="fill" />
+                                </div>
+                              </div>
+                              <div class="col-md-12">
+                                <div class="form-group form-group-default">
+                                  <label>Ruang Lingkup, Lokasi & Fasilitas Penunjang</label>
+                                  <input type="text" class="form-control" placeholder="fill" />
+                                </div>
+                              </div>
+                              <div class="col-md-12">
+                                <div class="form-group form-group-default">
+                                  <label>Produk/Jasa yang dihasilkan (Deliverable)</label>
+                                  <input type="text" class="form-control" placeholder="fill" />
+                                </div>
+                              </div>
+                              <div class="col-md-12">
+                                <div class="form-group form-group-default">
+                                  <label>Waktu Pelaksana</label>
+                                  <input type="text" class="form-control" placeholder="fill" />
+                                </div>
+                              </div>
+                              <div class="col-md-12">
+                                <div class="form-group form-group-default">
+                                  <label>Tenaga Ahli/Terampil</label>
+                                  <input type="text" class="form-control" placeholder="fill" />
+                                </div>
+                              </div>
+                              <div class="col-md-12">
+                                <div class="form-group form-group-default">
+                                  <label>Peralatan</label>
+                                  <input type="text" class="form-control" placeholder="fill" />
+                                </div>
+                              </div>
+                              <div class="col-md-12">
+                                <div class="form-group form-group-default">
+                                  <label>Metode Kerja</label>
+                                  <input type="text" class="form-control" placeholder="fill" />
+                                </div>
+                              </div>
+                              <div class="col-md-12">
+                                <div class="form-group form-group-default">
+                                  <label>Manajemen Resiko</label>
+                                  <input type="text" class="form-control" placeholder="fill" />
+                                </div>
+                              </div>
+                              <div class="col-md-12">
+                                <div class="form-group form-group-default">
+                                  <label>Laporan Pengajuan Pekerjaan</label>
+                                  <input type="text" class="form-control" placeholder="fill" />
+                                </div>
+                              </div>
+                              <div class="col-md-12">
+                                <div class="form-group form-group-default">
+                                  <label>Sumber Dana & Prakiraan Biaya</label>
+                                  <input type="text" class="form-control" placeholder="fill" />
+                                </div>
+                              </div>
+                              <div class="col-md-12">
+                                <div class="form-group form-group-default">
+                                  <label>Penutup</label>
+                                  <input type="text" class="form-control" placeholder="fill" />
+                                </div>
+                              </div>
+                            </div>
+                          </form>
+                        </div>
+
+                        <!-- Modal Footer with Fixed Buttons -->
+                        <div class="modal-footer border-0">
+                          <button type="button" class="btn btn-primary">Simpan</button>
+                          <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Batal</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Modal Ubah -->
+                  <div class="modal fade" id="editRowModal" tabindex="-1" role="dialog" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                      <div class="modal-content">
+                        <div class="modal-header border-0">
+                          <h5 class="modal-title">
+                            <span class="fw-mediumbold">Detail Daftar KAK</span>
+                          </h5>
+                          <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+
+                        <!-- Modal Body with Scroll -->
+                        <div class="modal-body" style="max-height: 400px; overflow-y: auto;">
+                          <form>
+                            <div class="row">
+                              <div class="col-sm-12">
+                                <div class="form-group form-group-default">
+                                  <label>No Doc</label>
+                                  <input type="text" class="form-control" placeholder="fill" />
+                                </div>
+                              </div>
+                              <div class="col-md-12">
+                                <div class="form-group form-group-default">
+                                  <label>Judul KAK</label>
+                                  <input type="text" class="form-control" placeholder="fill" />
+                                </div>
+                              </div>
+                              <div class="col-md-12">
+                                <div class="form-group form-group-default">
+                                  <label>Kategori Program</label>
+                                  <input type="text" class="form-control" placeholder="fill" />
+                                </div>
+                              </div>
+                              <div class="col-md-12">
+                                <div class="form-group form-group-default">
+                                  <label>Latar Belakang</label>
+                                  <label>A. Dasar Hukum</label>
+                                  <input type="text" class="form-control" placeholder="fill " />
+                                </div>
+                              </div>
+                              <div class="col-md-12">
+                                <div class="form-group form-group-default">
+                                  <label>B. Gambaran Umum</label>
+                                  <input type="text" class="form-control" placeholder="fill" />
+                                </div>
+                              </div>
+                              <div class="col-md-12">
+                                <div class="form-group form-group-default">
+                                  <label>Tujuan</label>
+                                  <input type="text" class="form-control" placeholder="fill" />
+                                </div>
+                              </div>
+                              <div class="col-md-12">
+                                <div class="form-group form-group-default">
+                                  <label>Target/Sasaran</label>
+                                  <input type="text" class="form-control" placeholder="fill" />
+                                </div>
+                              </div>
+                              <div class="col-md-12">
+                                <div class="form-group form-group-default">
+                                  <label>Unit Kerja Pelaksana</label>
+                                  <input type="text" class="form-control" placeholder="fill" />
+                                </div>
+                              </div>
+                              <div class="col-md-12">
+                                <div class="form-group form-group-default">
+                                  <label>Ruang Lingkup, Lokasi & Fasilitas Penunjang</label>
+                                  <input type="text" class="form-control" placeholder="fill" />
+                                </div>
+                              </div>
+                              <div class="col-md-12">
+                                <div class="form-group form-group-default">
+                                  <label>Produk/Jasa yang dihasilkan (Deliverable)</label>
+                                  <input type="text" class="form-control" placeholder="fill" />
+                                </div>
+                              </div>
+                              <div class="col-md-12">
+                                <div class="form-group form-group-default">
+                                  <label>Waktu Pelaksana</label>
+                                  <input type="text" class="form-control" placeholder="fill" />
+                                </div>
+                              </div>
+                              <div class="col-md-12">
+                                <div class="form-group form-group-default">
+                                  <label>Tenaga Ahli/Terampil</label>
+                                  <input type="text" class="form-control" placeholder="fill" />
+                                </div>
+                              </div>
+                              <div class="col-md-12">
+                                <div class="form-group form-group-default">
+                                  <label>Peralatan</label>
+                                  <input type="text" class="form-control" placeholder="fill" />
+                                </div>
+                              </div>
+                              <div class="col-md-12">
+                                <div class="form-group form-group-default">
+                                  <label>Metode Kerja</label>
+                                  <input type="text" class="form-control" placeholder="fill" />
+                                </div>
+                              </div>
+                              <div class="col-md-12">
+                                <div class="form-group form-group-default">
+                                  <label>Manajemen Resiko</label>
+                                  <input type="text" class="form-control" placeholder="fill" />
+                                </div>
+                              </div>
+                              <div class="col-md-12">
+                                <div class="form-group form-group-default">
+                                  <label>Laporan Pengajuan Pekerjaan</label>
+                                  <input type="text" class="form-control" placeholder="fill" />
+                                </div>
+                              </div>
+                              <div class="col-md-12">
+                                <div class="form-group form-group-default">
+                                  <label>Sumber Dana & Prakiraan Biaya</label>
+                                  <input type="text" class="form-control" placeholder="fill" />
+                                </div>
+                              </div>
+                              <div class="col-md-12">
+                                <div class="form-group form-group-default">
+                                  <label>Penutup</label>
+                                  <input type="text" class="form-control" placeholder="fill" />
+                                </div>
+                              </div>
+                            </div>
+                          </form>
+                        </div>
+
+                        <!-- Modal Footer with Fixed Buttons -->
+                        <div class="modal-footer border-0">
+                          <button type="button" class="btn btn-primary">Simpan</button>
+                          <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Batal</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
 
                   <!-- Modal Detail -->
                   <div class="modal fade" id="detailRowModal" tabindex="-1" role="dialog" aria-hidden="true">
@@ -394,7 +669,7 @@ require '../cek.php';
                     </div>
                   </div>
 
-
+                  <!-- START TABLE -->
                   <?php
                   // Check if query returned results
                   if ($result && mysqli_num_rows($result) > 0) {
@@ -452,10 +727,18 @@ require '../cek.php';
                   <td>{$row['tanggal_diperbarui']}</td>
                   <td>
                     <div class='form-button-action'>
-                      <button class='btn btn-dark btn-round me-2' style='width: 100px;' data-bs-toggle='modal' data-bs-target='#detailRowModal'>
-                        <i class='fas fa-eye'></i> Detail
-                      </button>
-                    </div>
+                              <button class='btn btn-dark btn-round me-2' style='width: 100px;' data-bs-toggle='modal'
+                                data-bs-target='#detailRowModal'>
+                                <i class='fas fa-eye'></i> Detail
+                              </button>
+                              <button class='btn btn-warning btn-round me-2' style='width: 100px;' data-bs-toggle='modal'
+                                data-bs-target='#editRowModal'>
+                                <i class='fa fa-edit'></i> Ubah
+                              </button>
+                              <button class='btn btn-danger btn-round' style='width: 100px'>
+                                <i class='fa fa-trash'></i> Hapus
+                              </button>
+                            </div>
                   </td>
                 </tr>";
                           }
@@ -468,8 +751,6 @@ require '../cek.php';
                     echo "<p>No data available</p>";
                   }
                   ?>
-
-
                 </div>
               </div>
             </div>

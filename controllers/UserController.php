@@ -79,6 +79,22 @@ if ($result->num_rows > 0) {
     $total_kak = $row['total_kak'];
 }
 
+$sql_pending = "SELECT COUNT(*) AS total_pending FROM kak WHERE status = 'pending'";
+$sql_draft = "SELECT COUNT(*) AS total_draft FROM kak WHERE status = 'draft'";
+$sql_disetujui = "SELECT COUNT(*) AS total_disetujui FROM kak WHERE status = 'disetujui'";
+$sql_ditolak = "SELECT COUNT(*) AS total_ditolak FROM kak WHERE status = 'ditolak'";
+
+$result_pending = $koneksi->query($sql_pending);
+$result_draft = $koneksi->query($sql_draft);
+$result_disetujui = $koneksi->query($sql_disetujui);
+$result_ditolak = $koneksi->query($sql_ditolak);
+
+// Initialize count variables
+$total_pending = $result_pending->fetch_assoc()['total_pending'] ?? 0;
+$total_draft = $result_draft->fetch_assoc()['total_draft'] ?? 0;
+$total_disetujui = $result_disetujui->fetch_assoc()['total_disetujui'] ?? 0;
+$total_ditolak = $result_ditolak->fetch_assoc()['total_ditolak'] ?? 0;
+
 // Get the date filter parameters from the GET request
 $fromDate = isset($_GET['fromDate']) && !empty($_GET['fromDate']) ? $_GET['fromDate'] : null;
 $toDate = isset($_GET['toDate']) && !empty($_GET['toDate']) ? $_GET['toDate'] : null;
