@@ -203,27 +203,6 @@ require '../cek.php';
           </div>
           <div class="row">
             <!-- First row with three cards -->
-            <div class="col-sm-4 col-md-4">
-              <div class="card card-stats card-round card-compact">
-                <div class="card-body">
-                  <div class="row align-items-center">
-                    <div class="col-icon">
-                      <div class="icon-big text-center icon-info bubble-shadow-small">
-                        <i class="fa-sharp fa-solid fa-clipboard-list"></i>
-                      </div>
-                    </div>
-                    <div class="col col-stats ms-3 ms-sm-0">
-                      <a href="daftar.php" style="text-decoration: none; color: inherit;">
-                        <div class="numbers">
-                          <p class="card-category">Daftar KAK</p>
-                          <h4 class="card-title"><?php echo $total_kak; ?></h4>
-                        </div>
-                      </a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
 
             <div class="col-sm-4 col-md-4">
               <div class="card card-stats card-round card-compact">
@@ -264,11 +243,8 @@ require '../cek.php';
                 </div>
               </div>
             </div>
-          </div>
 
-          <div class="row mt-4 justify-content-center">
-            <!-- Second row with two centered cards -->
-            <div class="col-sm-6 col-md-4">
+            <div class="col-sm-4 col-md-4">
               <div class="card card-stats card-round card-compact">
                 <div class="card-body">
                   <div class="row align-items-center">
@@ -282,6 +258,31 @@ require '../cek.php';
                         <p class="card-category">Ditolak</p>
                         <h4 class="card-title"><?php echo $total_ditolak; ?></h4>
                       </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row mt-4 justify-content-center">
+            <!-- Second row with two centered cards -->
+            <div class="col-sm-6 col-md-4">
+              <div class="card card-stats card-round card-compact">
+                <div class="card-body">
+                  <div class="row align-items-center">
+                    <div class="col-icon">
+                      <div class="icon-big text-center icon-info bubble-shadow-small">
+                        <i class="fa-sharp fa-solid fa-clipboard-list"></i>
+                      </div>
+                    </div>
+                    <div class="col col-stats ms-3 ms-sm-0">
+                      <a href="daftar.php" style="text-decoration: none; color: inherit;">
+                        <div class="numbers">
+                          <p class="card-category">Daftar KAK</p>
+                          <h4 class="card-title"><?php echo $total_kak; ?></h4>
+                        </div>
+                      </a>
                     </div>
                   </div>
                 </div>

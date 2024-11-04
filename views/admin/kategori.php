@@ -335,8 +335,7 @@ require '../cek.php';
                                     }
                                     ?>
                                   </select>
-                                </div>
-                              </div>
+                                </div>                              </div>
                             </div>
                             <div class="modal-footer border-0">
                               <button type="submit" class="btn btn-primary">Simpan</button>
