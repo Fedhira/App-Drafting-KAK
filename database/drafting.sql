@@ -31,7 +31,7 @@ CREATE TABLE `kak` (
   `kak_id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   `kategori_id` int(11) NOT NULL,
-  `no_doc` varchar(100) NOT NULL,
+  `no_doc_mak` varchar(100) NOT NULL,
   `judul` varchar(255) NOT NULL,
   `status` enum('draft','submitted','approved','rejected') NOT NULL,
   `gambaran_umum` text NOT NULL,

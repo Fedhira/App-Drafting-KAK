@@ -219,96 +219,118 @@ require '../cek.php';
                                 <div class="accordion-item">
                                     <h2 class="accordion-header" id="headingOne">
                                         <button class="accordion-button custom-font-size" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                                            Bagaimana untuk memulai pengajuan magang atau PKL?
+                                            Bagaimana cara melihat daftar KAK yang sudah dibuat?
                                         </button>
                                     </h2>
                                     <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
                                         <div class="accordion-body custom-font-size">
-                                            Untuk memulai pengajuan magang atau PKL, pergi ke bagian "Pengajuan", isi formulir yang tersedia, dan ikuti petunjuk selanjutnya.
+                                            Buka menu Daftar KAK di sidebar untuk melihat semua KAK yang telah dibuat. Di sana, Anda bisa daftar KAK.
                                         </div>
                                     </div>
                                 </div>
                                 <div class="accordion-item">
                                     <h2 class="accordion-header" id="headingTwo">
                                         <button class="accordion-button collapsed custom-font-size" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                                            Bagaimana cara menambahkan pengguna baru ke sistem?
+                                            Bagaimana cara memulai pengajuan draft KAK?
                                         </button>
                                     </h2>
                                     <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
                                         <div class="accordion-body custom-font-size">
-                                            Untuk menambahkan pengguna baru ke sistem, pergi ke bagian "Users", klik "Tambah Pengguna", dan isi data yang diperlukan seperti nama, email, dan peran pengguna.
+                                            Untuk memulai pengajuan draft KAK, pergi ke bagian "Draft KAK", isi formulir yang tersedia, dan ikuti petunjuk selanjutnya.
                                         </div>
                                     </div>
                                 </div>
                                 <div class="accordion-item">
                                     <h2 class="accordion-header" id="headingThree">
                                         <button class="accordion-button collapsed custom-font-size" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                                            Apa yang harus saya lakukan jika saya lupa kata sandi?
+                                            Bagaimana cara melihat dan mengelola Laporan yang sudah dibuat?
                                         </button>
                                     </h2>
                                     <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
                                         <div class="accordion-body custom-font-size">
-                                            Jika Anda lupa kata sandi, klik pada opsi "Lupa Kata Sandi" di halaman masuk dan ikuti petunjuk untuk meresetnya.
+                                            Buka menu "Laporan" di sidebar untuk melihat daftar laporan yang tersedia. Pilih laporan yang ingin didownload, kemudian klik opsi Download PDF atau Download Word sesuai format yang diinginkan.
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <!-- End Accordion -->
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header" id="headingFour">
+                                        <button class="accordion-button collapsed custom-font-size" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                                            Bagaimana cara melihat daftar KAK yang sudah dibuat?
+                                        </button>
+                                    </h2>
+                                    <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour" data-bs-parent="#accordionExample">
+                                        <div class="accordion-body custom-font-size">
+                                            Buka menu "Daftar KAK" di sidebar untuk melihat semua KAK yang telah dibuat. Di sana, Anda bisa melihat daftar KAK yang tersedia.
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header" id="headingFive">
+                                        <button class="accordion-button collapsed custom-font-size" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+                                            Bagaimana cara melihat dan mengelola laporan yang sudah dibuat?
+                                        </button>
+                                    </h2>
+                                    <div id="collapseFive" class="accordion-collapse collapse" aria-labelledby="headingFive" data-bs-parent="#accordionExample">
+                                        <div class="accordion-body custom-font-size">
+                                            Masuk ke menu "Laporan" di sidebar untuk melihat dan mengelola semua laporan yang telah dibuat. Anda dapat melakukan pembaruan atau tinjauan terhadap laporan yang tersedia. </div>
+                                    </div>
+
+                                    <!-- End Accordion -->
 
 
-                            <!-- Contact Support Box -->
-                            <div class="contact-support box">
-                                <h5><strong>Contact Support</strong></h5>
-                                <h6>Jika Anda memerlukan bantuan lebih lanjut, silakan hubungi tim dukungan kami:</h6>
-                                <ul>
-                                    <li>
-                                        <h6><strong>Email:</strong> <a href="mailto:halobakti@baktikominfo.id">halobakti@baktikominfo.id</a></h6>
-                                    </li>
-                                    <li>
-                                        <h6><strong>Phone:</strong> <a href="tel:021-30205834">021-30205834</a></h6>
-                                    </li>
-                                </ul>
-                            </div>
-                            <!-- End Contact Support -->
+                                    <!-- Contact Support Box -->
+                                    <div class="contact-support box">
+                                        <h5><strong>Contact Support</strong></h5>
+                                        <h6>Jika Anda memerlukan bantuan lebih lanjut, silakan hubungi tim dukungan kami:</h6>
+                                        <ul>
+                                            <li>
+                                                <h6><strong>Email:</strong> <a href="mailto:halobakti@baktikominfo.id">halobakti@baktikominfo.id</a></h6>
+                                            </li>
+                                            <li>
+                                                <h6><strong>Phone:</strong> <a href="tel:021-30205834">021-30205834</a></h6>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <!-- End Contact Support -->
 
-                            <!-- CSS untuk membuat kotak -->
-                            <style>
-                                .box {
-                                    border: 1px solid #ddd;
-                                    /* Border dengan warna abu-abu */
-                                    padding: 30px;
-                                    /* Jarak antara konten dan border */
-                                    background-color: #f9f9f9;
-                                    /* Warna latar belakang */
-                                    border-radius: 8px;
-                                    /* Ujung kotak dibuat melengkung */
-                                    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-                                    /* Memberikan efek shadow */
-                                    max-width: 1210px;
-                                    /* Maksimal lebar kotak */
-                                    margin: auto;
-                                    /* Membuat kotak berada di tengah */
-                                }
+                                    <!-- CSS untuk membuat kotak -->
+                                    <style>
+                                        .box {
+                                            border: 1px solid #ddd;
+                                            /* Border dengan warna abu-abu */
+                                            padding: 30px;
+                                            /* Jarak antara konten dan border */
+                                            background-color: #f9f9f9;
+                                            /* Warna latar belakang */
+                                            border-radius: 8px;
+                                            /* Ujung kotak dibuat melengkung */
+                                            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                                            /* Memberikan efek shadow */
+                                            max-width: 1210px;
+                                            /* Maksimal lebar kotak */
+                                            margin: auto;
+                                            /* Membuat kotak berada di tengah */
+                                        }
 
-                                .box h5 {
-                                    margin-bottom: 10px;
-                                    /* Jarak bawah heading */
-                                }
+                                        .box h5 {
+                                            margin-bottom: 10px;
+                                            /* Jarak bawah heading */
+                                        }
 
-                                .box a {
-                                    color: #007bff;
-                                    /* Warna tautan */
-                                    text-decoration: none;
-                                    /* Menghilangkan garis bawah pada tautan */
-                                }
+                                        .box a {
+                                            color: #007bff;
+                                            /* Warna tautan */
+                                            text-decoration: none;
+                                            /* Menghilangkan garis bawah pada tautan */
+                                        }
 
-                                .box a:hover {
-                                    text-decoration: underline;
-                                    /* Tautan bergaris bawah saat di-hover */
-                                }
-                            </style>
+                                        .box a:hover {
+                                            text-decoration: underline;
+                                            /* Tautan bergaris bawah saat di-hover */
+                                        }
+                                    </style>
 
-                        </div>
+                                </div>
                     </section>
                 </div>
             </div>

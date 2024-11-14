@@ -6,7 +6,6 @@ include('../controllers/UserController.php');
 date_default_timezone_set('Asia/Jakarta');
 
 // Function to add a user
-// Function to add a user
 function addUser($koneksi)
 {
     if (isset($_POST['username'], $_POST['email'], $_POST['nik'], $_POST['role'], $_POST['kategori_id'], $_POST['password'])) {

@@ -238,39 +238,60 @@ $email = isset($_SESSION['email']) ? htmlspecialchars($_SESSION['email']) : 'gue
                                 <div class="accordion-item">
                                     <h2 class="accordion-header" id="headingOne">
                                         <button class="accordion-button custom-font-size" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                                            Bagaimana untuk memulai pengajuan magang atau PKL?
+                                            Bagaimana cara melihat daftar KAK yang sudah dibuat?
                                         </button>
                                     </h2>
                                     <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
                                         <div class="accordion-body custom-font-size">
-                                            Untuk memulai pengajuan magang atau PKL, pergi ke bagian "Pengajuan", isi formulir yang tersedia, dan ikuti petunjuk selanjutnya.
-                                        </div>
+                                            Buka menu Daftar KAK di sidebar untuk melihat semua KAK yang telah dibuat. Di sana, anda akan melihat semua KAK yang tersedia beserta detailnya, disana juga anda dapat menyetujui atau menolak KAK tersebut. </div>
                                     </div>
                                 </div>
                                 <div class="accordion-item">
                                     <h2 class="accordion-header" id="headingTwo">
                                         <button class="accordion-button collapsed custom-font-size" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                                            Bagaimana cara menambahkan pengguna baru ke sistem?
+                                            Bagaimana cara melakukan penolakan KAK?
                                         </button>
                                     </h2>
                                     <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
                                         <div class="accordion-body custom-font-size">
-                                            Untuk menambahkan pengguna baru ke sistem, pergi ke bagian "Users", klik "Tambah Pengguna", dan isi data yang diperlukan seperti nama, email, dan peran pengguna.
-                                        </div>
+                                            Untuk menolak KAK (Kerangka Acuan Kerja), buka menu "Daftar KAK" di sidebar dan temukan KAK yang ingin Anda tolak. Klik pada judul KAK tersebut, lalu pilih opsi "Tolak." Berikan alasan penolakan di kolom yang tersedia, serta saran/revisi dan klik "Kirim" untuk mengkonfirmasi. Setelah itu, periksa kembali daftar KAK untuk memastikan statusnya sudah berubah menjadi "Ditolak". </div>
                                     </div>
                                 </div>
                                 <div class="accordion-item">
                                     <h2 class="accordion-header" id="headingThree">
                                         <button class="accordion-button collapsed custom-font-size" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                                            Apa yang harus saya lakukan jika saya lupa kata sandi?
+                                            Apa itu Kategori Pemilik Program (PP)?
                                         </button>
                                     </h2>
                                     <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
                                         <div class="accordion-body custom-font-size">
-                                            Jika Anda lupa kata sandi, klik pada opsi "Lupa Kata Sandi" di halaman masuk dan ikuti petunjuk untuk meresetnya.
-                                        </div>
+                                            Kategori Pemilik Program (PP) adalah kategori yang mengelompokkan program atau proyek berdasarkan pemilik atau unit yang bertanggung jawab atas pelaksanaannya. </div>
                                     </div>
                                 </div>
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header" id="headingFour">
+                                        <button class="accordion-button collapsed custom-font-size" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                                            Bagaimana jika saya tidak setuju dengan alasan pengajuan KAK?
+                                        </button>
+                                    </h2>
+                                    <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour" data-bs-parent="#accordionExample">
+                                        <div class="accordion-body custom-font-size">
+                                            Anda dapat menolak pengajuan KAK dengan memberikan alasan penolakan yang jelas di kolom komentar agar pengaju memahami alasannya. </div>
+                                    </div>
+                                </div>
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header" id="headingFive">
+                                        <button class="accordion-button collapsed custom-font-size" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+                                            Bagaimana cara Supervisor mengakses riwayat revisi pada KAK?
+                                        </button>
+                                    </h2>
+                                    <div id="collapseFive" class="accordion-collapse collapse" aria-labelledby="headingFive" data-bs-parent="#accordionExample">
+                                        <div class="accordion-body custom-font-size">
+                                            Riwayat revisi dapat diakses di bagian Riwayat Revisi pada halaman detail KAK. Semua perubahan yang diajukan, termasuk siapa yang melakukan perubahan dan tanggalnya, akan tercatat di sini. </div>
+                                    </div>
+                                </div>
+                                <!-- End Accordion -->
+
                             </div>
                             <!-- End Accordion -->
 

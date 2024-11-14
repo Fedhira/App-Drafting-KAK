@@ -115,3 +115,18 @@ function fetchStatusOptions($koneksi)
 
     return $statusOptions;
 }
+
+function fetchAllKategori($koneksi)
+{
+    $query = "SELECT kategori_id, nama_divisi FROM kategori_program";
+    $result = $koneksi->query($query);
+    $categories = [];
+
+    if ($result && $result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            $categories[] = $row;
+        }
+    }
+
+    return $categories;
+}

@@ -1,5 +1,6 @@
 <?php
 require '../../database/config.php';
+require '../../models/CategoryModel.php';
 require '../../controllers/UserController.php';
 require '../cek.php';
 ?>
@@ -307,8 +308,6 @@ require '../cek.php';
                                     }
                                     ?>
                                   </select>
-
-
                                 </div>
                               </div>
 
@@ -327,32 +326,18 @@ require '../cek.php';
                               <div class="col-sm-12">
                                 <div class="form-group form-group-default">
                                   <label>Kategori</label>
-                                  <select name="kategori_id" class="form-control">
-                                    <option value="">Select Kategori</option>
-                                    <?php
 
-                                    // Fetch all categories from 'kategori_program' table
-                                    $kategori = mysqli_query($koneksi, "SELECT * FROM kategori_program");
-
-                                    // Check if the query was successful
-                                    if ($kategori) {
-                                      // Loop through the result and create an option for each category
-                                      while ($data = mysqli_fetch_array($kategori)) {
-                                        // Check if the 'nama_divisi' key exists in the fetched array
-                                        if (isset($data['nama_divisi'])) {
-                                    ?>
-                                          <option value="<?= htmlspecialchars($data['kategori_id']) ?>">
-                                            <?= htmlspecialchars($data['nama_divisi']) ?>
-                                          </option>
+                                  <select id="kategori_id" name="kategori" class="form-control" required>
+                                    <option value="">Pilih Kategori</option>
                                     <?php
-                                        } else {
-                                          // Handle the case where 'nama_divisi' is missing or undefined
-                                          echo "<option value=''>Nama Divisi Not Found</option>";
-                                        }
+                                    $categories = fetchAllKategori($koneksi);
+                                    // Populate the select options with data from the database
+                                    if (!empty($categories)) {
+                                      foreach ($categories as $category) {
+                                        echo '<option value="' . htmlspecialchars($category['kategori_id']) . '">' . htmlspecialchars($category['nama_divisi']) . '</option>';
                                       }
                                     } else {
-                                      // Handle the case where the query failed
-                                      echo "<option value=''>Failed to retrieve categories</option>";
+                                      echo '<option value="">Tidak ada kategori tersedia</option>';
                                     }
                                     ?>
                                   </select>

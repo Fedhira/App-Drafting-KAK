@@ -1,9 +1,20 @@
 <?php
+if (session_status() === PHP_SESSION_NONE) {
+  session_start();
+}
+
+if (!isset($_SESSION['user_id'])) {
+  echo "User ID is missing. Please ensure you are logged in.";
+  exit;
+}
 require '../../database/config.php';
+require '../../models/CategoryModel.php';
+require '../../models/DraftModel.php';
 require '../../controllers/UserController.php';
-require '../../controllers/DaftarController.php';
+require '../../controllers/DraftController.php';
 require '../cek.php';
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -51,6 +62,29 @@ require '../cek.php';
 
   <!-- CSS Just for demo purpose, don't include it in your project -->
   <link rel="stylesheet" href="../../assets/css/demo.css" />
+  <style>
+    .btn {
+      padding: 10px;
+      font-size: 16px;
+      border-radius: 5px;
+      display: inline-block;
+      text-align: center;
+    }
+
+    .btn-ubah {
+      background-color: #FFA726;
+      color: black;
+    }
+
+    .btn-hapus {
+      background-color: #E57373;
+      color: white;
+    }
+
+    .ck-editor__editable {
+      min-height: 250px;
+    }
+  </style>
 
 </head>
 
@@ -98,13 +132,13 @@ require '../cek.php';
                 <p>Daftar KAK</p>
               </a>
             </li>
-            <li class="nav-item">
+            <li class="nav-item active">
               <a href="draft.php">
                 <i class="fa-solid fa-file-pen"></i>
                 <p>Draft KAK</p>
               </a>
             </li>
-            <li class="nav-item active">
+            <li class="nav-item">
               <a href="laporan.php">
                 <i class="fas fa-file"></i>
                 <p>Laporan</p>
@@ -127,9 +161,9 @@ require '../cek.php';
         <div class="main-header-logo">
           <!-- Logo Header -->
           <div class="logo-header" data-background-color="light-blue">
-            <a href="index.html" class="logo">
+            <a href="../index.html" class="logo">
               <img
-                src="assets/img/kaiadmin/logo_light.svg"
+                src="..../../assets/img/kaiadmin/logo_bakti_light.svg"
                 alt="navbar brand"
                 class="navbar-brand"
                 height="20" />
@@ -152,9 +186,7 @@ require '../cek.php';
         <nav
           class="navbar navbar-header navbar-header-transparent navbar-expand-lg border-bottom">
           <div class="container-fluid">
-
             <ul class="navbar-nav topbar-nav ms-md-auto align-items-center">
-
               <li class="nav-item topbar-user dropdown hidden-caret">
                 <a
                   class="dropdown-toggle profile-pic"
@@ -180,7 +212,6 @@ require '../cek.php';
                           <h4><?= $username ?></h4> <!-- Display the username -->
                           <p class="text-muted"><?= $email ?></p> <!-- Display the email -->
                         </div>
-                      </div>
                     </li>
                     <li>
                       <div class="dropdown-divider"></div>
@@ -197,181 +228,124 @@ require '../cek.php';
 
       <div class="container">
         <div class="page-inner">
-          <div class="d-flex align-items-left align-items-md-center flex-column flex-md-row pt-2 pb-4">
-            <div>
-              <h3 class="fw-bold mb-3">Laporan</h3>
-            </div>
+          <div class="page-header">
+            <h3 class="fw-bold mb-3">Tambah Draft KAK</h3>
           </div>
-
-          <!-- New row for the 3 cards -->
-          <div class="row mt-4">
-            <div class="col-sm-4 col-md-4">
-              <div class="card card-stats card-round">
+          <div class="row">
+            <div class="col-md-12 mt-4">
+              <div class="card" style="height: 500px; overflow-y: auto;"> <!-- Scrollable card with fixed height -->
                 <div class="card-body">
-                  <div class="row align-items-center">
-                    <div class="col-icon">
-                      <div class="icon-big text-center icon-warning bubble-shadow-small">
-                        <i class="fas fa-hourglass-half"></i>
-                      </div>
-                    </div>
-                    <div class="col col-stats ms-3 ms-sm-0">
-                      <div class="numbers">
-                        <p class="card-category">Pending</p>
-                        <h4 class="card-title"><?php echo $total_pending; ?></h4>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+                  <!-- Form with bold labels and improved spacing -->
+                  <form method="POST" action="../../models/DraftModel.php" enctype="multipart/form-data">
 
-            <div class="col-sm-4 col-md-4">
-              <div class="card card-stats card-round">
-                <div class="card-body">
-                  <div class="row align-items-center">
-                    <div class="col-icon">
-                      <div class="icon-big text-center icon-success bubble-shadow-small">
-                        <i class="fas fa-check-circle"></i>
-                      </div>
-                    </div>
-                    <div class="col col-stats ms-3 ms-sm-0">
-                      <div class="numbers">
-                        <p class="card-category">Disetujui</p>
-                        <h4 class="card-title"><?php echo $total_disetujui; ?></h4>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+                    <input type="hidden" name="user_id" value="<?php echo htmlspecialchars($_SESSION['user_id']); ?>">
 
-            <div class="col-sm-4 col-md-4">
-              <div class="card card-stats card-round">
-                <div class="card-body">
-                  <div class="row align-items-center">
-                    <div class="col-icon">
-                      <div class="icon-big text-center icon-danger bubble-shadow-small">
-                        <i class="fas fa-exclamation-triangle"></i>
-                      </div>
-                    </div>
-                    <div class="col col-stats ms-3 ms-sm-0">
-                      <div class="numbers">
-                        <p class="card-category">Ditolak</p>
-                        <h4 class="card-title"><?php echo $total_ditolak; ?></h4>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+                    <label for="nodoc"><strong>No. MAK</strong></label>
+                    <input type="text" id="nodoc" name="nodoc" class="form-control mb-3" autofocus>
 
-          <!-- New section for the table -->
-          <div class="col-md-12 mt-4">
-            <div class="card">
-              <div class="card-header">
-                <div class="d-flex align-items-center">
-                  <!-- Date Picker From and To -->
-                  <form method="GET" action="laporan.php">
-                    <div class="d-flex">
-                      <div class="input-group me-4">
-                        <span class="input-group-text">From</span>
-                        <input type="date" class="form-control" name="fromDate" value="<?php echo htmlspecialchars($fromDate); ?>" />
-                      </div>
-                      <div class="input-group me-4">
-                        <span class="input-group-text">To</span>
-                        <input type="date" class="form-control" name="toDate" value="<?php echo htmlspecialchars($toDate); ?>" />
-                      </div>
-                      <button type="submit" class="btn btn-primary btn-round me-2" style="width: 167px;">Filter</button>
+                    <label for="kategori"><strong>Kategori Program</strong></label>
+                    <select id="kategori" name="kategori" class="form-control mb-3" autofocus>
+                      <option value="">Pilih Kategori</option>
+                      <?php
+                      $categories = fetchAllKategori($koneksi);
+                      // Populate the select options with data from the database
+                      if (!empty($categories)) {
+                        foreach ($categories as $category) {
+                          echo '<option value="' . htmlspecialchars($category['kategori_id']) . '">' . htmlspecialchars($category['nama_divisi']) . '</option>';
+                        }
+                      } else {
+                        echo '<option value="">Tidak ada kategori tersedia</option>';
+                      }
+                      ?>
+                    </select>
+
+                    <?php
+                    // Close the database connection
+                    $koneksi->close();
+                    ?>
+
+                    <label for="judul"><strong>Judul KAK</strong></label>
+                    <input type="text" id="judul" name="judul" class="form-control mb-3" autofocus>
+
+                    <label for="latbek"><strong>Latar Belakang</strong></label>
+                    <textarea class="editor form-control mb-3" id="latbek" name="latbek" autofocus></textarea>
+                    <br>
+
+                    <label for="daskum"><strong>Dasar Hukum</strong></label>
+                    <textarea class="editor form-control mb-3" id="daskum" name="daskum" autofocus></textarea>
+                    <br>
+
+                    <label for="gambaran"><strong>Gambaran Umum</strong></label>
+                    <textarea class="editor form-control mb-3" id="gambaran" name="gambaran" autofocus></textarea>
+                    <br>
+
+                    <label for="tujuan"><strong>Tujuan</strong></label>
+                    <textarea class="editor form-control mb-3" id="tujuan" name="tujuan" autofocus></textarea>
+                    <br>
+
+                    <label for="target"><strong>Target/Sasaran</strong></label>
+                    <textarea class="editor form-control mb-3" id="target" name="target" autofocus></textarea>
+                    <br>
+
+                    <label for="unitkerja"><strong>Unit Kerja Pelaksana</strong></label>
+                    <textarea class="editor form-control mb-3" id="unitkerja" name="unitkerja" autofocus></textarea>
+                    <br>
+
+                    <label for="ruanglingkup"><strong>Ruang Lingkup, Lokasi dan Fasilitas Penunjang</strong></label>
+                    <textarea class="editor form-control mb-3" id="ruanglingkup" name="ruanglingkup" autofocus></textarea>
+                    <br>
+
+                    <label for="produk"><strong>Produk/Jasa yang dihasilkan (Deliverable)</strong></label>
+                    <textarea class="editor form-control mb-3" id="produk" name="produk" autofocus></textarea>
+                    <br>
+
+                    <label for="waktu"><strong>Waktu Pelaksanaan</strong></label>
+                    <textarea class="editor form-control mb-3" id="waktu" name="waktu" autofocus></textarea>
+                    <br>
+
+                    <label for="tenaga_ahli"><strong>Tenaga Ahli</strong></label>
+                    <textarea class="editor form-control mb-3" id="tenaga_ahli" name="tenaga_ahli" autofocus></textarea>
+                    <br>
+
+                    <label for="peralatan"><strong>Peralatan</strong></label>
+                    <textarea class="editor form-control mb-3" id="peralatan" name="peralatan" autofocus></textarea>
+                    <br>
+
+                    <label for="metode"><strong>Metode Kerja</strong></label>
+                    <textarea class="editor form-control mb-3" id="metode" name="metode" autofocus></textarea>
+                    <br>
+
+                    <label for="manajemen"><strong>Manajemen Resiko</strong></label>
+                    <textarea class="editor form-control mb-3" id="manajemen" name="manajemen" autofocus></textarea>
+                    <br>
+
+                    <label for="laporan"><strong>Laporan Pengajuan Pekerjaan</strong></label>
+                    <textarea class="editor form-control mb-3" id="laporan" name="laporan" autofocus></textarea>
+                    <br>
+
+                    <label for="sumber"><strong>Sumber Dana dan Prakiraan Biaya</strong></label>
+                    <textarea class="editor form-control mb-3" id="sumber" name="sumber" autofocus></textarea>
+                    <br>
+
+                    <label for="penutup"><strong>Penutup</strong></label>
+                    <textarea class="editor form-control mb-3" id="penutup" name="penutup" autofocus></textarea>
+                    <br>
+
+                    <label for="lampiran"><strong>Lampiran</strong></label>
+                    <input type="file" id="lampiran" name="lampiran" class="form-control mb-3" accept=".pdf, image/*" autofocus>
+
+                    <div class="mt-4 text-end">
+                      <button type="submit" class="btn btn-primary" value="Submit">Submit</button>
+                      <button type="button" class="btn btn-danger" onclick="window.location.href='draft.php';">Cancel</button>
                     </div>
+
                   </form>
                 </div>
-              </div>
-              <div class="card-body">
-
-                <!-- START TABLE -->
-                <?php
-                // Check if query returned results
-                if ($result && mysqli_num_rows($result) > 0) {
-                ?>
-                  <div class="table-responsive">
-                    <table id="add-row" class="display table table-striped table-hover">
-                      <thead>
-                        <tr>
-                          <th>No Doc</th>
-                          <th>Judul KAK</th>
-                          <th>Kategori Program</th>
-                          <th>Status Dokumen</th>
-                          <th>Tanggal Dibuat</th>
-                          <th>Tanggal Diperbarui</th>
-                          <th style="width: 10%">Aksi</th>
-                        </tr>
-                      </thead>
-                      <tfoot>
-                        <tr>
-                          <th>No Doc</th>
-                          <th>Judul KAK</th>
-                          <th>Kategori Program</th>
-                          <th>Status Dokumen</th>
-                          <th>Tanggal Dibuat</th>
-                          <th>Tanggal Diperbarui</th>
-                          <th>Aksi</th>
-                        </tr>
-                      </tfoot>
-                      <tbody>
-                        <?php
-                        // Fetch and display each row of data
-                        while ($row = mysqli_fetch_assoc($result)) {
-                          // Define the status label class based on the document status
-                          $statusClass = '';
-                          switch ($row['status']) {
-                            case 'approved':
-                              $statusClass = 'status-disetujui';
-                              break;
-                            case 'pending':
-                              $statusClass = 'status-pending';
-                              break;
-                            case 'rejected':
-                              $statusClass = 'status-ditolak';
-                              break;
-                            case 'draft':
-                              $statusClass = 'status-draft';
-                              break;
-                          }
-                          echo "<tr>
-                  <td>{$row['no_doc_mak']}</td>
-                  <td>{$row['judul']}</td>
-                  <td>{$row['kategori_program']}</td>
-                  <td><span class='status {$statusClass}'>" . ucfirst($row['status']) . "</span></td>
-                  <td>{$row['tanggal_dibuat']}</td>
-                  <td>{$row['tanggal_diperbarui']}</td>
-                  <td>
-                    <div class='form-button-action'>
-                            <button class='btn btn-dark btn-round me-2' style='width: 120px;'>
-                              <i class='fas fa-download'></i> PDF
-                            </button>
-                            <button class='btn btn-dark btn-round me-2' style='width: 120px;'>
-                              <i class='fas fa-download'></i> WORD
-                            </button>
-                          </div>
-                  </td>
-                </tr>";
-                        }
-                        ?>
-                      </tbody>
-                    </table>
-                  </div>
-                <?php
-                } else {
-                  echo "<p>No data available</p>";
-                }
-                ?>
               </div>
             </div>
           </div>
         </div>
       </div>
-
 
       <footer class="footer">
         <div class="container-fluid d-flex justify-content-between">
@@ -385,7 +359,6 @@ require '../cek.php';
         </div>
       </footer>
     </div>
-
   </div>
   <!--   Core JS Files   -->
   <script src="../../assets/js/core/jquery-3.7.1.min.js"></script>
@@ -394,24 +367,12 @@ require '../cek.php';
 
   <!-- jQuery Scrollbar -->
   <script src="../../assets/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js"></script>
-
-  <!-- jQuery Sparkline -->
-  <script src="../../assets/js/plugin/jquery.sparkline/jquery.sparkline.min.js"></script>
-
-  <!-- Sweet Alert -->
-  <script src="../../assets/js/plugin/sweetalert/sweetalert.min.js"></script>
-
-  <!-- Kaiadmin JS -->
-  <script src="../../assets/js/kaiadmin.min.js"></script>
-
-  <!-- Kaiadmin DEMO methods, don't include it in your project! -->
-  <script src="../../assets/js/setting-demo.js"></script>
-  <script src="../../assets/js/demo.js"></script>
-  <script src="../../assets/js/setting-demo2.js"></script>
   <!-- Datatables -->
   <script src="../../assets/js/plugin/datatables/datatables.min.js"></script>
   <!-- Kaiadmin JS -->
   <script src="../../assets/js/kaiadmin.min.js"></script>
+  <!-- Kaiadmin DEMO methods, don't include it in your project! -->
+  <script src="../../assets/js/setting-demo2.js"></script>
   <script>
     $(document).ready(function() {
       $("#basic-datatables").DataTable({});
@@ -447,6 +408,26 @@ require '../cek.php';
             });
         },
       });
+
+      // Add Row
+      $("#add-row").DataTable({
+        pageLength: 5,
+      });
+
+      var action =
+        '<td> <div class="form-button-action"> <button type="button" data-bs-toggle="tooltip" title="" class="btn btn-link btn-primary btn-lg" data-original-title="Edit Task"> <i class="fa fa-edit"></i> </button> <button type="button" data-bs-toggle="tooltip" title="" class="btn btn-link btn-danger" data-original-title="Remove"> <i class="fa fa-times"></i> </button> </div> </td>';
+
+      $("#addRowButton").click(function() {
+        $("#add-row")
+          .dataTable()
+          .fnAddData([
+            $("#addName").val(),
+            $("#addPosition").val(),
+            $("#addOffice").val(),
+            action,
+          ]);
+        $("#addRowModal").modal("hide");
+      });
     });
   </script>
 
@@ -470,10 +451,35 @@ require '../cek.php';
       });
     }
   </script>
-</body>
 
-</html>
+  <script src="https://cdn.ckeditor.com/ckeditor5/35.4.0/classic/ckeditor.js"></script>
+  <script type="text/javascript">
+    document.querySelectorAll('.editor').forEach(editorElement => {
+      ClassicEditor
+        .create(editorElement, {
+          ckfinder: {
+            uploadUrl: "ckfileupload.php",
+          }
+        })
+        .then(editor => {
+          console.log(editor);
+        })
+        .catch(error => {
+          console.error(error);
+        });
+    });
+  </script>
 
+  <script>
+    document.querySelector('form').addEventListener('submit', function(event) {
+      const metodeField = document.getElementById('metode');
+      if (metodeField && !metodeField.checkValidity()) {
+        metodeField.scrollIntoView(); // Make sure it's visible
+        metodeField.focus(); // Focus on it
+        event.preventDefault(); // Prevent form submission until valid
+      }
+    });
+  </script>
 
 </body>
 

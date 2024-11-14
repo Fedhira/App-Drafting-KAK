@@ -227,13 +227,14 @@ require '../cek.php';
               <div class="card">
                 <div class="card-header">
                   <div class="d-flex align-items-center">
-                    <button
-                      class="btn btn-primary btn-round me-4"
-                      data-bs-toggle="modal"
-                      data-bs-target="#addRowModal" style="width: 167px;">
-                      <i class="fa fa-user-plus"></i>
-                      Tambah KAK
-                    </button>
+                    <a href="add_draft.php">
+                      <button
+                        class="btn btn-primary btn-round me-4"
+                        style="width: 167px;">
+                        <i class="fa fa-user-plus"></i>
+                        Tambah KAK
+                      </button>
+                    </a>
 
                     <!-- Date Picker From and To -->
                     <form method="GET" action="draft.php">
@@ -719,7 +720,7 @@ require '../cek.php';
                                 break;
                             }
                             echo "<tr>
-                  <td>{$row['no_doc']}</td>
+                  <td>{$row['no_doc_mak']}</td>
                   <td>{$row['judul']}</td>
                   <td>{$row['kategori_program']}</td>
                   <td><span class='status {$statusClass}'>" . ucfirst($row['status']) . "</span></td>
@@ -731,10 +732,12 @@ require '../cek.php';
                                 data-bs-target='#detailRowModal'>
                                 <i class='fas fa-eye'></i> Detail
                               </button>
+                              <a href='edit_draft.php'>
                               <button class='btn btn-warning btn-round me-2' style='width: 100px;' data-bs-toggle='modal'
-                                data-bs-target='#editRowModal'>
+                                data-bs-target=''>
                                 <i class='fa fa-edit'></i> Ubah
                               </button>
+                              </a>
                               <button class='btn btn-danger btn-round' style='width: 100px'>
                                 <i class='fa fa-trash'></i> Hapus
                               </button>

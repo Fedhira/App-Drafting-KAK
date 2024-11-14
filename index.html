@@ -34,15 +34,26 @@
 				Paragraph,
 				Bold,
 				Italic,
-				Font
+				Font,
+				Table,
+				TableToolbar,
+				List
 			} from 'ckeditor5';
+			
 			ClassicEditor
 				.create( document.querySelector( '#editor' ), {
-					plugins: [ Essentials, Paragraph, Bold, Italic, Font ],
+					plugins: [
+						Essentials, Paragraph, Bold, Italic, Font, 
+						Table, TableToolbar, List
+					],
 					toolbar: [
 						'undo', 'redo', '|', 'bold', 'italic', '|',
-						'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor'
-					]
+						'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor', '|',
+						'numberedList', 'bulletedList', 'insertTable'
+					],
+					table: {
+						contentToolbar: [ 'tableColumn', 'tableRow', 'mergeTableCells' ]
+					}
 				} )
 				.then( editor => {
 					window.editor = editor;
@@ -51,7 +62,6 @@
 					console.error( error );
 				} );
 		</script>
-		<!-- A friendly reminder to run on a server, remove this during the integration. -->
 		<script>
 			window.onload = function() {
 				if ( window.location.protocol === 'file:' ) {

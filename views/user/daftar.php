@@ -436,7 +436,7 @@ require '../cek.php';
                                 break;
                             }
                             echo "<tr>
-                  <td>{$row['no_doc']}</td>
+                  <td>{$row['no_doc_mak']}</td>
                   <td>{$row['judul']}</td>
                   <td>{$row['kategori_program']}</td>
                   <td><span class='status {$statusClass}'>" . ucfirst($row['status']) . "</span></td>

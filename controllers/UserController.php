@@ -12,27 +12,35 @@ if (isset($_POST['login'])) {
     $email = $_POST['email'];
     $password = $_POST['password'];
 
-    // Query database
-    $cekdatabase = mysqli_query($koneksi, "SELECT * FROM user WHERE email='$email' AND password='$password'");
-    $hitung = mysqli_num_rows($cekdatabase);
+    // Query database with prepared statements to prevent SQL Injection
+    $query = "SELECT * FROM user WHERE email = ? AND password = ?";
+    $stmt = $koneksi->prepare($query);
+    $stmt->bind_param("ss", $email, $password); // Bind email and password parameters
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $hitung = $result->num_rows;
 
     if ($hitung > 0) {
-        $data = mysqli_fetch_assoc($cekdatabase);
+        $data = $result->fetch_assoc();
 
         // Simpan data session
         $_SESSION['log'] = 'True';
         $_SESSION['role'] = $data['role'];
+        $_SESSION['user_id'] = $data['user_id']; // Pastikan 'user_id' disimpan di sesi
         $_SESSION['email'] = $email;
         $_SESSION['username'] = $data['username'];
-        $_SESSION['user_email'] = $data['email'];
 
         // Redirect sesuai role user dan tambahkan status=success
-        if ($data['role'] === 'admin') {
-            header('Location: ../views/admin/index.php?status=success');
-        } elseif ($data['role'] === 'user') {
-            header('Location: ../views/user/index.php?status=success');
-        } elseif ($data['role'] === 'supervisor') {
-            header('Location: ../views/supervisor/index.php?status=success');
+        switch ($data['role']) {
+            case 'admin':
+                header('Location: ../views/admin/index.php?status=success');
+                break;
+            case 'user':
+                header('Location: ../views/user/index.php?status=success');
+                break;
+            case 'supervisor':
+                header('Location: ../views/supervisor/index.php?status=success');
+                break;
         }
         exit();
     } else {
@@ -49,35 +57,17 @@ $email = isset($_SESSION['email']) ? htmlspecialchars($_SESSION['email']) : 'gue
 // Query untuk menghitung jumlah user
 $sql = "SELECT COUNT(*) AS total_users FROM user";
 $result = $koneksi->query($sql);
-
-// Ambil hasil query
-$total_users = 0;
-if ($result->num_rows > 0) {
-    $row = $result->fetch_assoc();
-    $total_users = $row['total_users'];
-}
+$total_users = $result->fetch_assoc()['total_users'] ?? 0;
 
 // Query untuk menghitung jumlah kategori
 $sql = "SELECT COUNT(*) AS total_kategori FROM kategori_program";
 $result = $koneksi->query($sql);
-
-// Ambil hasil query
-$total_kategori = 0;
-if ($result->num_rows > 0) {
-    $row = $result->fetch_assoc();
-    $total_kategori = $row['total_kategori'];
-}
+$total_kategori = $result->fetch_assoc()['total_kategori'] ?? 0;
 
 // Query untuk menghitung jumlah daftar KAK
 $sql = "SELECT COUNT(*) AS total_kak FROM kak";
 $result = $koneksi->query($sql);
-
-// Ambil hasil query
-$total_kak = 0;
-if ($result->num_rows > 0) {
-    $row = $result->fetch_assoc();
-    $total_kak = $row['total_kak'];
-}
+$total_kak = $result->fetch_assoc()['total_kak'] ?? 0;
 
 $sql_pending = "SELECT COUNT(*) AS total_pending FROM kak WHERE status = 'pending'";
 $sql_draft = "SELECT COUNT(*) AS total_draft FROM kak WHERE status = 'draft'";
@@ -89,7 +79,6 @@ $result_draft = $koneksi->query($sql_draft);
 $result_disetujui = $koneksi->query($sql_disetujui);
 $result_ditolak = $koneksi->query($sql_ditolak);
 
-// Initialize count variables
 $total_pending = $result_pending->fetch_assoc()['total_pending'] ?? 0;
 $total_draft = $result_draft->fetch_assoc()['total_draft'] ?? 0;
 $total_disetujui = $result_disetujui->fetch_assoc()['total_disetujui'] ?? 0;

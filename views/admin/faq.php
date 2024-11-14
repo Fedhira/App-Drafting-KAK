@@ -225,96 +225,122 @@ $email = isset($_SESSION['email']) ? htmlspecialchars($_SESSION['email']) : 'gue
                                 <div class="accordion-item">
                                     <h2 class="accordion-header" id="headingOne">
                                         <button class="accordion-button custom-font-size" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                                            Bagaimana untuk memulai pengajuan magang atau PKL?
+                                            Bagaimana cara menambahkan pengguna baru ke sistem?
                                         </button>
                                     </h2>
                                     <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
                                         <div class="accordion-body custom-font-size">
-                                            Untuk memulai pengajuan magang atau PKL, pergi ke bagian "Pengajuan", isi formulir yang tersedia, dan ikuti petunjuk selanjutnya.
+                                            Untuk menambahkan pengguna baru ke sistem, pergi ke bagian "Users", klik "Tambah Pengguna", dan isi data yang diperlukan seperti Nama, Email, NIK, Role, Password, dan Kategori.
                                         </div>
                                     </div>
                                 </div>
                                 <div class="accordion-item">
                                     <h2 class="accordion-header" id="headingTwo">
                                         <button class="accordion-button collapsed custom-font-size" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                                            Bagaimana cara menambahkan pengguna baru ke sistem?
+                                            Bagaimana cara mengelola kategori pemilik program (PP)?
                                         </button>
                                     </h2>
                                     <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
                                         <div class="accordion-body custom-font-size">
-                                            Untuk menambahkan pengguna baru ke sistem, pergi ke bagian "Users", klik "Tambah Pengguna", dan isi data yang diperlukan seperti nama, email, dan peran pengguna.
+                                            Di bagian Kategori Pemilik Program (PP), klik Tambah Kategori, isi detail yang diperlukan, seperti Nama Kategori Divisi, dan lalu simpan
                                         </div>
                                     </div>
                                 </div>
                                 <div class="accordion-item">
                                     <h2 class="accordion-header" id="headingThree">
                                         <button class="accordion-button collapsed custom-font-size" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                                            Apa yang harus saya lakukan jika saya lupa kata sandi?
+                                            Bagaimana cara melihat laporan aktivitas pengguna?
                                         </button>
                                     </h2>
                                     <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
                                         <div class="accordion-body custom-font-size">
-                                            Jika Anda lupa kata sandi, klik pada opsi "Lupa Kata Sandi" di halaman masuk dan ikuti petunjuk untuk meresetnya.
+                                            Di bagian "Laporan" pada sidebar, Anda dapat melihat aktivitas pengguna terkait pembuatan, pengajuan, dan persetujuan KAK.
                                         </div>
                                     </div>
                                 </div>
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header" id="headingFour">
+                                        <button class="accordion-button collapsed custom-font-size" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                                            Bagaimana cara mengubah informasi pengguna yang sudah ada?
+                                        </button>
+                                    </h2>
+                                    <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour" data-bs-parent="#accordionExample">
+                                        <div class="accordion-body custom-font-size">
+                                            Untuk mengubah informasi pengguna yang sudah ada, buka menu "Users", cari pengguna yang ingin diubah, lalu klik "Edit" di sebelah nama pengguna tersebut. Setelah itu, Anda bisa memperbarui data yang diperlukan dan menyimpannya. </div>
+                                    </div>
+                                </div>
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header" id="headingFive">
+                                        <button class="accordion-button collapsed custom-font-size" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+                                            Bagaimana cara menghapus pengguna dari sistem?
+                                        </button>
+                                    </h2>
+                                    <div id="collapseFive" class="accordion-collapse collapse" aria-labelledby="headingFive" data-bs-parent="#accordionExample">
+                                        <div class="accordion-body custom-font-size">
+                                            Untuk menghapus pengguna, buka menu "Users", cari pengguna yang ingin dihapus, lalu klik "Hapus". Pastikan Anda mengonfirmasi tindakan ini karena penghapusan bersifat permanen. </div>
+                                    </div>
+                                </div>
+
+
+
+
+
+                                <!-- End Accordion -->
+
+
+                                <!-- Contact Support Box -->
+                                <div class="contact-support box">
+                                    <h5><strong>Contact Support</strong></h5>
+                                    <h6>Jika Anda memerlukan bantuan lebih lanjut, silakan hubungi tim dukungan kami:</h6>
+                                    <ul>
+                                        <li>
+                                            <h6><strong>Email:</strong> <a href="mailto:halobakti@baktikominfo.id">halobakti@baktikominfo.id</a></h6>
+                                        </li>
+                                        <li>
+                                            <h6><strong>Phone:</strong> <a href="tel:021-30205834">021-30205834</a></h6>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <!-- End Contact Support -->
+
+                                <!-- CSS untuk membuat kotak -->
+                                <style>
+                                    .box {
+                                        border: 1px solid #ddd;
+                                        /* Border dengan warna abu-abu */
+                                        padding: 30px;
+                                        /* Jarak antara konten dan border */
+                                        background-color: #f9f9f9;
+                                        /* Warna latar belakang */
+                                        border-radius: 8px;
+                                        /* Ujung kotak dibuat melengkung */
+                                        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                                        /* Memberikan efek shadow */
+                                        max-width: 1210px;
+                                        /* Maksimal lebar kotak */
+                                        margin: auto;
+                                        /* Membuat kotak berada di tengah */
+                                    }
+
+                                    .box h5 {
+                                        margin-bottom: 10px;
+                                        /* Jarak bawah heading */
+                                    }
+
+                                    .box a {
+                                        color: #007bff;
+                                        /* Warna tautan */
+                                        text-decoration: none;
+                                        /* Menghilangkan garis bawah pada tautan */
+                                    }
+
+                                    .box a:hover {
+                                        text-decoration: underline;
+                                        /* Tautan bergaris bawah saat di-hover */
+                                    }
+                                </style>
+
                             </div>
-                            <!-- End Accordion -->
-
-
-                            <!-- Contact Support Box -->
-                            <div class="contact-support box">
-                                <h5><strong>Contact Support</strong></h5>
-                                <h6>Jika Anda memerlukan bantuan lebih lanjut, silakan hubungi tim dukungan kami:</h6>
-                                <ul>
-                                    <li>
-                                        <h6><strong>Email:</strong> <a href="mailto:halobakti@baktikominfo.id">halobakti@baktikominfo.id</a></h6>
-                                    </li>
-                                    <li>
-                                        <h6><strong>Phone:</strong> <a href="tel:021-30205834">021-30205834</a></h6>
-                                    </li>
-                                </ul>
-                            </div>
-                            <!-- End Contact Support -->
-
-                            <!-- CSS untuk membuat kotak -->
-                            <style>
-                                .box {
-                                    border: 1px solid #ddd;
-                                    /* Border dengan warna abu-abu */
-                                    padding: 30px;
-                                    /* Jarak antara konten dan border */
-                                    background-color: #f9f9f9;
-                                    /* Warna latar belakang */
-                                    border-radius: 8px;
-                                    /* Ujung kotak dibuat melengkung */
-                                    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-                                    /* Memberikan efek shadow */
-                                    max-width: 1210px;
-                                    /* Maksimal lebar kotak */
-                                    margin: auto;
-                                    /* Membuat kotak berada di tengah */
-                                }
-
-                                .box h5 {
-                                    margin-bottom: 10px;
-                                    /* Jarak bawah heading */
-                                }
-
-                                .box a {
-                                    color: #007bff;
-                                    /* Warna tautan */
-                                    text-decoration: none;
-                                    /* Menghilangkan garis bawah pada tautan */
-                                }
-
-                                .box a:hover {
-                                    text-decoration: underline;
-                                    /* Tautan bergaris bawah saat di-hover */
-                                }
-                            </style>
-
-                        </div>
                     </section>
                 </div>
             </div>
