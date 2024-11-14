@@ -15,8 +15,8 @@ $query = "SELECT
             kak.judul, 
             kategori_program.nama_divisi AS kategori_program, 
             kak.status, 
-            DATE_FORMAT(kak.created_at, '%d-%m-%Y') AS tanggal_dibuat, 
-            DATE_FORMAT(kak.updated_at, '%d-%m-%Y') AS tanggal_diperbarui
+            DATE_FORMAT(kak.created_at, '%d-%m-%Y %H:%i:%s') AS tanggal_dibuat, 
+            DATE_FORMAT(kak.updated_at, '%d-%m-%Y %H:%i:%s') AS tanggal_diperbarui
           FROM kak
           LEFT JOIN kategori_program ON kak.kategori_id = kategori_program.kategori_id";
 
