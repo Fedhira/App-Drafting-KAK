@@ -1,112 +1,188 @@
 <?php
 include $_SERVER['DOCUMENT_ROOT'] . '/App-Drafting-KAK/database/config.php';
-include $_SERVER['DOCUMENT_ROOT'] . '/App-Drafting-KAK/controllers/UserController.php';
 
-// Set the timezone to Indonesia Western Time (WIB)
 date_default_timezone_set('Asia/Jakarta');
 
-// Check if form is submitted
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Retrieve form data
-    $user_id = $_SESSION['user_id'] ?? null;
-    $kategori_id = $_POST['kategori'];
-    $no_doc_mak = $_POST['nodoc'];
-    $judul = $_POST['judul'];
-    $latar_belakang = $_POST['latbek'];
-    $dasar_hukum = $_POST['daskum'];
-    $gambaran_umum = $_POST['gambaran'];
-    $tujuan = $_POST['tujuan'];
-    $target_sasaran = $_POST['target'];
-    $unit_kerja = $_POST['unitkerja'];
-    $ruang_lingkup = $_POST['ruanglingkup'];
-    $produk_jasa_dihasilkan = $_POST['produk'];
-    $waktu_pelaksanaan = $_POST['waktu'];
-    $tenaga_ahli_terampil = $_POST['tenaga_ahli'] ?? null;
-    $peralatan = $_POST['peralatan'];
-    $metode_kerja = $_POST['metode'];
-    $manajemen_resiko = $_POST['manajemen'];
-    $laporan_pengajuan_pekerjaan = $_POST['laporan'];
-    $sumber_dana_prakiraan_biaya = $_POST['sumber'];
-    $penutup = $_POST['penutup'];
-    $status = 'draft';
+function addKak($koneksi, $data, $lampiran = null)
+{
+    // Jika status tidak diatur, tetapkan sebagai "draft"
+    $status = isset($data['status']) ? $data['status'] : 'draft';
 
-    // Check if user_id exists
-    if ($user_id === null) {
-        echo "User ID is missing. Please ensure you are logged in.";
-        exit;
+    $targetDir = "uploads/";
+
+    // Ensure the uploads directory exists
+    if (!is_dir($targetDir)) {
+        mkdir($targetDir, 0755, true);
     }
 
-    // Handle file upload for 'lampiran'
-    $lampiran = ""; // Default is empty
+    // Check if file was uploaded and move it
     if (isset($_FILES['lampiran']) && $_FILES['lampiran']['error'] == 0) {
-        $lampiran = basename($_FILES['lampiran']['name']);
-        $target_dir = $_SERVER['DOCUMENT_ROOT'] . '/App-Drafting-KAK/uploads/';
-        $target_file = $target_dir . $lampiran;
+        $fileName = basename($_FILES['lampiran']['name']);
+        $fileName = preg_replace('/\s+/', '_', $fileName); // Replace spaces with underscores
+        $targetFilePath = $targetDir . $fileName;
 
-        // Check if the file already exists
-        if (file_exists($target_file)) {
-            echo "Sorry, file already exists.";
-            exit;
-        }
-
-        // Move uploaded file to the target directory
-        if (!move_uploaded_file($_FILES['lampiran']['tmp_name'], $target_file)) {
-            echo "Sorry, there was an error uploading your file.";
-            exit;
+        // Move the uploaded file to the target directory
+        if (move_uploaded_file($_FILES['lampiran']['tmp_name'], $targetFilePath)) {
+            $lampiran = $fileName; // Set $lampiran to the file name if upload is successful
+        } else {
+            $lampiran = null; // Handle the case where file upload fails
         }
     } else {
-        echo "File upload error: " . $_FILES['lampiran']['error'];
-        exit;
+        $lampiran = null; // If no file is uploaded, set $lampiran to null
     }
 
-    // Prepare SQL query to insert data into the 'kak' table
     $query = "INSERT INTO kak (
         user_id, kategori_id, no_doc_mak, judul, status, latar_belakang,
         dasar_hukum, gambaran_umum, tujuan, target_sasaran, unit_kerja,
         ruang_lingkup, produk_jasa_dihasilkan, waktu_pelaksanaan,
         tenaga_ahli_terampil, peralatan, metode_kerja, manajemen_resiko,
         laporan_pengajuan_pekerjaan, sumber_dana_prakiraan_biaya, lampiran,
-        penutup
-      ) VALUES (
-        ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
-      )";
+        penutup, created_at, updated_at
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())";
 
-    // Prepare and bind parameters
     $stmt = $koneksi->prepare($query);
     $stmt->bind_param(
         "iissssssssssssssssssss",
-        $user_id,
-        $kategori_id,
-        $no_doc_mak,
-        $judul,
+        $data['user_id'],
+        $data['kategori_id'],
+        $data['no_doc_mak'],
+        $data['judul'],
         $status,
-        $latar_belakang,
-        $dasar_hukum,
-        $gambaran_umum,
-        $tujuan,
-        $target_sasaran,
-        $unit_kerja,
-        $ruang_lingkup,
-        $produk_jasa_dihasilkan,
-        $waktu_pelaksanaan,
-        $tenaga_ahli_terampil,
-        $peralatan,
-        $metode_kerja,
-        $manajemen_resiko,
-        $laporan_pengajuan_pekerjaan,
-        $sumber_dana_prakiraan_biaya,
+        $data['latar_belakang'],
+        $data['dasar_hukum'],
+        $data['gambaran_umum'],
+        $data['tujuan'],
+        $data['target_sasaran'],
+        $data['unit_kerja'],
+        $data['ruang_lingkup'],
+        $data['produk_jasa_dihasilkan'],
+        $data['waktu_pelaksanaan'],
+        $data['tenaga_ahli_terampil'],
+        $data['peralatan'],
+        $data['metode_kerja'],
+        $data['manajemen_resiko'],
+        $data['laporan_pengajuan_pekerjaan'],
+        $data['sumber_dana_prakiraan_biaya'],
         $lampiran,
-        $penutup
+        $data['penutup']
     );
 
-    // Execute and check for success
     if ($stmt->execute()) {
-        header("Location: ../views/user/draft.php"); // Redirect to draft page after successful insertion
+        header("Location: ../views/user/draft.php");
         exit;
     } else {
-        echo "Error: " . $stmt->error;
+        return $stmt->error;
     }
-
-    $stmt->close();
 }
-$koneksi->close();
+
+function updateKak($koneksi, $data, $lampiran = null)
+{
+    $query = "UPDATE kak SET
+        kategori_id = ?, no_doc_mak = ?, judul = ?, status = ?, latar_belakang = ?,
+        dasar_hukum = ?, gambaran_umum = ?, tujuan = ?, target_sasaran = ?,
+        unit_kerja = ?, ruang_lingkup = ?, produk_jasa_dihasilkan = ?, waktu_pelaksanaan = ?,
+        tenaga_ahli_terampil = ?, peralatan = ?, metode_kerja = ?, manajemen_resiko = ?,
+        laporan_pengajuan_pekerjaan = ?, sumber_dana_prakiraan_biaya = ?, lampiran = ?,
+        penutup = ?, updated_at = NOW()
+        WHERE kak_id = ?";
+
+    $stmt = $koneksi->prepare($query);
+    $stmt->bind_param(
+        "issssssssssssssssssssi",
+        $data['kategori_id'],
+        $data['no_doc_mak'],
+        $data['judul'],
+        $data['status'],
+        $data['latar_belakang'],
+        $data['dasar_hukum'],
+        $data['gambaran_umum'],
+        $data['tujuan'],
+        $data['target_sasaran'],
+        $data['unit_kerja'],
+        $data['ruang_lingkup'],
+        $data['produk_jasa_dihasilkan'],
+        $data['waktu_pelaksanaan'],
+        $data['tenaga_ahli_terampil'],
+        $data['peralatan'],
+        $data['metode_kerja'],
+        $data['manajemen_resiko'],
+        $data['laporan_pengajuan_pekerjaan'],
+        $data['sumber_dana_prakiraan_biaya'],
+        $lampiran,
+        $data['penutup'],
+        $data['kak_id']
+    );
+
+    if ($stmt->execute()) {
+        header("Location: ../views/user/draft.php");
+        exit;
+    } else {
+        return $stmt->error;
+    }
+}
+
+function deleteKak($koneksi, $kak_id)
+{
+    $query = "DELETE FROM kak WHERE kak_id = ?";
+    $stmt = $koneksi->prepare($query);
+    $stmt->bind_param("i", $kak_id);
+
+    if ($stmt->execute()) {
+        header("Location: ../views/user/draft.php");
+        exit;
+    } else {
+        return $stmt->error;
+    }
+}
+
+function getKakById($koneksi, $kak_id)
+{
+    $query = "SELECT * FROM kak WHERE kak_id = ?";
+    $stmt = $koneksi->prepare($query);
+    $stmt->bind_param("i", $kak_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    return $result->fetch_assoc();
+}
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    if (isset($_POST['action'])) {
+        $action = $_POST['action'];
+
+        switch ($action) {
+            case 'add':
+                // Panggil fungsi tambah KAK
+                $result = addKak($koneksi, $_POST, $_FILES['lampiran']);
+                if ($result === true) {
+                    header("Location: ../views/user/draft.php");
+                    exit;
+                } else {
+                    echo "Error adding data: " . $result;
+                }
+                break;
+
+            case 'update':
+                // Panggil fungsi update KAK
+                $result = updateKak($koneksi, $_POST, $_FILES['lampiran']);
+                if ($result === true) {
+                    header("Location: ../views/user/draft.php");
+                    exit;
+                } else {
+                    echo "Error updating data: " . $result;
+                }
+                break;
+        }
+    }
+}
+
+// Hapus data jika menerima permintaan GET dengan aksi 'delete'
+if (isset($_GET['action']) && $_GET['action'] == 'delete' && isset($_GET['kak_id'])) {
+    $kak_id = $_GET['kak_id'];
+    $result = deleteKak($koneksi, $kak_id);
+    if ($result === true) {
+        header("Location: ../views/user/draft.php");
+        exit;
+    } else {
+        echo "Error deleting data: " . $result;
+    }
+}
