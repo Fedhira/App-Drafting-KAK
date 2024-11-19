@@ -9,49 +9,47 @@ date_default_timezone_set('Asia/Jakarta');
 function addUser($koneksi)
 {
     if (isset($_POST['username'], $_POST['email'], $_POST['nik'], $_POST['role'], $_POST['kategori_id'], $_POST['password'])) {
-        // Ambil data dari form
-        $username = $_POST['username'];
-        $email = $_POST['email'];
-        $nik = $_POST['nik'];
-        $role = $_POST['role'];
-        $kategori_id = $_POST['kategori_id'];
-        $password = $_POST['password'];
+        try {
+            // Ambil data dari form
+            $username = $_POST['username'];
+            $email = $_POST['email'];
+            $nik = $_POST['nik'];
+            $role = $_POST['role'];
+            $kategori_id = (int)$_POST['kategori_id'];
+            $password = $_POST['password'];
 
-        // Hash the password
-        $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+            // Hash the password
+            $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
-        // Periksa apakah kategori_id yang diberikan valid
-        $stmt = $koneksi->prepare("SELECT 1 FROM `kategori_program` WHERE `kategori_id` = ?");
-        $stmt->bind_param("i", $kategori_id);
-        $stmt->execute();
-        $result = $stmt->get_result();
+            // Validasi kategori_id
+            $stmt = $koneksi->prepare("SELECT 1 FROM `kategori_program` WHERE `kategori_id` = ?");
+            $stmt->bind_param("i", $kategori_id);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            if ($result->num_rows === 0) {
+                throw new Exception("Invalid kategori_id: $kategori_id");
+            }
 
-        if ($result->num_rows === 0) {
-            // Jika kategori_id tidak ditemukan, tampilkan pesan error
-            header("Location: ../views/admin/users.php?status=error&action=add&reason=invalid_kategori");
-            exit();
-        }
+            // Siapkan query untuk menambahkan data
+            $stmt = $koneksi->prepare("INSERT INTO `user` (username, email, nik, role, kategori_id, password, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, NOW(), NOW())");
+            $stmt->bind_param("ssssss", $username, $email, $nik, $role, $kategori_id, $hashedPassword);
 
-        // Siapkan query untuk menambahkan data, termasuk hashed password
-        $stmt = $koneksi->prepare("INSERT INTO `user` (username, email, nik, role, kategori_id, password, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, NOW(), NOW())");
-        $stmt->bind_param("ssssss", $username, $email, $nik, $role, $kategori_id, $hashedPassword);
+            // Jalankan query
+            if (!$stmt->execute()) {
+                throw new Exception("Insert failed: " . $stmt->error);
+            }
 
-        // Jalankan query
-        if ($stmt->execute()) {
             header("Location: ../views/admin/users.php?status=success&action=add");
             exit();
-        } else {
-            header("Location: ../views/admin/users.php?status=error&action=add");
-            exit();
+        } catch (Exception $e) {
+            echo "Gagal! Terjadi kesalahan saat menambahkan data. Pesan error: " . $e->getMessage();
         }
-
-        // Tutup statement
-        $stmt->close();
     } else {
-        header("Location: ../views/admin/users.php?status=error&action=add");
-        exit();
+        echo "Gagal! Data form tidak lengkap.";
     }
 }
+
+
 
 
 

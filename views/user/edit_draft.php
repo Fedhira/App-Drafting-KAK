@@ -1,8 +1,31 @@
 <?php
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+if (!isset($_SESSION['user_id'])) {
+    echo "User ID is missing. Please ensure you are logged in.";
+    exit;
+}
 require '../../database/config.php';
+require '../../models/CategoryModel.php';
+require '../../models/DraftModel.php';
 require '../../controllers/UserController.php';
-require '../../controllers/DaftarController.php';
+require '../../controllers/DraftController.php';
 require '../cek.php';
+
+$kak_id = isset($_GET['kak_id']) ? $_GET['kak_id'] : null;
+
+if ($kak_id) {
+    $data = getDraftById($koneksi, $kak_id);
+    if (!$data) {
+        echo "<script>alert('Data tidak ditemukan!'); window.location.href = 'draft.php';</script>";
+        exit;
+    }
+} else {
+    echo "<script>alert('ID tidak valid!'); window.location.href = 'draft.php';</script>";
+    exit;
+}
 ?>
 
 <!DOCTYPE html>
@@ -42,10 +65,6 @@ require '../cek.php';
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-    <script type="text/javascript" src="../../ckeditor/ckeditor.js"></script>
-    <script type="text/javascript" src="../../ckeditor/script.js"></script>
-
-
     <!-- Load Font Awesome 6 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
 
@@ -73,6 +92,10 @@ require '../cek.php';
         .btn-hapus {
             background-color: #E57373;
             color: white;
+        }
+
+        .ck-editor__editable {
+            min-height: 250px;
         }
     </style>
 
@@ -223,88 +246,93 @@ require '../cek.php';
                     </div>
                     <div class="row">
                         <div class="col-md-12 mt-4">
-                            <div class="card" style="height: 500px; overflow-y: auto;"> <!-- Scrollable card with fixed height -->
+                            <div class="card" style="height: 500px; overflow-y: auto;">
+                                <!-- Scrollable card with fixed height -->
                                 <div class="card-body">
                                     <!-- Form with bold labels and improved spacing -->
-                                    <form method="POST" action="your-action-url.php" enctype="multipart/form-data">
+                                    <form method="POST" action="../../models/DraftModel.php" enctype="multipart/form-data">
+                                        <input type="hidden" name="action" value="update">
+                                        <input type="hidden" name="current_status" value="<?= $data['status']; ?>">
+                                        <input type="hidden" name="kak_id" value="<?php echo htmlspecialchars($data['kak_id']); ?>">
 
-                                        <label for="nodoc"><strong>No. MAK</strong></label>
-                                        <input type="text" id="nodoc" name="nodoc" class="form-control mb-3">
+                                        <label for="no_doc_mak"><strong>No. MAK</strong></label>
+                                        <input type="text" id="no_doc_mak" name="no_doc_mak" class="form-control mb-3" value="<?php echo isset($data['no_doc_mak']) ? htmlspecialchars($data['no_doc_mak']) : ''; ?>">
+
+                                        <label for="kategori_id"><strong>Kategori Program</strong></label>
+                                        <select id="kategori_id" name="kategori_id" class="form-control mb-3">
+                                            <option value="">Pilih Kategori</option>
+                                            <?php
+                                            $categories = fetchAllKategori($koneksi);
+                                            if (!empty($categories)) {
+                                                foreach ($categories as $category) {
+                                                    $selected = $category['kategori_id'] == $data['kategori_id'] ? 'selected' : '';
+                                                    echo '<option value="' . htmlspecialchars($category['kategori_id']) . '" ' . $selected . '>' . htmlspecialchars($category['nama_divisi']) . '</option>';
+                                                }
+                                            } else {
+                                                echo '<option value="">Tidak ada kategori tersedia</option>';
+                                            }
+                                            ?>
+                                        </select>
 
                                         <label for="judul"><strong>Judul KAK</strong></label>
-                                        <input type="text" id="judul" name="judul" class="form-control mb-3">
+                                        <input type="text" id="judul" name="judul" class="form-control mb-3" value="<?php echo htmlspecialchars($data['judul']); ?>">
 
-                                        <label for="kategori"><strong>Kategori Program</strong></label>
-                                        <input type="text" id="kategori" name="kategori" class="form-control mb-3">
+                                        <label for="latar_belakang"><strong>Latar Belakang</strong></label>
+                                        <textarea class="editor form-control mb-3" id="latar_belakang" name="latar_belakang"><?php echo isset($data['latar_belakang']) ? htmlspecialchars($data['latar_belakang']) : ''; ?></textarea>
 
-                                        <label for="latbek"><strong>Latar Belakang</strong></label>
-                                        <textarea class="ckeditor form-control mb-3" id="latbek" name="latbek"></textarea>
-                                        <br>
+                                        <label for="dasar_hukum"><strong>Dasar Hukum</strong></label>
+                                        <textarea class="editor form-control mb-3" id="dasar_hukum" name="dasar_hukum"><?php echo htmlspecialchars($data['dasar_hukum']); ?></textarea>
 
-                                        <label for="daskum"><strong>Dasar Hukum</strong></label>
-                                        <textarea class="ckeditor form-control mb-3" id="daskum" name="daskum"></textarea>
-                                        <br>
-
-                                        <label for="gambaran"><strong>Gambaran Umum</strong></label>
-                                        <textarea class="ckeditor form-control mb-3" id="gambaran" name="gambaran"></textarea>
-                                        <br>
+                                        <label for="gambaran_umum"><strong>Gambaran Umum</strong></label>
+                                        <textarea class="editor form-control mb-3" id="gambaran_umum" name="gambaran_umum"><?php echo htmlspecialchars($data['gambaran_umum']); ?></textarea>
 
                                         <label for="tujuan"><strong>Tujuan</strong></label>
-                                        <textarea class="ckeditor form-control mb-3" id="tujuan" name="tujuan"></textarea>
-                                        <br>
+                                        <textarea class="editor form-control mb-3" id="tujuan" name="tujuan"><?php echo htmlspecialchars($data['tujuan']); ?></textarea>
 
-                                        <label for="target"><strong>Target/Sasaran</strong></label>
-                                        <textarea class="ckeditor form-control mb-3" id="target" name="target"></textarea>
-                                        <br>
+                                        <label for="target_sasaran"><strong>Target/Sasaran</strong></label>
+                                        <textarea class="editor form-control mb-3" id="target_sasaran" name="target_sasaran"><?php echo htmlspecialchars($data['target_sasaran']); ?></textarea>
 
-                                        <label for="unitkerja"><strong>Unit Kerja Pelaksana</strong></label>
-                                        <textarea class="ckeditor form-control mb-3" id="unitkerja" name="unitkerja"></textarea>
-                                        <br>
+                                        <label for="unit_kerja"><strong>Unit Kerja Pelaksana</strong></label>
+                                        <textarea class="editor form-control mb-3" id="unit_kerja" name="unit_kerja"><?php echo htmlspecialchars($data['unit_kerja']); ?></textarea>
 
-                                        <label for="ruanglingkup"><strong>Ruang Lingkup, Lokasi dan Fasilitas Penunjang</strong></label>
-                                        <textarea class="ckeditor form-control mb-3" id="ruanglingkup" name="ruanglingkup"></textarea>
-                                        <br>
+                                        <label for="ruang_lingkup"><strong>Ruang Lingkup, Lokasi dan Fasilitas Penunjang</strong></label>
+                                        <textarea class="editor form-control mb-3" id="ruang_lingkup" name="ruang_lingkup"><?php echo htmlspecialchars($data['ruang_lingkup']); ?></textarea>
 
-                                        <label for="produk"><strong>Produk/Jasa yang dihasilkan (Deliverable)</strong></label>
-                                        <textarea class="ckeditor form-control mb-3" id="produk" name="produk"></textarea>
-                                        <br>
+                                        <label for="produk_jasa_dihasilkan"><strong>Produk/Jasa yang dihasilkan (Deliverable)</strong></label>
+                                        <textarea class="editor form-control mb-3" id="produk_jasa_dihasilkan" name="produk_jasa_dihasilkan"><?php echo htmlspecialchars($data['produk_jasa_dihasilkan']); ?></textarea>
 
-                                        <label for="waktu"><strong>Waktu Pelaksanaan</strong></label>
-                                        <textarea class="ckeditor form-control mb-3" id="waktu" name="waktu"></textarea>
-                                        <br>
+                                        <label for="waktu_pelaksanaan"><strong>Waktu Pelaksanaan</strong></label>
+                                        <textarea class="editor form-control mb-3" id="waktu_pelaksanaan" name="waktu_pelaksanaan"><?php echo htmlspecialchars($data['waktu_pelaksanaan']); ?></textarea>
+
+                                        <label for="tenaga_ahli_terampil"><strong>Tenaga Ahli</strong></label>
+                                        <textarea class="editor form-control mb-3" id="tenaga_ahli_terampil" name="tenaga_ahli_terampil"><?php echo htmlspecialchars($data['tenaga_ahli_terampil']); ?></textarea>
 
                                         <label for="peralatan"><strong>Peralatan</strong></label>
-                                        <textarea class="ckeditor form-control mb-3" id="peralatan" name="peralatan"></textarea>
-                                        <br>
+                                        <textarea class="editor form-control mb-3" id="peralatan" name="peralatan"><?php echo htmlspecialchars($data['peralatan']); ?></textarea>
 
-                                        <label for="metode"><strong>Metode Kerja</strong></label>
-                                        <textarea class="ckeditor form-control mb-3" id="metode" name="metode"></textarea>
-                                        <br>
+                                        <label for="metode_kerja"><strong>Metode Kerja</strong></label>
+                                        <textarea class="editor form-control mb-3" id="metode_kerja" name="metode_kerja"><?php echo htmlspecialchars($data['metode_kerja']); ?></textarea>
 
-                                        <label for="manajemen"><strong>Manajemen Resiko</strong></label>
-                                        <textarea class="ckeditor form-control mb-3" id="manajemen" name="manajemen"></textarea>
-                                        <br>
+                                        <label for="manajemen_resiko"><strong>Manajemen Resiko</strong></label>
+                                        <textarea class="editor form-control mb-3" id="manajemen_resiko" name="manajemen_resiko"><?php echo htmlspecialchars($data['manajemen_resiko']); ?></textarea>
 
-                                        <label for="laporan"><strong>Laporan Pengajuan Pekerjaan</strong></label>
-                                        <textarea class="ckeditor form-control mb-3" id="laporan" name="laporan"></textarea>
-                                        <br>
+                                        <label for="laporan_pengajuan_pekerjaan"><strong>Laporan Pengajuan Pekerjaan</strong></label>
+                                        <textarea class="editor form-control mb-3" id="laporan_pengajuan_pekerjaan" name="laporan_pengajuan_pekerjaan"><?php echo htmlspecialchars($data['laporan_pengajuan_pekerjaan']); ?></textarea>
 
-                                        <label for="sumber"><strong>Sumber Dana dan Prakiraan Biaya</strong></label>
-                                        <textarea class="ckeditor form-control mb-3" id="sumber" name="sumber"></textarea>
-                                        <br>
+                                        <label for="sumber_dana_prakiraan_biaya"><strong>Sumber Dana dan Prakiraan Biaya</strong></label>
+                                        <textarea class="editor form-control mb-3" id="sumber_dana_prakiraan_biaya" name="sumber_dana_prakiraan_biaya"><?php echo htmlspecialchars($data['sumber_dana_prakiraan_biaya']); ?></textarea>
 
                                         <label for="penutup"><strong>Penutup</strong></label>
-                                        <textarea class="ckeditor form-control mb-3" id="penutup" name="penutup"></textarea>
-                                        <br>
+                                        <textarea class="editor form-control mb-3" id="penutup" name="penutup"><?php echo htmlspecialchars($data['penutup']); ?></textarea>
 
                                         <label for="lampiran"><strong>Lampiran</strong></label>
                                         <input type="file" id="lampiran" name="lampiran" class="form-control mb-3" accept=".pdf, image/*">
+                                        <p>Current file: <?php echo htmlspecialchars($data['lampiran']); ?></p>
 
                                         <div class="mt-4 text-end">
                                             <button type="submit" class="btn btn-primary">Ubah</button>
                                             <button type="button" class="btn btn-danger" onclick="window.location.href='draft.php';">Cancel</button>
                                         </div>
-
                                     </form>
                                 </div>
                             </div>
@@ -313,18 +341,6 @@ require '../cek.php';
                 </div>
             </div>
 
-            <!-- Include CKEditor script -->
-            <script src="https://cdn.ckeditor.com/4.16.2/standard/ckeditor.js"></script>
-            <script>
-                CKEDITOR.replace('ket');
-            </script>
-
-
-            <!-- Include CKEditor script -->
-            <script src="https://cdn.ckeditor.com/4.16.2/standard/ckeditor.js"></script>
-            <script>
-                CKEDITOR.replace('ket');
-            </script>
 
             <footer class="footer">
                 <div class="container-fluid d-flex justify-content-between">
@@ -430,6 +446,63 @@ require '../cek.php';
             });
         }
     </script>
+
+    <script src="https://cdn.ckeditor.com/ckeditor5/35.4.0/classic/ckeditor.js"></script>
+    <script type="text/javascript">
+        document.querySelectorAll('.editor').forEach(editorElement => {
+            ClassicEditor
+                .create(editorElement, {
+                    ckfinder: {
+                        uploadUrl: "ckfileupload.php",
+                    }
+                })
+                .then(editor => {
+                    console.log(editor);
+                })
+                .catch(error => {
+                    console.error(error);
+                });
+        });
+    </script>
+
+    <script>
+        document.querySelector('form').addEventListener('submit', function(event) {
+            const metodeField = document.getElementById('metode');
+            if (metodeField && !metodeField.checkValidity()) {
+                metodeField.scrollIntoView(); // Make sure it's visible
+                metodeField.focus(); // Focus on it
+                event.preventDefault(); // Prevent form submission until valid
+            }
+        });
+    </script>
+
+    <?php if (isset($_GET['status'])): ?>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script>
+            const status = "<?= $_GET['status'] ?>";
+            const message = "<?= urldecode($_GET['message']) ?>";
+
+            if (status === "success") {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Berhasil!',
+                    text: message,
+                    timer: 3000,
+                    showConfirmButton: false
+                });
+            } else if (status === "error") {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Gagal!',
+                    text: message,
+                    timer: 3000,
+                    showConfirmButton: false
+                });
+            }
+        </script>
+    <?php endif; ?>
+
+
 </body>
 
 </html>

@@ -483,6 +483,33 @@ require '../cek.php';
     });
   </script>
 
+  <?php if (isset($_GET['status'])): ?>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+      const status = "<?= $_GET['status'] ?>";
+      const message = "<?= urldecode($_GET['message']) ?>";
+
+      if (status === "success") {
+        Swal.fire({
+          icon: 'success',
+          title: 'Berhasil!',
+          text: message,
+          timer: 3000,
+          showConfirmButton: false
+        });
+      } else if (status === "error") {
+        Swal.fire({
+          icon: 'error',
+          title: 'Gagal!',
+          text: message,
+          timer: 3000,
+          showConfirmButton: false
+        });
+      }
+    </script>
+  <?php endif; ?>
+
+
 </body>
 
 </html>

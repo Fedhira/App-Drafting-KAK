@@ -5,30 +5,28 @@ date_default_timezone_set('Asia/Jakarta');
 
 function addKak($koneksi, $data, $lampiran = null)
 {
-    // Jika status tidak diatur, tetapkan sebagai "draft"
+    // Tetapkan status default sebagai 'draft' jika tidak diatur
     $status = isset($data['status']) ? $data['status'] : 'draft';
 
     $targetDir = "uploads/";
 
-    // Ensure the uploads directory exists
+    // Pastikan direktori uploads ada
     if (!is_dir($targetDir)) {
         mkdir($targetDir, 0755, true);
     }
 
-    // Check if file was uploaded and move it
+    // Cek apakah file diunggah
     if (isset($_FILES['lampiran']) && $_FILES['lampiran']['error'] == 0) {
         $fileName = basename($_FILES['lampiran']['name']);
-        $fileName = preg_replace('/\s+/', '_', $fileName); // Replace spaces with underscores
+        $fileName = preg_replace('/\s+/', '_', $fileName); // Ganti spasi dengan underscore
         $targetFilePath = $targetDir . $fileName;
 
-        // Move the uploaded file to the target directory
+        // Pindahkan file yang diunggah
         if (move_uploaded_file($_FILES['lampiran']['tmp_name'], $targetFilePath)) {
-            $lampiran = $fileName; // Set $lampiran to the file name if upload is successful
+            $lampiran = $fileName; // Set lampiran jika upload berhasil
         } else {
-            $lampiran = null; // Handle the case where file upload fails
+            $lampiran = null; // Jika upload gagal, set lampiran menjadi null
         }
-    } else {
-        $lampiran = null; // If no file is uploaded, set $lampiran to null
     }
 
     $query = "INSERT INTO kak (
@@ -77,6 +75,26 @@ function addKak($koneksi, $data, $lampiran = null)
 
 function updateKak($koneksi, $data, $lampiran = null)
 {
+    $targetDir = "uploads/";
+
+    // Cek apakah file lampiran baru diunggah
+    if (isset($_FILES['lampiran']) && $_FILES['lampiran']['error'] == 0) {
+        $fileName = basename($_FILES['lampiran']['name']);
+        $fileName = preg_replace('/\s+/', '_', $fileName); // Ganti spasi dengan underscore
+        $targetFilePath = $targetDir . $fileName;
+
+        // Pindahkan file yang diunggah
+        if (move_uploaded_file($_FILES['lampiran']['tmp_name'], $targetFilePath)) {
+            $lampiran = $fileName; // Set lampiran jika upload berhasil
+        }
+    } else {
+        // Jika tidak ada file baru, pertahankan file lampiran lama
+        $lampiran = $data['current_lampiran'];
+    }
+
+    // Pertahankan status dokumen jika tidak diubah
+    $status = isset($data['status']) && !empty($data['status']) ? $data['status'] : $data['current_status'];
+
     $query = "UPDATE kak SET
         kategori_id = ?, no_doc_mak = ?, judul = ?, status = ?, latar_belakang = ?,
         dasar_hukum = ?, gambaran_umum = ?, tujuan = ?, target_sasaran = ?,
@@ -92,7 +110,7 @@ function updateKak($koneksi, $data, $lampiran = null)
         $data['kategori_id'],
         $data['no_doc_mak'],
         $data['judul'],
-        $data['status'],
+        $status,
         $data['latar_belakang'],
         $data['dasar_hukum'],
         $data['gambaran_umum'],
@@ -121,21 +139,33 @@ function updateKak($koneksi, $data, $lampiran = null)
     }
 }
 
+
+// Fungsi Hapus Data
 function deleteKak($koneksi, $kak_id)
 {
+    // Validasi ID (pastikan ini angka)
+    if (!is_numeric($kak_id)) {
+        die("Invalid ID provided.");
+    }
+
+    // Query untuk menghapus data
     $query = "DELETE FROM kak WHERE kak_id = ?";
     $stmt = $koneksi->prepare($query);
     $stmt->bind_param("i", $kak_id);
 
     if ($stmt->execute()) {
+        // Jika berhasil, arahkan kembali ke halaman draft.php
         header("Location: ../views/user/draft.php");
         exit;
     } else {
-        return $stmt->error;
+        // Jika gagal, tampilkan pesan error
+        die("Error deleting data: " . $stmt->error);
     }
 }
 
-function getKakById($koneksi, $kak_id)
+
+
+function getDraftById($koneksi, $kak_id)
 {
     $query = "SELECT * FROM kak WHERE kak_id = ?";
     $stmt = $koneksi->prepare($query);
@@ -145,44 +175,27 @@ function getKakById($koneksi, $kak_id)
     return $result->fetch_assoc();
 }
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    if (isset($_POST['action'])) {
-        $action = $_POST['action'];
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action'])) {
+    $action = $_POST['action'];
 
-        switch ($action) {
-            case 'add':
-                // Panggil fungsi tambah KAK
-                $result = addKak($koneksi, $_POST, $_FILES['lampiran']);
-                if ($result === true) {
-                    header("Location: ../views/user/draft.php");
-                    exit;
-                } else {
-                    echo "Error adding data: " . $result;
-                }
-                break;
+    switch ($action) {
+        case 'add':
+            $result = addKak($koneksi, $_POST, $_FILES['lampiran']);
+            if ($result !== true) {
+                echo "Error adding data: " . $result;
+            }
+            break;
 
-            case 'update':
-                // Panggil fungsi update KAK
-                $result = updateKak($koneksi, $_POST, $_FILES['lampiran']);
-                if ($result === true) {
-                    header("Location: ../views/user/draft.php");
-                    exit;
-                } else {
-                    echo "Error updating data: " . $result;
-                }
-                break;
-        }
+        case 'update':
+            $result = updateKak($koneksi, $_POST, $_FILES['lampiran']);
+            if ($result !== true) {
+                echo "Error updating data: " . $result;
+            }
+            break;
     }
 }
 
-// Hapus data jika menerima permintaan GET dengan aksi 'delete'
-if (isset($_GET['action']) && $_GET['action'] == 'delete' && isset($_GET['kak_id'])) {
+if (isset($_GET['action']) && $_GET['action'] === 'delete' && isset($_GET['kak_id'])) {
     $kak_id = $_GET['kak_id'];
-    $result = deleteKak($koneksi, $kak_id);
-    if ($result === true) {
-        header("Location: ../views/user/draft.php");
-        exit;
-    } else {
-        echo "Error deleting data: " . $result;
-    }
+    deleteKak($koneksi, $kak_id);
 }
