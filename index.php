@@ -108,7 +108,7 @@ require 'controllers/cek.php';
               </a>
             </li>
             <li class="nav-item">
-              <a href="laporan.html">
+              <a href="laporan.php">
                 <i class="fas fa-file"></i>
                 <p>Laporan</p>
               </a>

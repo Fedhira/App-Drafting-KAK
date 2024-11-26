@@ -5,27 +5,21 @@ date_default_timezone_set('Asia/Jakarta');
 
 function addKak($koneksi, $data, $lampiran = null)
 {
-    // Tetapkan status default sebagai 'draft' jika tidak diatur
     $status = isset($data['status']) ? $data['status'] : 'draft';
-
     $targetDir = "uploads/";
 
-    // Pastikan direktori uploads ada
     if (!is_dir($targetDir)) {
         mkdir($targetDir, 0755, true);
     }
 
-    // Cek apakah file diunggah
     if (isset($_FILES['lampiran']) && $_FILES['lampiran']['error'] == 0) {
-        $fileName = basename($_FILES['lampiran']['name']);
-        $fileName = preg_replace('/\s+/', '_', $fileName); // Ganti spasi dengan underscore
+        $fileName = preg_replace('/\s+/', '_', basename($_FILES['lampiran']['name']));
         $targetFilePath = $targetDir . $fileName;
 
-        // Pindahkan file yang diunggah
         if (move_uploaded_file($_FILES['lampiran']['tmp_name'], $targetFilePath)) {
-            $lampiran = $fileName; // Set lampiran jika upload berhasil
+            $lampiran = $fileName;
         } else {
-            $lampiran = null; // Jika upload gagal, set lampiran menjadi null
+            $lampiran = null;
         }
     }
 
@@ -66,12 +60,14 @@ function addKak($koneksi, $data, $lampiran = null)
     );
 
     if ($stmt->execute()) {
-        header("Location: ../views/user/draft.php");
+        header("Location: ../views/user/add_draft.php?status=success");
         exit;
     } else {
-        return $stmt->error;
+        header("Location: ../views/user/add_draft.php?status=error");
+        exit;
     }
 }
+
 
 function updateKak($koneksi, $data, $lampiran = null)
 {
@@ -132,10 +128,11 @@ function updateKak($koneksi, $data, $lampiran = null)
     );
 
     if ($stmt->execute()) {
-        header("Location: ../views/user/draft.php");
+        header("Location: ../views/user/draft.php?status=success&action=update");
         exit;
     } else {
-        return $stmt->error;
+        header("Location: ../views/user/draft.php?status=error&action=update");
+        exit;
     }
 }
 
@@ -174,6 +171,7 @@ function getDraftById($koneksi, $kak_id)
     $result = $stmt->get_result();
     return $result->fetch_assoc();
 }
+
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action'])) {
     $action = $_POST['action'];

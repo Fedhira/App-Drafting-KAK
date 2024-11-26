@@ -376,6 +376,7 @@ require '../cek.php';
                             <button class='btn btn-danger btn-round' style='width: 100px;' 
                                     onclick='confirmDeleteKategori(" . $row['kategori_id'] . ")'>
                                 <i class='fa fa-trash'></i> Hapus
+                              </button>
                         </div>
                     </td>
                 </tr>";

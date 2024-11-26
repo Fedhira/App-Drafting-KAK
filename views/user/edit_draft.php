@@ -26,6 +26,14 @@ if ($kak_id) {
     echo "<script>alert('ID tidak valid!'); window.location.href = 'draft.php';</script>";
     exit;
 }
+
+if (isset($_GET['kak_id']) && is_numeric($_GET['kak_id'])) {
+    $kak_id = $_GET['kak_id'];
+} else {
+    echo "<script>alert('ID tidak valid!'); window.location.href = 'draft.php';</script>";
+    exit;
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -254,6 +262,7 @@ if ($kak_id) {
                                         <input type="hidden" name="action" value="update">
                                         <input type="hidden" name="current_status" value="<?= $data['status']; ?>">
                                         <input type="hidden" name="kak_id" value="<?php echo htmlspecialchars($data['kak_id']); ?>">
+                                        <input type="hidden" name="user_id" value="<?php echo htmlspecialchars($data['user_id']); ?>">
 
                                         <label for="no_doc_mak"><strong>No. MAK</strong></label>
                                         <input type="text" id="no_doc_mak" name="no_doc_mak" class="form-control mb-3" value="<?php echo isset($data['no_doc_mak']) ? htmlspecialchars($data['no_doc_mak']) : ''; ?>">
@@ -330,7 +339,7 @@ if ($kak_id) {
                                         <p>Current file: <?php echo htmlspecialchars($data['lampiran']); ?></p>
 
                                         <div class="mt-4 text-end">
-                                            <button type="submit" class="btn btn-primary">Ubah</button>
+                                            <button type="submit" class="btn btn-primary" value="Submit">Ubah</button>
                                             <button type="button" class="btn btn-danger" onclick="window.location.href='draft.php';">Cancel</button>
                                         </div>
                                     </form>
@@ -476,31 +485,32 @@ if ($kak_id) {
         });
     </script>
 
-    <?php if (isset($_GET['status'])): ?>
-        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-        <script>
-            const status = "<?= $_GET['status'] ?>";
-            const message = "<?= urldecode($_GET['message']) ?>";
+    <?php
+    if (isset($_GET['status'])) {
+        if ($_GET['status'] === 'success') {
+            echo "<script>
+            Swal.fire({
+                icon: 'success',
+                title: 'Berhasil!',
+                text: 'Data berhasil diubah.',
+                showConfirmButton: true
+            }).then(() => {
+                window.location.href = 'draft.php';
+            });
+        </script>";
+        } elseif ($_GET['status'] === 'error') {
+            echo "<script>
+            Swal.fire({
+                icon: 'error',
+                title: 'Gagal!',
+                text: 'Data gagal diubah. Silakan coba lagi.',
+                showConfirmButton: true
+            });
+        </script>";
+        }
+    }
+    ?>
 
-            if (status === "success") {
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Berhasil!',
-                    text: message,
-                    timer: 3000,
-                    showConfirmButton: false
-                });
-            } else if (status === "error") {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Gagal!',
-                    text: message,
-                    timer: 3000,
-                    showConfirmButton: false
-                });
-            }
-        </script>
-    <?php endif; ?>
 
 
 </body>

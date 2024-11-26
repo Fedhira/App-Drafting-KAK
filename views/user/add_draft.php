@@ -52,6 +52,7 @@ require '../cek.php';
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+
   <!-- Load Font Awesome 6 -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
 
@@ -243,10 +244,10 @@ require '../cek.php';
                     <input type="hidden" name="user_id" value="<?php echo htmlspecialchars($_SESSION['user_id']); ?>">
 
                     <label for="no_doc_mak"><strong>No. MAK</strong></label>
-                    <input type="text" id="no_doc_mak" name="no_doc_mak" class="form-control mb-3" autofocus>
+                    <input type="text" id="no_doc_mak" name="no_doc_mak" class="form-control mb-3" required autofocus>
 
                     <label for="kategori_id"><strong>Kategori Program</strong></label>
-                    <select id="kategori_id" name="kategori_id" class="form-control mb-3" autofocus>
+                    <select id="kategori_id" name="kategori_id" class="form-control mb-3" required autofocus>
                       <option value="">Pilih Kategori</option>
                       <?php
                       $categories = fetchAllKategori($koneksi);
@@ -267,74 +268,74 @@ require '../cek.php';
                     ?>
 
                     <label for="judul"><strong>Judul KAK</strong></label>
-                    <input type="text" id="judul" name="judul" class="form-control mb-3" autofocus>
+                    <input type="text" id="judul" name="judul" class="form-control mb-3" required autofocus>
 
                     <label for="latar_belakang"><strong>Latar Belakang</strong></label>
-                    <textarea class="editor form-control mb-3" id="latar_belakang" name="latar_belakang" autofocus></textarea>
+                    <textarea class="editor form-control mb-3" id="latar_belakang" name="latar_belakang" required autofocus></textarea>
                     <br>
 
                     <label for="dasar_hukum"><strong>Dasar Hukum</strong></label>
-                    <textarea class="editor form-control mb-3" id="dasar_hukum" name="dasar_hukum" autofocus></textarea>
+                    <textarea class="editor form-control mb-3" id="dasar_hukum" name="dasar_hukum" required autofocus></textarea>
                     <br>
 
                     <label for="gambaran_umum"><strong>Gambaran Umum</strong></label>
-                    <textarea class="editor form-control mb-3" id="gambaran_umum" name="gambaran_umum" autofocus></textarea>
+                    <textarea class="editor form-control mb-3" id="gambaran_umum" name="gambaran_umum" required autofocus></textarea>
                     <br>
 
                     <label for="tujuan"><strong>Tujuan</strong></label>
-                    <textarea class="editor form-control mb-3" id="tujuan" name="tujuan" autofocus></textarea>
+                    <textarea class="editor form-control mb-3" id="tujuan" name="tujuan" required autofocus></textarea>
                     <br>
 
                     <label for="target_sasaran"><strong>Target/Sasaran</strong></label>
-                    <textarea class="editor form-control mb-3" id="target_sasaran" name="target_sasaran" autofocus></textarea>
+                    <textarea class="editor form-control mb-3" id="target_sasaran" name="target_sasaran" required autofocus></textarea>
                     <br>
 
                     <label for="unit_kerja"><strong>Unit Kerja Pelaksana</strong></label>
-                    <textarea class="editor form-control mb-3" id="unit_kerja" name="unit_kerja" autofocus></textarea>
+                    <textarea class="editor form-control mb-3" id="unit_kerja" name="unit_kerja" required autofocus></textarea>
                     <br>
 
                     <label for="ruang_lingkup"><strong>Ruang Lingkup, Lokasi dan Fasilitas Penunjang</strong></label>
-                    <textarea class="editor form-control mb-3" id="ruang_lingkup" name="ruang_lingkup" autofocus></textarea>
+                    <textarea class="editor form-control mb-3" id="ruang_lingkup" name="ruang_lingkup" required autofocus></textarea>
                     <br>
 
                     <label for="produk_jasa_dihasilkan"><strong>Produk/Jasa yang dihasilkan (Deliverable)</strong></label>
-                    <textarea class="editor form-control mb-3" id="produk_jasa_dihasilkan" name="produk_jasa_dihasilkan" autofocus></textarea>
+                    <textarea class="editor form-control mb-3" id="produk_jasa_dihasilkan" name="produk_jasa_dihasilkan" required autofocus></textarea>
                     <br>
 
                     <label for="waktu_pelaksanaan"><strong>Waktu Pelaksanaan</strong></label>
-                    <textarea class="editor form-control mb-3" id="waktu_pelaksanaan" name="waktu_pelaksanaan" autofocus></textarea>
+                    <textarea class="editor form-control mb-3" id="waktu_pelaksanaan" name="waktu_pelaksanaan" required autofocus></textarea>
                     <br>
 
                     <label for="tenaga_ahli_terampil"><strong>Tenaga Ahli</strong></label>
-                    <textarea class="editor form-control mb-3" id="tenaga_ahli_terampil" name="tenaga_ahli_terampil" autofocus></textarea>
+                    <textarea class="editor form-control mb-3" id="tenaga_ahli_terampil" name="tenaga_ahli_terampil" required autofocus></textarea>
                     <br>
 
                     <label for="peralatan"><strong>Peralatan</strong></label>
-                    <textarea class="editor form-control mb-3" id="peralatan" name="peralatan" autofocus></textarea>
+                    <textarea class="editor form-control mb-3" id="peralatan" name="peralatan" required autofocus></textarea>
                     <br>
 
                     <label for="metode_kerja"><strong>Metode Kerja</strong></label>
-                    <textarea class="editor form-control mb-3" id="metode_kerja" name="metode_kerja" autofocus></textarea>
+                    <textarea class="editor form-control mb-3" id="metode_kerja" name="metode_kerja" required autofocus></textarea>
                     <br>
 
                     <label for="manajemen_resiko"><strong>Manajemen Resiko</strong></label>
-                    <textarea class="editor form-control mb-3" id="manajemen_resiko" name="manajemen_resiko" autofocus></textarea>
+                    <textarea class="editor form-control mb-3" id="manajemen_resiko" name="manajemen_resiko" required autofocus></textarea>
                     <br>
 
                     <label for="laporan_pengajuan_pekerjaan"><strong>Laporan Pengajuan Pekerjaan</strong></label>
-                    <textarea class="editor form-control mb-3" id="laporan_pengajuan_pekerjaan" name="laporan_pengajuan_pekerjaan" autofocus></textarea>
+                    <textarea class="editor form-control mb-3" id="laporan_pengajuan_pekerjaan" name="laporan_pengajuan_pekerjaan" required autofocus></textarea>
                     <br>
 
                     <label for="sumber_dana_prakiraan_biaya"><strong>Sumber Dana dan Prakiraan Biaya</strong></label>
-                    <textarea class="editor form-control mb-3" id="sumber_dana_prakiraan_biaya" name="sumber_dana_prakiraan_biaya" autofocus></textarea>
+                    <textarea class="editor form-control mb-3" id="sumber_dana_prakiraan_biaya" name="sumber_dana_prakiraan_biaya" required autofocus></textarea>
                     <br>
 
                     <label for="penutup"><strong>Penutup</strong></label>
-                    <textarea class="editor form-control mb-3" id="penutup" name="penutup" autofocus></textarea>
+                    <textarea class="editor form-control mb-3" id="penutup" name="penutup" required autofocus></textarea>
                     <br>
 
                     <label for="lampiran"><strong>Lampiran</strong></label>
-                    <input type="file" id="lampiran" name="lampiran" class="form-control mb-3" accept=".pdf, image/*" autofocus>
+                    <input type="file" id="lampiran" name="lampiran" class="form-control mb-3" accept=".pdf, image/*" required autofocus>
 
                     <div class="mt-4 text-end">
                       <button type="submit" class="btn btn-primary" value="Submit">Submit</button>
@@ -483,31 +484,29 @@ require '../cek.php';
     });
   </script>
 
-  <?php if (isset($_GET['status'])): ?>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script>
-      const status = "<?= $_GET['status'] ?>";
-      const message = "<?= urldecode($_GET['message']) ?>";
-
-      if (status === "success") {
+  <?php
+  if (isset($_GET['status']) && $_GET['status'] === 'success') {
+    echo "<script>
         Swal.fire({
-          icon: 'success',
-          title: 'Berhasil!',
-          text: message,
-          timer: 3000,
-          showConfirmButton: false
+            icon: 'success',
+            title: 'Berhasil!',
+            text: 'Data berhasil ditambahkan.',
+            showConfirmButton: true
+        }).then(() => {
+            window.location.href = 'draft.php';
         });
-      } else if (status === "error") {
+    </script>";
+  } elseif (isset($_GET['status']) && $_GET['status'] === 'error') {
+    echo "<script>
         Swal.fire({
-          icon: 'error',
-          title: 'Gagal!',
-          text: message,
-          timer: 3000,
-          showConfirmButton: false
+            icon: 'error',
+            title: 'Gagal!',
+            text: 'Data gagal ditambahkan. Silakan coba lagi.',
+            showConfirmButton: true
         });
-      }
-    </script>
-  <?php endif; ?>
+    </script>";
+  }
+  ?>
 
 
 </body>
