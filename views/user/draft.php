@@ -391,112 +391,126 @@ require '../cek.php';
                       </div>
                     </div>
                   </div>
+                  <?php
+                  // Query untuk mengambil data draft
+                  $query = "
+                  SELECT
+                  kak.kak_id,
+                  kak.no_doc_mak,
+                  kak.judul,
+                  kategori_program.nama_divisi AS kategori_program,
+                  kak.status,
+                  kak.created_at AS tanggal_dibuat,
+                  kak.updated_at AS tanggal_diperbarui
+                  FROM
+                  kak
+                  LEFT JOIN
+                  kategori_program
+                  ON
+                  kak.kategori_id = kategori_program.kategori_id
+                  WHERE
+                  kak.status = 'draft'; -- Hanya data dengan status draft
+                  ";
+
+                  $result = mysqli_query($koneksi, $query);
+
+                  if (!$result) {
+                    die("Query failed: " . mysqli_error($koneksi));
+                  }
+                  ?>
 
                   <!-- START TABLE -->
-                  <?php
-                  // Check if query returned results
-                  if ($result && mysqli_num_rows($result) > 0) {
-                  ?>
-                    <div class="table-responsive">
-                      <table id="add-row" class="display table table-striped table-hover">
-                        <thead>
+                  <div class="table-responsive">
+                    <table id="add-row" class="display table table-striped table-hover">
+                      <thead>
+                        <tr>
+                          <th>No Doc</th>
+                          <th>Judul KAK</th>
+                          <th>Kategori Program</th>
+                          <th>Status Dokumen</th>
+                          <th>Tanggal Dibuat</th>
+                          <th>Tanggal Diperbarui</th>
+                          <th style="width: 10%">Aksi</th>
+                        </tr>
+                      </thead>
+                      <tfoot>
+                        <tr>
+                          <th>No Doc</th>
+                          <th>Judul KAK</th>
+                          <th>Kategori Program</th>
+                          <th>Status Dokumen</th>
+                          <th>Tanggal Dibuat</th>
+                          <th>Tanggal Diperbarui</th>
+                          <th>Aksi</th>
+                        </tr>
+                      </tfoot>
+                      <tbody>
+                        <?php if (mysqli_num_rows($result) > 0): ?>
+                          <?php while ($row = mysqli_fetch_assoc($result)): ?>
+                            <?php
+                            // Menentukan kelas untuk status
+                            $statusClass = '';
+                            switch ($row['status']) {
+                              case 'approved':
+                                $statusClass = 'status-disetujui';
+                                break;
+                              case 'pending':
+                                $statusClass = 'status-pending';
+                                break;
+                              case 'rejected':
+                                $statusClass = 'status-ditolak';
+                                break;
+                              case 'draft':
+                                $statusClass = 'status-draft';
+                                break;
+                            }
+                            ?>
+                            <tr>
+                              <td><?= htmlspecialchars($row['no_doc_mak']); ?></td>
+                              <td><?= htmlspecialchars($row['judul']); ?></td>
+                              <td><?= htmlspecialchars($row['kategori_program']); ?></td>
+                              <td>
+                                <span class="status <?= $statusClass; ?>">
+                                  <?= ucfirst($row['status']); ?>
+                                </span>
+                              </td>
+                              <td><?= htmlspecialchars($row['tanggal_dibuat']); ?></td>
+                              <td><?= htmlspecialchars($row['tanggal_diperbarui']); ?></td>
+                              <td>
+                                <div class="form-button-action button-group d-inline-flex">
+                                  <a href='detail.php?kak_id=<?php echo $kak_id; ?>' class='btn btn-dark btn-round me-2' style='width: 100px;'>
+                                    <i class='fas fa-eye'></i> Detail
+                                  </a>
+
+                                  <a href="upload_draft.php?kak_id=<?= $row['kak_id']; ?>"
+                                    class="btn btn-secondary btn-round me-2"
+                                    style="width: 100px;">
+                                    <i class="fas fa-upload"></i> Upload
+                                  </a>
+                                  <a href="edit_draft.php?kak_id=<?= $row['kak_id']; ?>"
+                                    class="btn btn-warning btn-round me-2"
+                                    style="width: 100px;">
+                                    <i class="fa fa-edit"></i> Ubah
+                                  </a>
+                                  <button class="btn btn-danger btn-round"
+                                    style="width: 100px;"
+                                    onclick="confirmDeleteDraft(<?= $row['kak_id']; ?>)">
+                                    <i class="fa fa-trash"></i> Hapus
+                                  </button>
+                                </div>
+                              </td>
+                            </tr>
+                          <?php endwhile; ?>
+                        <?php else: ?>
                           <tr>
-                            <th>No Doc</th>
-                            <th>Judul KAK</th>
-                            <th>Kategori Program</th>
-                            <th>Status Dokumen</th>
-                            <th>Tanggal Dibuat</th>
-                            <th>Tanggal Diperbarui</th>
-                            <th style="width: 10%">Aksi</th>
+                            <td colspan="7" class="text-center">Tidak ada data draft ditemukan.</td>
                           </tr>
-                        </thead>
-                        <tfoot>
-                          <tr>
-                            <th>No Doc</th>
-                            <th>Judul KAK</th>
-                            <th>Kategori Program</th>
-                            <th>Status Dokumen</th>
-                            <th>Tanggal Dibuat</th>
-                            <th>Tanggal Diperbarui</th>
-                            <th>Aksi</th>
-                          </tr>
-                        </tfoot>
-                        <tbody>
-                        <?php
-                        $query = "
-          SELECT 
-              kak.kak_id,
-              kak.no_doc_mak,
-              kak.judul,
-              kategori_program.nama_divisi AS kategori_program,
-              kak.status,
-              kak.created_at AS tanggal_dibuat,
-              kak.updated_at AS tanggal_diperbarui
-          FROM 
-              kak
-          LEFT JOIN 
-              kategori_program
-          ON 
-              kak.kategori_id = kategori_program.kategori_id;
-        ";
-                        $result = mysqli_query($koneksi, $query);
-
-                        if (!$result) {
-                          die("Query failed: " . mysqli_error($koneksi));
-                        }
-
-                        while ($row = mysqli_fetch_assoc($result)) {
-                          $statusClass = '';
-                          switch ($row['status']) {
-                            case 'approved':
-                              $statusClass = 'status-disetujui';
-                              break;
-                            case 'pending':
-                              $statusClass = 'status-pending';
-                              break;
-                            case 'rejected':
-                              $statusClass = 'status-ditolak';
-                              break;
-                            case 'draft':
-                              $statusClass = 'status-draft';
-                              break;
-                          }
-
-                          if (isset($row['kak_id'])) {
-                            $kak_id = htmlspecialchars($row['kak_id']);
-                            echo "<tr>
-                    <td>{$row['no_doc_mak']}</td>
-                    <td>{$row['judul']}</td>
-                    <td>{$row['kategori_program']}</td>
-                    <td><span class='status {$statusClass}'>" . ucfirst($row['status']) . "</span></td>
-                    <td>{$row['tanggal_dibuat']}</td>
-                    <td>{$row['tanggal_diperbarui']}</td>
-                    <td>
-                     <div class='form-button-action button-group d-inline-flex'>
-                      <a href='upload.php?kak_id=$kak_id' class='btn btn-primary btn-round me-2' style='width: 100px;'><i class='fas fa-upload'></i> Upload</a>
-                      <a href='edit_draft.php?kak_id=$kak_id' class='btn btn-warning btn-round me-2' style='width: 100px;'>
-                        <i class='fa fa-edit'></i> Ubah
-                      </a>
-                      <button class='btn btn-danger btn-round' style='width: 100px;' 
-                                    onclick='confirmDeleteDraft(" . $row['kak_id'] . ")'>
-                                <i class='fa fa-trash'></i> Hapus
-                              </button>
-                      </div>
-                    </td>
-                  </tr>";
-                          } else {
-                            echo "<tr><td colspan='7'>ID tidak tersedia</td></tr>";
-                          }
-                        }
-                      } else {
-                        echo "<tr><td colspan='7'>No data available</td></tr>";
-                      }
-                        ?>
+                        <?php endif; ?>
 
 
-                        </tbody>
-                      </table>
-                    </div>
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
               </div>
             </div>

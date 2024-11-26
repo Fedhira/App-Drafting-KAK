@@ -322,21 +322,24 @@ require '../cek.php';
                       <tbody>
                       <?php
                       $query = "
-          SELECT 
-              kak.kak_id,
-              kak.no_doc_mak,
-              kak.judul,
-              kategori_program.nama_divisi AS kategori_program,
-              kak.status,
-              kak.created_at AS tanggal_dibuat,
-              kak.updated_at AS tanggal_diperbarui
-          FROM 
-              kak
-          LEFT JOIN 
-              kategori_program
-          ON 
-              kak.kategori_id = kategori_program.kategori_id;
-        ";
+                       SELECT 
+                           kak.kak_id,
+                           kak.no_doc_mak,
+                           kak.judul,
+                           kategori_program.nama_divisi AS kategori_program,
+                           kak.status,
+                           kak.created_at AS tanggal_dibuat,
+                           kak.updated_at AS tanggal_diperbarui
+                       FROM 
+                           kak
+                       LEFT JOIN 
+                           kategori_program
+                       ON 
+                           kak.kategori_id = kategori_program.kategori_id
+                       WHERE 
+                           kak.status IN ('pending', 'disetujui', 'ditolak');  -- Mengambil dokumen dengan status selain 'draft'
+                   ";
+
                       $result = mysqli_query($koneksi, $query);
 
                       if (!$result) {

@@ -386,9 +386,35 @@ require '../cek.php';
                   </div>
 
 
+
                   <!-- START TABLE -->
                   <?php
-                  // Check if query returned results
+                  // Query untuk mengambil dokumen yang statusnya selain 'draft' (pending, disetujui, ditolak)
+                  $query = "
+                  SELECT 
+                      kak.kak_id,
+                      kak.no_doc_mak,
+                      kak.judul,
+                      kategori_program.nama_divisi AS kategori_program,
+                      kak.status,
+                      kak.created_at AS tanggal_dibuat,
+                      kak.updated_at AS tanggal_diperbarui
+                  FROM 
+                      kak
+                  LEFT JOIN 
+                      kategori_program
+                  ON 
+                      kak.kategori_id = kategori_program.kategori_id
+                  WHERE 
+                      kak.status IN ('pending', 'disetujui', 'ditolak');  -- Mengambil dokumen dengan status selain 'draft'
+              ";
+
+                  $result = mysqli_query($koneksi, $query);
+
+                  if (!$result) {
+                    die("Query failed: " . mysqli_error($koneksi));
+                  }
+
                   if ($result && mysqli_num_rows($result) > 0) {
                   ?>
                     <div class="table-responsive">
@@ -419,7 +445,6 @@ require '../cek.php';
                           <?php
                           // Fetch and display each row of data
                           while ($row = mysqli_fetch_assoc($result)) {
-                            // Define the status label class based on the document status
                             $statusClass = '';
                             switch ($row['status']) {
                               case 'approved':
@@ -436,20 +461,20 @@ require '../cek.php';
                                 break;
                             }
                             echo "<tr>
-                  <td>{$row['no_doc_mak']}</td>
-                  <td>{$row['judul']}</td>
-                  <td>{$row['kategori_program']}</td>
-                  <td><span class='status {$statusClass}'>" . ucfirst($row['status']) . "</span></td>
-                  <td>{$row['tanggal_dibuat']}</td>
-                  <td>{$row['tanggal_diperbarui']}</td>
-                  <td>
-                    <div class='form-button-action'>
-                                <button class='btn btn-dark btn-round me-2' style='width: 100px;' data-bs-toggle='modal' data-bs-target='#detailRowModal'>
-                                    <i class='fas fa-eye'></i> Detail
-                                </button>
-                            </div>
-                  </td>
-                </tr>";
+                                <td>{$row['no_doc_mak']}</td>
+                                <td>{$row['judul']}</td>
+                                <td>{$row['kategori_program']}</td>
+                                <td><span class='status {$statusClass}'>" . ucfirst($row['status']) . "</span></td>
+                                <td>{$row['tanggal_dibuat']}</td>
+                                <td>{$row['tanggal_diperbarui']}</td>
+                                <td>
+                                    <div class='form-button-action'>
+                                        <button class='btn btn-dark btn-round me-2' style='width: 100px;' data-bs-toggle='modal' data-bs-target='#detailRowModal'>
+                                            <i class='fas fa-eye'></i> Detail
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>";
                           }
                           ?>
                         </tbody>
@@ -460,6 +485,8 @@ require '../cek.php';
                     echo "<p>No data available</p>";
                   }
                   ?>
+
+
 
                 </div>
               </div>
@@ -572,6 +599,19 @@ require '../cek.php';
       });
     }
   </script>
+
+  <?php
+  if (isset($_GET['status'])) {
+    if ($_GET['status'] == 'success') {
+      echo "<div class='alert alert-success'>Status berhasil diperbarui ke 'pending'.</div>";
+    } elseif ($_GET['status'] == 'error') {
+      echo "<div class='alert alert-danger'>Terjadi kesalahan saat memperbarui status.</div>";
+    } elseif ($_GET['status'] == 'missing_id') {
+      echo "<div class='alert alert-warning'>ID KAK tidak ditemukan.</div>";
+    }
+  }
+  ?>
+
 
 </body>
 

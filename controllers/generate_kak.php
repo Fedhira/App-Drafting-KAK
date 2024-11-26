@@ -43,22 +43,23 @@ $templateProcessor->setValue('username', htmlspecialchars($data['username'], ENT
 $templateProcessor->setValue('no_doc_mak', htmlspecialchars($data['no_doc_mak'], ENT_QUOTES, 'UTF-8'));
 $templateProcessor->setValue('judul', htmlspecialchars($data['judul'], ENT_QUOTES, 'UTF-8'));
 $templateProcessor->setValue('status', htmlspecialchars($status, ENT_QUOTES, 'UTF-8'));
-$templateProcessor->setValue('latar_belakang', htmlspecialchars($data['latar_belakang'], ENT_QUOTES, 'UTF-8'));
-$templateProcessor->setValue('dasar_hukum', htmlspecialchars($data['dasar_hukum'], ENT_QUOTES, 'UTF-8'));
-$templateProcessor->setValue('gambaran_umum', htmlspecialchars($data['gambaran_umum'], ENT_QUOTES, 'UTF-8'));
-$templateProcessor->setValue('tujuan', htmlspecialchars($data['tujuan'], ENT_QUOTES, 'UTF-8'));
-$templateProcessor->setValue('target_sasaran', htmlspecialchars($data['target_sasaran'], ENT_QUOTES, 'UTF-8'));
-$templateProcessor->setValue('unit_kerja', htmlspecialchars($data['unit_kerja'], ENT_QUOTES, 'UTF-8'));
-$templateProcessor->setValue('ruang_lingkup', htmlspecialchars($data['ruang_lingkup'], ENT_QUOTES, 'UTF-8'));
-$templateProcessor->setValue('produk_jasa_dihasilkan', htmlspecialchars($data['produk_jasa_dihasilkan'], ENT_QUOTES, 'UTF-8'));
-$templateProcessor->setValue('waktu_pelaksanaan', htmlspecialchars($data['waktu_pelaksanaan'], ENT_QUOTES, 'UTF-8'));
-$templateProcessor->setValue('tenaga_ahli_terampil', htmlspecialchars($data['tenaga_ahli_terampil'], ENT_QUOTES, 'UTF-8'));
-$templateProcessor->setValue('peralatan', htmlspecialchars($data['peralatan'], ENT_QUOTES, 'UTF-8'));
-$templateProcessor->setValue('metode_kerja', htmlspecialchars($data['metode_kerja'], ENT_QUOTES, 'UTF-8'));
-$templateProcessor->setValue('manajemen_resiko', htmlspecialchars($data['manajemen_resiko'], ENT_QUOTES, 'UTF-8'));
-$templateProcessor->setValue('laporan_pengajuan_pekerjaan', htmlspecialchars($data['laporan_pengajuan_pekerjaan'], ENT_QUOTES, 'UTF-8'));
-$templateProcessor->setValue('sumber_dana_prakiraan_biaya', htmlspecialchars($data['sumber_dana_prakiraan_biaya'], ENT_QUOTES, 'UTF-8'));
-$templateProcessor->setValue('penutup', htmlspecialchars($data['penutup'], ENT_QUOTES, 'UTF-8'));
+$templateProcessor->setValue('latar_belakang', htmlspecialchars(strip_tags($data['latar_belakang']), ENT_QUOTES, 'UTF-8'));
+$templateProcessor->setValue('dasar_hukum', htmlspecialchars(strip_tags($data['dasar_hukum']), ENT_QUOTES, 'UTF-8'));
+$templateProcessor->setValue('gambaran_umum', htmlspecialchars(strip_tags($data['gambaran_umum']), ENT_QUOTES, 'UTF-8'));
+$templateProcessor->setValue('tujuan', htmlspecialchars(strip_tags($data['tujuan']), ENT_QUOTES, 'UTF-8'));
+$templateProcessor->setValue('target_sasaran', htmlspecialchars(strip_tags($data['target_sasaran']), ENT_QUOTES, 'UTF-8'));
+$templateProcessor->setValue('unit_kerja', htmlspecialchars(strip_tags($data['unit_kerja']), ENT_QUOTES, 'UTF-8'));
+$templateProcessor->setValue('ruang_lingkup', htmlspecialchars(strip_tags($data['ruang_lingkup']), ENT_QUOTES, 'UTF-8'));
+$templateProcessor->setValue('produk_jasa_dihasilkan', htmlspecialchars(strip_tags($data['produk_jasa_dihasilkan']), ENT_QUOTES, 'UTF-8'));
+$templateProcessor->setValue('waktu_pelaksanaan', htmlspecialchars(strip_tags($data['waktu_pelaksanaan']), ENT_QUOTES, 'UTF-8'));
+$templateProcessor->setValue('tenaga_ahli_terampil', htmlspecialchars(strip_tags($data['tenaga_ahli_terampil']), ENT_QUOTES, 'UTF-8'));
+$templateProcessor->setValue('peralatan', htmlspecialchars(strip_tags($data['peralatan']), ENT_QUOTES, 'UTF-8'));
+$templateProcessor->setValue('metode_kerja', htmlspecialchars(strip_tags($data['metode_kerja']), ENT_QUOTES, 'UTF-8'));
+$templateProcessor->setValue('manajemen_resiko', htmlspecialchars(strip_tags($data['manajemen_resiko']), ENT_QUOTES, 'UTF-8'));
+$templateProcessor->setValue('laporan_pengajuan_pekerjaan', htmlspecialchars(strip_tags($data['laporan_pengajuan_pekerjaan']), ENT_QUOTES, 'UTF-8'));
+$templateProcessor->setValue('sumber_dana_prakiraan_biaya', htmlspecialchars(strip_tags($data['sumber_dana_prakiraan_biaya']), ENT_QUOTES, 'UTF-8'));
+$templateProcessor->setValue('penutup', htmlspecialchars(strip_tags($data['penutup']), ENT_QUOTES, 'UTF-8'));
+
 
 // Menambahkan lampiran sebagai gambar jika file gambar tersedia
 $lampiranFile = __DIR__ . '/../models/uploads/' . $data['lampiran'];
