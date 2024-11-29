@@ -28,7 +28,7 @@ function addKategori($koneksi, $nama_divisi, $status)
 function updateKategori($koneksi, $kategori_id, $nama_divisi, $status)
 {
     $stmt = $koneksi->prepare("UPDATE kategori_program SET nama_divisi = ?, status = ? WHERE kategori_id = ?");
-    if ($stmt === false) {
+    if ($stmt === false) {  
         die('Prepare failed: ' . $koneksi->error);
     }
 

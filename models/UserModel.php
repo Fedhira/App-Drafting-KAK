@@ -49,11 +49,6 @@ function addUser($koneksi)
     }
 }
 
-
-
-
-
-
 // Function to update a user
 function updateUser($koneksi)
 {

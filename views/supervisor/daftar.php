@@ -2,6 +2,7 @@
 require '../../database/config.php';
 require '../../controllers/UserController.php';
 require '../../controllers/DaftarController.php';
+require '../../models/DaftarModel.php';
 require '../cek.php';
 ?>
 
@@ -51,7 +52,7 @@ require '../cek.php';
   <link rel="stylesheet" href="../../assets/css/kaiadmin.min.css" />
 
   <!-- CSS Just for demo purpose, don't include it in your project -->
-  <link rel="stylesheet" href="../../assets/css/demo.css" />
+  <link rel="stylesheet" href="../../asasets/css/demo.css" />
   <style>
     .btn {
       padding: 10px;
@@ -394,55 +395,82 @@ require '../cek.php';
 
                         <!-- Modal Body with Scroll -->
                         <div class="modal-body" style="max-height: 400px; overflow-y: auto;">
-                          <form>
+                          <form method="POST" action="../../models/DaftarModel.php">
                             <div class="row">
-                              <div class="col-sm-12">
+                              <!-- <div class="col-sm-12">
                                 <div class="form-group form-group-default">
                                   <label>No Doc</label>
-                                  <input type="text" class="form-control" placeholder="fill" />
+                                  <input type="text" name="no_doc_mak" class="form-control" placeholder="fill" />
                                 </div>
                               </div>
                               <div class="col-md-12">
                                 <div class="form-group form-group-default">
                                   <label>Judul KAK</label>
-                                  <input type="text" class="form-control" placeholder="fill" />
+                                  <input type="text" name="judul" class="form-control" placeholder="fill" />
                                 </div>
                               </div>
                               <div class="col-md-12">
                                 <div class="form-group form-group-default">
                                   <label>Kategori Program</label>
-                                  <input type="text" class="form-control" placeholder="fill" />
+                                  <input type="text" name="kategori" class="form-control" placeholder="fill" />
                                 </div>
-                              </div>
+                              </div> -->
                               <div class="col-md-12">
                                 <div class="form-group form-group-default">
                                   <label>Alasan Penolakan</label>
-                                  <input type="text" class="form-control" placeholder="fill " />
+                                  <textarea name="alasan_penolakan" class="form-control" placeholder="Masukkan alasan penolakan" required></textarea>
                                 </div>
                               </div>
                               <div class="col-md-12">
                                 <div class="form-group form-group-default">
                                   <label>Saran/Revisi</label>
-                                  <input type="text" class="form-control" placeholder="fill" />
+                                  <textarea name="saran" class="form-control" placeholder="Masukkan saran atau revisi" required></textarea>
                                 </div>
                               </div>
+
                             </div>
                           </form>
                         </div>
 
                         <!-- Modal Footer with Fixed Buttons -->
                         <div class="modal-footer border-0">
-                          <button type="button" class="btn btn-primary">Simpan</button>
+                          <button type="submit" class="btn btn-primary">Simpan</button>
                           <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Batal</button>
                         </div>
+
                       </div>
                     </div>
                   </div>
 
-                  <!-- START TABLE -->
 
+                  <!-- START TABLE -->
                   <?php
-                  // Check if query returned results
+                  // Query untuk mengambil dokumen yang statusnya selain 'draft' (pending, disetujui, ditolak)
+                  $query = "
+                  SELECT 
+                      kak.kak_id,
+                      kak.no_doc_mak,
+                      kak.judul,
+                      kategori_program.nama_divisi AS kategori_program,
+                      kak.status,
+                      kak.created_at AS tanggal_dibuat,
+                      kak.updated_at AS tanggal_diperbarui
+                  FROM 
+                      kak
+                  LEFT JOIN 
+                      kategori_program
+                  ON 
+                      kak.kategori_id = kategori_program.kategori_id
+                  WHERE 
+                      kak.status IN ('pending', 'disetujui', 'ditolak');  -- Mengambil dokumen dengan status selain 'draft'
+              ";
+
+                  $result = mysqli_query($koneksi, $query);
+
+                  if (!$result) {
+                    die("Query failed: " . mysqli_error($koneksi));
+                  }
+
                   if ($result && mysqli_num_rows($result) > 0) {
                   ?>
                     <div class="table-responsive">
@@ -473,7 +501,6 @@ require '../cek.php';
                           <?php
                           // Fetch and display each row of data
                           while ($row = mysqli_fetch_assoc($result)) {
-                            // Define the status label class based on the document status
                             $statusClass = '';
                             switch ($row['status']) {
                               case 'approved':
@@ -490,25 +517,28 @@ require '../cek.php';
                                 break;
                             }
                             echo "<tr>
-                  <td>{$row['no_doc_mak']}</td>
-                  <td>{$row['judul']}</td>
-                  <td>{$row['kategori_program']}</td>
-                  <td><span class='status {$statusClass}'>" . ucfirst($row['status']) . "</span></td>
-                  <td>{$row['tanggal_dibuat']}</td>
-                  <td>{$row['tanggal_diperbarui']}</td>
-                  <td>
-                    <div class='form-button-action'>
-                              <button class='btn btn-dark btn-round me-2' style='width: 100px;' data-bs-toggle='modal'
+                                <td>{$row['no_doc_mak']}</td>
+                                <td>{$row['judul']}</td>
+                                <td>{$row['kategori_program']}</td>
+                                <td><span class='status {$statusClass}'>" . ucfirst($row['status']) . "</span></td>
+                                <td>{$row['tanggal_dibuat']}</td>
+                                <td>{$row['tanggal_diperbarui']}</td>
+                                <td>
+                                   <div class='form-button-action'>
+                              <button class='btn btn-dark btn-round me-2' style='width: 110px;' data-bs-toggle='modal'
                                 data-bs-target='#detailRowModal'>
                                 <i class='fas fa-eye'></i> Detail
                               </button>
-                              <button class='btn btn-danger btn-round me-2' style='width: 100px;' data-bs-toggle='modal'
+                              <button class='btn btn-danger btn-round me-2' style='width: 110px;' data-bs-toggle='modal'
                                 data-bs-target='#tolakRowModal'>
                                 <i class='fas fa-xmark'></i> Ditolak
                               </button>
+                              <button class='btn btn-success btn-round me-2' style='width: 110px;'>
+                               <i class='fas fa-check'></i> Disetujui
+                              </button>
                             </div>
-                  </td>
-                </tr>";
+                                </td>
+                            </tr>";
                           }
                           ?>
                         </tbody>

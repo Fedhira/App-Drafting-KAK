@@ -335,7 +335,7 @@ if (isset($_GET['kak_id']) && is_numeric($_GET['kak_id'])) {
                                         <textarea class="form-control mb-3" id="penutup" name="penutup" readonly><?php echo isset($data['penutup']) ? htmlspecialchars(strip_tags($data['penutup'])) : ''; ?></textarea>
 
                                         <label for="lampiran"><strong>Lampiran</strong></label>
-                                        <input type="file" id="lampiran" name="lampiran" class="form-control mb-3" accept=".pdf, image/*" readonly>
+                                        <input type="file" id="lampiran" name="lampiran" class="form-control mb-3" accept=".pdf, image/*" disabled>
                                         <p>Current file: <?php echo htmlspecialchars($data['lampiran']); ?></p>
 
                                         <div class="mt-4 text-end">

@@ -1,8 +1,7 @@
 <?php
 require '../../database/config.php';
 require '../../controllers/UserController.php';
-require '../../controllers/DraftController.php';
-require '../../models/DraftModel.php';
+require '../../controllers/DaftarController.php';
 require '../cek.php';
 ?>
 <!DOCTYPE html>
