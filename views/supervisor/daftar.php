@@ -397,24 +397,24 @@ require '../cek.php';
                         <div class="modal-body" style="max-height: 400px; overflow-y: auto;">
                           <form method="POST" action="../../models/DaftarModel.php">
                             <div class="row">
-                              <!-- <div class="col-sm-12">
+                              <div class="col-sm-12">
                                 <div class="form-group form-group-default">
                                   <label>No Doc</label>
-                                  <input type="text" name="no_doc_mak" class="form-control" placeholder="fill" />
+                                  <input type="text" name="no_doc_mak" class="form-control" readonly />
                                 </div>
                               </div>
                               <div class="col-md-12">
                                 <div class="form-group form-group-default">
                                   <label>Judul KAK</label>
-                                  <input type="text" name="judul" class="form-control" placeholder="fill" />
+                                  <input type="text" name="judul" class="form-control" readonly />
                                 </div>
                               </div>
                               <div class="col-md-12">
                                 <div class="form-group form-group-default">
                                   <label>Kategori Program</label>
-                                  <input type="text" name="kategori" class="form-control" placeholder="fill" />
+                                  <input type="text" name="kategori" class="form-control" readonly />
                                 </div>
-                              </div> -->
+                              </div>
                               <div class="col-md-12">
                                 <div class="form-group form-group-default">
                                   <label>Alasan Penolakan</label>
@@ -443,36 +443,35 @@ require '../cek.php';
                   </div>
 
 
-                  <!-- START TABLE -->
                   <?php
                   // Query untuk mengambil dokumen yang statusnya selain 'draft' (pending, disetujui, ditolak)
                   $query = "
-                  SELECT 
-                      kak.kak_id,
-                      kak.no_doc_mak,
-                      kak.judul,
-                      kategori_program.nama_divisi AS kategori_program,
-                      kak.status,
-                      kak.created_at AS tanggal_dibuat,
-                      kak.updated_at AS tanggal_diperbarui
-                  FROM 
-                      kak
-                  LEFT JOIN 
-                      kategori_program
-                  ON 
-                      kak.kategori_id = kategori_program.kategori_id
-                  WHERE 
-                      kak.status IN ('pending', 'disetujui', 'ditolak');  -- Mengambil dokumen dengan status selain 'draft'
-              ";
+SELECT 
+    kak.kak_id,
+    kak.no_doc_mak,
+    kak.judul,
+    kategori_program.nama_divisi AS kategori_program,
+    kak.status,
+    kak.created_at AS tanggal_dibuat,
+    kak.updated_at AS tanggal_diperbarui
+FROM 
+    kak
+LEFT JOIN 
+    kategori_program
+ON 
+    kak.kategori_id = kategori_program.kategori_id
+WHERE 
+    kak.status IN ('pending', 'disetujui', 'ditolak');
+";
 
                   $result = mysqli_query($koneksi, $query);
 
                   if (!$result) {
                     die("Query failed: " . mysqli_error($koneksi));
                   }
-
-                  if ($result && mysqli_num_rows($result) > 0) {
                   ?>
+
+                  <?php if ($result && mysqli_num_rows($result) > 0): ?>
                     <div class="table-responsive">
                       <table id="add-row" class="display table table-striped table-hover">
                         <thead>
@@ -498,9 +497,9 @@ require '../cek.php';
                           </tr>
                         </tfoot>
                         <tbody>
-                          <?php
-                          // Fetch and display each row of data
-                          while ($row = mysqli_fetch_assoc($result)) {
+                          <?php while ($row = mysqli_fetch_assoc($result)): ?>
+                            <?php
+                            // Menentukan kelas status
                             $statusClass = '';
                             switch ($row['status']) {
                               case 'approved':
@@ -516,39 +515,47 @@ require '../cek.php';
                                 $statusClass = 'status-draft';
                                 break;
                             }
-                            echo "<tr>
-                                <td>{$row['no_doc_mak']}</td>
-                                <td>{$row['judul']}</td>
-                                <td>{$row['kategori_program']}</td>
-                                <td><span class='status {$statusClass}'>" . ucfirst($row['status']) . "</span></td>
-                                <td>{$row['tanggal_dibuat']}</td>
-                                <td>{$row['tanggal_diperbarui']}</td>
-                                <td>
-                                   <div class='form-button-action'>
-                              <button class='btn btn-dark btn-round me-2' style='width: 110px;' data-bs-toggle='modal'
-                                data-bs-target='#detailRowModal'>
-                                <i class='fas fa-eye'></i> Detail
-                              </button>
-                              <button class='btn btn-danger btn-round me-2' style='width: 110px;' data-bs-toggle='modal'
-                                data-bs-target='#tolakRowModal'>
-                                <i class='fas fa-xmark'></i> Ditolak
-                              </button>
-                              <button class='btn btn-success btn-round me-2' style='width: 110px;'>
-                               <i class='fas fa-check'></i> Disetujui
-                              </button>
-                            </div>
-                                </td>
-                            </tr>";
-                          }
-                          ?>
+                            ?>
+                            <tr>
+                              <td><?= htmlspecialchars($row['no_doc_mak']); ?></td>
+                              <td><?= htmlspecialchars($row['judul']); ?></td>
+                              <td><?= htmlspecialchars($row['kategori_program']); ?></td>
+                              <td>
+                                <span class="status <?= $statusClass; ?>">
+                                  <?= ucfirst($row['status']); ?>
+                                </span>
+                              </td>
+                              <td><?= htmlspecialchars($row['tanggal_dibuat']); ?></td>
+                              <td><?= htmlspecialchars($row['tanggal_diperbarui']); ?></td>
+                              <td>
+                                <div class="form-button-action">
+                                  <button class="btn btn-dark btn-round me-2" style="width: 110px;"
+                                    data-bs-toggle="modal" data-bs-target="#detailRowModal">
+                                    <i class="fas fa-eye"></i> Detail
+                                  </button>
+                                  <button
+                                    class="btn btn-danger btn-round me-2"
+                                    style="width: 110px;"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#tolakRowModal"
+                                    onclick="populateModal(<?php echo $row['kak_id']; ?>)">
+                                    <i class="fas fa-xmark"></i> Ditolak
+                                  </button>
+
+                                  <button class="btn btn-success btn-round me-2" style="width: 110px;">
+                                    <i class="fas fa-check"></i> Disetujui
+                                  </button>
+                                </div>
+                              </td>
+                            </tr>
+                          <?php endwhile; ?>
                         </tbody>
                       </table>
                     </div>
-                  <?php
-                  } else {
-                    echo "<p>No data available</p>";
-                  }
-                  ?>
+                  <?php else: ?>
+                    <p>No data available</p>
+                  <?php endif; ?>
+
 
                 </div>
               </div>
@@ -639,6 +646,19 @@ require '../cek.php';
         $("#addRowModal").modal("hide");
       });
     });
+  </script>
+
+  <script>
+    function populateModal(kakId) {
+      fetch(`../../models/DaftarModel.php?kak_id=${kakId}`)
+        .then(response => response.json())
+        .then(data => {
+          document.querySelector("input[name='no_doc_mak']").value = data.no_doc_mak || '';
+          document.querySelector("input[name='judul']").value = data.judul || '';
+          document.querySelector("input[name='kategori']").value = data.kategori || '';
+        })
+        .catch(error => console.error('Error:', error));
+    }
   </script>
 
   <script>

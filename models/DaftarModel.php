@@ -37,3 +37,38 @@ if (isset($_POST['submit_penolakan'])) {
     // Panggil fungsi untuk menyimpan revisi
     addRevisi($koneksi, $kak_id, $alasan_penolakan, $saran);
 }
+
+function getKAKDetails($koneksi, $kak_id)
+{
+    $query = "
+        SELECT 
+            kak.no_doc_mak, 
+            kak.judul, 
+            kategori_program.nama_divisi AS kategori
+        FROM kak
+        JOIN kategori_program ON kak.kategori_id = kategori_program.kategori_id
+        WHERE kak.kak_id = ?
+    ";
+
+    $stmt = $koneksi->prepare($query);
+    if (!$stmt) {
+        die('Query Error: ' . $koneksi->error);
+    }
+
+    $stmt->bind_param("i", $kak_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    // Mengembalikan hasil sebagai array asosiatif
+    return $result->fetch_assoc();
+}
+
+if (isset($_GET['kak_id'])) {
+    $kak_id = $_GET['kak_id'];
+    $kakDetails = getKAKDetails($koneksi, $kak_id);
+
+    // Kirim data dalam format JSON
+    header('Content-Type: application/json');
+    echo json_encode($kakDetails);
+    exit();
+}
