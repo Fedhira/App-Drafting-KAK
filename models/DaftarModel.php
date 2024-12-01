@@ -4,44 +4,42 @@ include $_SERVER['DOCUMENT_ROOT'] . '/App-Drafting-KAK/database/config.php';
 
 function addRevisi($koneksi, $kak_id, $alasan_penolakan, $saran)
 {
-    // Ambil kategori_id dan user_id dari tabel kak
-    $querySelect = "SELECT user_id, kategori_id FROM kak WHERE kak_id = ?";
-    $stmtSelect = $koneksi->prepare($querySelect);
-    if (!$stmtSelect) {
-        die('Query Error: ' . $koneksi->error);
-    }
-
-    $stmtSelect->bind_param("i", $kak_id);
-    $stmtSelect->execute();
-    $result = $stmtSelect->get_result();
-    $row = $result->fetch_assoc();
-
-    if (!$row) {
-        header("Location: ../views/supervisor/daftar.php?status=error&action=add");
-        exit();
-    }
-
-    $user_id = $row['user_id'];
-    $kategori_id = $row['kategori_id'];
-
     // Query untuk memasukkan data ke tabel revisi
-    $query = "
-        INSERT INTO revisi (user_id, kak_id, kategori_id, alasan_penolakan, saran) 
-        VALUES (?, ?, ?, ?, ?)
+    $queryRevisi = "
+        INSERT INTO revisi (kak_id, alasan_penolakan, saran) 
+        VALUES (?, ?, ?)
     ";
 
-    $stmt = $koneksi->prepare($query);
-    if (!$stmt) {
+    $stmtRevisi = $koneksi->prepare($queryRevisi);
+    if (!$stmtRevisi) {
         die('Query Error: ' . $koneksi->error);
     }
 
-    // Bind data untuk query
-    $stmt->bind_param("iiiss", $user_id, $kak_id, $kategori_id, $alasan_penolakan, $saran);
+    // Bind data untuk query revisi
+    $stmtRevisi->bind_param("iss", $kak_id, $alasan_penolakan, $saran);
 
-    // Eksekusi query dan redirect sesuai hasilnya
-    if ($stmt->execute()) {
-        header("Location: ../views/supervisor/daftar.php?status=success&action=add");
-        exit();
+    // Eksekusi query revisi
+    if ($stmtRevisi->execute()) {
+        // Jika berhasil, perbarui status di tabel kak
+        $queryUpdateStatus = "
+            UPDATE kak 
+            SET status = 'ditolak'
+            WHERE kak_id = ?
+        ";
+        $stmtUpdate = $koneksi->prepare($queryUpdateStatus);
+        if (!$stmtUpdate) {
+            die('Query Error: ' . $koneksi->error);
+        }
+
+        $stmtUpdate->bind_param("i", $kak_id);
+        if ($stmtUpdate->execute()) {
+            // Redirect jika berhasil
+            header("Location: ../views/supervisor/daftar.php?status=success&action=add");
+            exit();
+        } else {
+            header("Location: ../views/supervisor/daftar.php?status=error&action=update_status");
+            exit();
+        }
     } else {
         header("Location: ../views/supervisor/daftar.php?status=error&action=add");
         exit();
@@ -93,4 +91,24 @@ if (isset($_GET['kak_id'])) {
     header('Content-Type: application/json');
     echo json_encode($kakDetails);
     exit();
+}
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_POST['action'] == 'update') {
+    // Ensure you are updating the correct entry based on the kak_id
+    $kak_id = $_POST['kak_id'];
+    $current_status = $_POST['current_status'];
+    $new_status = 'disetujui'; // Set the new status to 'disetujui'
+
+    // Database connection (assuming $koneksi is your DB connection variable)
+    $query = "UPDATE kak SET status = ? WHERE kak_id = ?";
+    $stmt = $koneksi->prepare($query);
+    $stmt->bind_param("si", $new_status, $kak_id);
+
+    if ($stmt->execute()) {
+        // Redirect to the daftar page after updating status
+        header("Location: ../views/supervisor/daftar.php");
+        exit();
+    } else {
+        echo "Error updating status.";
+    }
 }

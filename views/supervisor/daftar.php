@@ -235,6 +235,7 @@ require '../cek.php';
                           <input type="date" class="form-control" name="toDate" value="<?php echo htmlspecialchars($toDate); ?>" />
                         </div>
                         <button type="submit" class="btn btn-primary btn-round me-2" style="width: 167px;">Filter</button>
+                        <a href="daftar.php" class="btn btn-danger btn-round me-2" style="width: 167px;">Clear</a>
                       </div>
                     </form>
                   </div>
@@ -528,10 +529,11 @@ WHERE
                               <td><?= htmlspecialchars($row['tanggal_diperbarui']); ?></td>
                               <td>
                                 <div class="form-button-action">
-                                  <button class="btn btn-dark btn-round me-2" style="width: 110px;"
-                                    data-bs-toggle="modal" data-bs-target="#detailRowModal">
-                                    <i class="fas fa-eye"></i> Detail
-                                  </button>
+                                  <a href="detail_draft.php?kak_id=<?= $row['kak_id']; ?>"
+                                    class="btn btn-dark btn-round me-2"
+                                    style="width: 110px;">
+                                    <i class="fa fa-eye"></i> Detail
+                                  </a>
                                   <button
                                     class="btn btn-danger btn-round me-2"
                                     style="width: 110px;"
@@ -539,10 +541,6 @@ WHERE
                                     data-bs-target="#tolakRowModal"
                                     onclick="populateModal(<?php echo $row['kak_id']; ?>)">
                                     <i class="fas fa-xmark"></i> Ditolak
-                                  </button>
-
-                                  <button class="btn btn-success btn-round me-2" style="width: 110px;">
-                                    <i class="fas fa-check"></i> Disetujui
                                   </button>
                                 </div>
                               </td>
@@ -658,6 +656,14 @@ WHERE
           document.querySelector("input[name='kak_id']").value = kakId; // Set hidden input kak_id
         })
         .catch(error => console.error('Error:', error));
+    }
+  </script>
+
+  <script>
+    function approveKAK(kak_id) {
+      if (confirm("Apakah Anda yakin ingin menyetujui dokumen ini?")) {
+        window.location.href = "../../models/DaftarModel.php?action=approve&kak_id=" + kak_id;
+      }
     }
   </script>
 

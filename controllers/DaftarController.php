@@ -9,6 +9,15 @@ require __DIR__ . '/../database/config.php';
 $fromDate = isset($_GET['fromDate']) && !empty($_GET['fromDate']) ? $_GET['fromDate'] : null;
 $toDate = isset($_GET['toDate']) && !empty($_GET['toDate']) ? $_GET['toDate'] : null;
 
+// Convert dates to 'YYYY-MM-DD' format if needed
+if ($fromDate) {
+    $fromDate = DateTime::createFromFormat('d-m-Y', $fromDate)->format('Y-m-d');
+}
+
+if ($toDate) {
+    $toDate = DateTime::createFromFormat('d-m-Y', $toDate)->format('Y-m-d');
+}
+
 // Base query for fetching data from the kak table
 $query = "SELECT 
             kak.no_doc_mak, 
@@ -25,7 +34,16 @@ if ($fromDate && $toDate) {
     $query .= " WHERE DATE(kak.created_at) BETWEEN ? AND ?";
     $stmt = $koneksi->prepare($query);
     $stmt->bind_param("ss", $fromDate, $toDate);
+} elseif ($fromDate) {
+    $query .= " WHERE DATE(kak.created_at) >= ?";
+    $stmt = $koneksi->prepare($query);
+    $stmt->bind_param("s", $fromDate);
+} elseif ($toDate) {
+    $query .= " WHERE DATE(kak.created_at) <= ?";
+    $stmt = $koneksi->prepare($query);
+    $stmt->bind_param("s", $toDate);
 } else {
+    // No filter applied, fetch all data
     $stmt = $koneksi->prepare($query);
 }
 
