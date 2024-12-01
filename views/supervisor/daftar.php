@@ -394,7 +394,7 @@ require '../cek.php';
                         </div>
 
                         <!-- Modal Body with Scroll -->
-                        <div class="modal-body" style="max-height: 400px; overflow-y: auto;">
+                        <div class="modal-body" style="max-height: 500px; overflow-y: auto;">
                           <form method="POST" action="../../models/DaftarModel.php">
                             <div class="row">
                               <div class="col-sm-12">
@@ -427,17 +427,16 @@ require '../cek.php';
                                   <textarea name="saran" class="form-control" placeholder="Masukkan saran atau revisi" required></textarea>
                                 </div>
                               </div>
-
+                              <!-- Hidden input for kak_id -->
+                              <input type="hidden" name="kak_id" value="" />
+                            </div>
+                            <div class="modal-footer border-0">
+                              <button type="submit" name="submit_penolakan" class="btn btn-primary">Simpan</button>
+                              <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Batal</button>
                             </div>
                           </form>
-                        </div>
 
-                        <!-- Modal Footer with Fixed Buttons -->
-                        <div class="modal-footer border-0">
-                          <button type="submit" class="btn btn-primary">Simpan</button>
-                          <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Batal</button>
                         </div>
-
                       </div>
                     </div>
                   </div>
@@ -502,13 +501,13 @@ WHERE
                             // Menentukan kelas status
                             $statusClass = '';
                             switch ($row['status']) {
-                              case 'approved':
+                              case 'disetujui': // Gunakan 'disetujui', bukan 'approved'
                                 $statusClass = 'status-disetujui';
                                 break;
                               case 'pending':
                                 $statusClass = 'status-pending';
                                 break;
-                              case 'rejected':
+                              case 'ditolak': // Gunakan 'ditolak', bukan 'rejected'
                                 $statusClass = 'status-ditolak';
                                 break;
                               case 'draft':
@@ -656,6 +655,7 @@ WHERE
           document.querySelector("input[name='no_doc_mak']").value = data.no_doc_mak || '';
           document.querySelector("input[name='judul']").value = data.judul || '';
           document.querySelector("input[name='kategori']").value = data.kategori || '';
+          document.querySelector("input[name='kak_id']").value = kakId; // Set hidden input kak_id
         })
         .catch(error => console.error('Error:', error));
     }
