@@ -21,6 +21,10 @@ $email = isset($_SESSION['email']) ? htmlspecialchars($_SESSION['email']) : 'gue
 <!-- Link ke file JS utama -->
 <script src="../../assets/js/app.js"></script>
 
+<!-- SweetAlert -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <!-- Favicon -->
 <link
     rel="icon"
@@ -129,7 +133,7 @@ $email = isset($_SESSION['email']) ? htmlspecialchars($_SESSION['email']) : 'gue
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="../logout.php">
+                            <a href="#" onclick="logoutConfirm(event)">
                                 <i class="fas fa-right-from-bracket"></i>
                                 <p>Logout</p>
                             </a>
@@ -368,5 +372,26 @@ $email = isset($_SESSION['email']) ? htmlspecialchars($_SESSION['email']) : 'gue
         <script src="../../assets/js/demo.js"></script>
     </div>
 </body>
+
+<script>
+    function logoutConfirm(event) {
+        event.preventDefault(); // Prevents the default link action
+
+        Swal.fire({
+            title: 'Are you sure you want to logout?',
+            text: "You will be logged out of the system.",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, logout'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Redirect to logout.php if confirmed
+                window.location.href = '../../login.php';
+            }
+        });
+    }
+</script>
 
 </html>

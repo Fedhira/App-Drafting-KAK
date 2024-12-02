@@ -248,6 +248,7 @@ require '../cek.php';
                           <input type="date" class="form-control" name="toDate" value="<?php echo htmlspecialchars($toDate); ?>" />
                         </div>
                         <button type="submit" class="btn btn-primary btn-round me-2" style="width: 167px;">Filter</button>
+                        <a href="draft.php" class="btn btn-danger btn-round me-2" style="width: 167px;">Clear</a>
                       </div>
                     </form>
                   </div>

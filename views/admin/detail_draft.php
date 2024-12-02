@@ -244,7 +244,7 @@ if (isset($_GET['kak_id']) && is_numeric($_GET['kak_id'])) {
             <div class="container">
                 <div class="page-inner">
                     <div class="page-header">
-                        <h3 class="fw-bold mb-3">KAK Disetujui</h3>
+                        <h3 class="fw-bold mb-3">Detail KAK</h3>
                     </div>
                     <div class="row">
                         <div class="col-md-12 mt-4">
@@ -336,7 +336,6 @@ if (isset($_GET['kak_id']) && is_numeric($_GET['kak_id'])) {
                                         <p>Current file: <?php echo htmlspecialchars($data['lampiran']); ?></p>
 
                                         <div class="mt-4 text-end">
-                                            <button type="submit" class="btn btn-success me-2" value="Submit">Disetujui</button>
                                             <button type="button" class="btn btn-danger" onclick="window.location.href='daftar.php';">Cancel</button>
                                         </div>
                                     </form>

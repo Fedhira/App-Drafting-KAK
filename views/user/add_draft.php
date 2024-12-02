@@ -243,10 +243,10 @@ require '../cek.php';
                     <input type="hidden" name="user_id" value="<?php echo htmlspecialchars($_SESSION['user_id']); ?>">
 
                     <label for="no_doc_mak"><strong>No. MAK</strong></label>
-                    <input type="text" id="no_doc_mak" name="no_doc_mak" class="form-control mb-3" autofocus>
+                    <input type="text" id="no_doc_mak" name="no_doc_mak" class="form-control mb-3" autofocus required>
 
                     <label for="kategori_id"><strong>Kategori Program</strong></label>
-                    <select id="kategori_id" name="kategori_id" class="form-control mb-3" autofocus>
+                    <select id="kategori_id" name="kategori_id" class="form-control mb-3" autofocus required>
                       <option value="">Pilih Kategori</option>
                       <?php
                       $categories = fetchAllKategori($koneksi);
@@ -267,7 +267,7 @@ require '../cek.php';
                     ?>
 
                     <label for="judul"><strong>Judul KAK</strong></label>
-                    <input type="text" id="judul" name="judul" class="form-control mb-3" autofocus>
+                    <input type="text" id="judul" name="judul" class="form-control mb-3" autofocus required>
 
                     <label for="latar_belakang"><strong>Latar Belakang</strong></label>
                     <textarea class="editor form-control mb-3" id="latar_belakang" name="latar_belakang" autofocus></textarea>
@@ -337,7 +337,7 @@ require '../cek.php';
                     <input type="file" id="lampiran" name="lampiran" class="form-control mb-3" accept=".pdf, image/*" autofocus>
 
                     <div class="mt-4 text-end">
-                      <button type="submit" class="btn btn-primary" value="Submit">Submit</button>
+                      <button type="submit" class="btn btn-primary me-2" value="Submit">Submit</button>
                       <button type="button" class="btn btn-danger" onclick="window.location.href='draft.php';">Cancel</button>
                     </div>
 

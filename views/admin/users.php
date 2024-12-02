@@ -252,6 +252,7 @@ require '../cek.php';
                           <input type="date" class="form-control" name="toDate" />
                         </div>
                         <button type="submit" class="btn btn-primary btn-round  me-2" style="width: 167px;">Filter</button>
+                        <a href="users.php" class="btn btn-danger btn-round me-2" style="width: 167px;">Clear</a>
                       </div>
                     </form>
                   </div>
@@ -263,17 +264,14 @@ require '../cek.php';
                       <div class="modal-content">
                         <div class="modal-header border-0">
                           <h5 class="modal-title">
-                            <span class="fw-mediumbold"> Tambah User</span>
+                            <span class="fw-mediumbold">Tambah User</span>
                           </h5>
                           <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                           </button>
-
-                          </button>
                         </div>
                         <div class="modal-body">
-                          <!-- Form to submit to PHP -->
-                          <form method="POST" action="../../models/UserModel.php"> <!-- Specify the PHP file here -->
+                          <form method="POST" action="../../models/UserModel.php">
                             <div class="row">
                               <div class="col-sm-12">
                                 <div class="form-group form-group-default">
@@ -293,24 +291,18 @@ require '../cek.php';
                                   <select id="role" name="role" class="form-control" required>
                                     <option value="">Pilih Role</option>
                                     <?php
-                                    // Fetch all roles from the database
                                     $roles = mysqli_query($koneksi, "SELECT DISTINCT role FROM user");
-
-                                    // Check if the query was successful
                                     if ($roles) {
-                                      // Loop through the result and create an option for each role
                                       while ($data = mysqli_fetch_array($roles)) {
                                         echo "<option value='" . htmlspecialchars($data['role']) . "'>" . htmlspecialchars($data['role']) . "</option>";
                                       }
                                     } else {
-                                      // Handle the case where the query failed
                                       echo "<option value=''>Failed to retrieve roles</option>";
                                     }
                                     ?>
                                   </select>
                                 </div>
                               </div>
-
                               <div class="col-md-6">
                                 <div class="form-group form-group-default">
                                   <label>NIK</label>
@@ -320,18 +312,16 @@ require '../cek.php';
                               <div class="col-md-6">
                                 <div class="form-group form-group-default">
                                   <label>Password</label>
-                                  <input type="text" name="password" class="form-control" placeholder="fill password" required />
+                                  <input type="password" name="password" class="form-control" placeholder="fill password" required />
                                 </div>
                               </div>
                               <div class="col-sm-12">
                                 <div class="form-group form-group-default">
                                   <label>Kategori</label>
-
-                                  <select id="kategori_id" name="kategori" class="form-control" required>
+                                  <select id="kategori_id" name="kategori_id" class="form-control" required>
                                     <option value="">Pilih Kategori</option>
                                     <?php
                                     $categories = fetchAllKategori($koneksi);
-                                    // Populate the select options with data from the database
                                     if (!empty($categories)) {
                                       foreach ($categories as $category) {
                                         echo '<option value="' . htmlspecialchars($category['kategori_id']) . '">' . htmlspecialchars($category['nama_divisi']) . '</option>';
@@ -341,7 +331,6 @@ require '../cek.php';
                                     }
                                     ?>
                                   </select>
-
                                 </div>
                               </div>
                             </div>
@@ -354,6 +343,7 @@ require '../cek.php';
                       </div>
                     </div>
                   </div>
+
 
 
                   <!-- Modal Ubah -->

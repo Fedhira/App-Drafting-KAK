@@ -274,63 +274,64 @@ require '../cek.php';
                                         <div class="accordion-body custom-font-size">
                                             Masuk ke menu "Laporan" di sidebar untuk melihat dan mengelola semua laporan yang telah dibuat. Anda dapat melakukan pembaruan atau tinjauan terhadap laporan yang tersedia. </div>
                                     </div>
-
-                                    <!-- End Accordion -->
-
-
-                                    <!-- Contact Support Box -->
-                                    <div class="contact-support box">
-                                        <h5><strong>Contact Support</strong></h5>
-                                        <h6>Jika Anda memerlukan bantuan lebih lanjut, silakan hubungi tim dukungan kami:</h6>
-                                        <ul>
-                                            <li>
-                                                <h6><strong>Email:</strong> <a href="mailto:halobakti@baktikominfo.id">halobakti@baktikominfo.id</a></h6>
-                                            </li>
-                                            <li>
-                                                <h6><strong>Phone:</strong> <a href="tel:021-30205834">021-30205834</a></h6>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <!-- End Contact Support -->
-
-                                    <!-- CSS untuk membuat kotak -->
-                                    <style>
-                                        .box {
-                                            border: 1px solid #ddd;
-                                            /* Border dengan warna abu-abu */
-                                            padding: 30px;
-                                            /* Jarak antara konten dan border */
-                                            background-color: #f9f9f9;
-                                            /* Warna latar belakang */
-                                            border-radius: 8px;
-                                            /* Ujung kotak dibuat melengkung */
-                                            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-                                            /* Memberikan efek shadow */
-                                            max-width: 1210px;
-                                            /* Maksimal lebar kotak */
-                                            margin: auto;
-                                            /* Membuat kotak berada di tengah */
-                                        }
-
-                                        .box h5 {
-                                            margin-bottom: 10px;
-                                            /* Jarak bawah heading */
-                                        }
-
-                                        .box a {
-                                            color: #007bff;
-                                            /* Warna tautan */
-                                            text-decoration: none;
-                                            /* Menghilangkan garis bawah pada tautan */
-                                        }
-
-                                        .box a:hover {
-                                            text-decoration: underline;
-                                            /* Tautan bergaris bawah saat di-hover */
-                                        }
-                                    </style>
-
                                 </div>
+
+                                <!-- End Accordion -->
+
+
+                                <!-- Contact Support Box -->
+                                <div class="contact-support box">
+                                    <h5><strong>Contact Support</strong></h5>
+                                    <h6>Jika Anda memerlukan bantuan lebih lanjut, silakan hubungi tim dukungan kami:</h6>
+                                    <ul>
+                                        <li>
+                                            <h6><strong>Email:</strong> <a href="mailto:halobakti@baktikominfo.id">halobakti@baktikominfo.id</a></h6>
+                                        </li>
+                                        <li>
+                                            <h6><strong>Phone:</strong> <a href="tel:021-30205834">021-30205834</a></h6>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <!-- End Contact Support -->
+
+                                <!-- CSS untuk membuat kotak -->
+                                <style>
+                                    .box {
+                                        border: 1px solid #ddd;
+                                        /* Border dengan warna abu-abu */
+                                        padding: 30px;
+                                        /* Jarak antara konten dan border */
+                                        background-color: #f9f9f9;
+                                        /* Warna latar belakang */
+                                        border-radius: 8px;
+                                        /* Ujung kotak dibuat melengkung */
+                                        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                                        /* Memberikan efek shadow */
+                                        max-width: 1210px;
+                                        /* Maksimal lebar kotak */
+                                        margin: auto;
+                                        /* Membuat kotak berada di tengah */
+                                    }
+
+                                    .box h5 {
+                                        margin-bottom: 10px;
+                                        /* Jarak bawah heading */
+                                    }
+
+                                    .box a {
+                                        color: #007bff;
+                                        /* Warna tautan */
+                                        text-decoration: none;
+                                        /* Menghilangkan garis bawah pada tautan */
+                                    }
+
+                                    .box a:hover {
+                                        text-decoration: underline;
+                                        /* Tautan bergaris bawah saat di-hover */
+                                    }
+                                </style>
+
+                            </div>
                     </section>
                 </div>
             </div>

@@ -339,7 +339,7 @@ if (isset($_GET['kak_id']) && is_numeric($_GET['kak_id'])) {
                                         <p>Current file: <?php echo htmlspecialchars($data['lampiran']); ?></p>
 
                                         <div class="mt-4 text-end">
-                                            <button type="submit" class="btn btn-primary" value="Submit">Ubah</button>
+                                            <button type="submit" class="btn btn-primary me-2" value="Submit">Simpan</button>
                                             <button type="button" class="btn btn-danger" onclick="window.location.href='draft.php';">Cancel</button>
                                         </div>
                                     </form>

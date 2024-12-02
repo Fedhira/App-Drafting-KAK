@@ -291,14 +291,15 @@ require '../cek.php';
                         <input type="date" class="form-control" name="toDate" value="<?php echo htmlspecialchars($toDate); ?>" />
                       </div>
                       <button type="submit" class="btn btn-primary btn-round me-2" style="width: 167px;">Filter</button>
+                      <a href="laporan.php" class="btn btn-danger btn-round me-2" style="width: 167px;">Clear</a>
                     </div>
                   </form>
                 </div>
               </div>
               <div class="card-body">
 
-                <!-- START TABLE -->
-                <?php
+               <!-- START TABLE -->
+               <?php
                 // Check if query returned results
                 if ($result && mysqli_num_rows($result) > 0) {
                 ?>
@@ -327,53 +328,60 @@ require '../cek.php';
                         </tr>
                       </tfoot>
                       <tbody>
-                        <?php
-                        // Fetch and display each row of data
-                        while ($row = mysqli_fetch_assoc($result)) {
-                          // Define the status label class based on the document status
-                          $statusClass = '';
-                          switch ($row['status']) {
-                            case 'approved':
-                              $statusClass = 'status-disetujui';
-                              break;
-                            case 'pending':
-                              $statusClass = 'status-pending';
-                              break;
-                            case 'rejected':
-                              $statusClass = 'status-ditolak';
-                              break;
-                            case 'draft':
-                              $statusClass = 'status-draft';
-                              break;
-                          }
-                          echo "<tr>
-                  <td>{$row['no_doc_mak']}</td>
-                  <td>{$row['judul']}</td>
-                  <td>{$row['kategori_program']}</td>
-                  <td><span class='status {$statusClass}'>" . ucfirst($row['status']) . "</span></td>
-                  <td>{$row['tanggal_dibuat']}</td>
-                  <td>{$row['tanggal_diperbarui']}</td>
-                  <td>
-                   <div class='form-button-action'>
-                            <button class='btn btn-dark btn-round me-2' style='width: 120px;'>
-                              <i class='fas fa-download'></i> PDF
-                            </button>
-                            <button class='btn btn-dark btn-round me-2' style='width: 120px;'>
-                              <i class='fas fa-download'></i> WORD
-                            </button>
-                          </div>
-                  </td>
-                </tr>";
-                        }
-                        ?>
+                      <?php
+                      $query = "
+                      SELECT 
+                          kak.kak_id,
+                          kak.no_doc_mak,
+                          kak.judul,
+                          kategori_program.nama_divisi AS kategori_program,
+                          kak.status,
+                          kak.created_at AS tanggal_dibuat,
+                          kak.updated_at AS tanggal_diperbarui
+                      FROM 
+                          kak
+                      LEFT JOIN 
+                          kategori_program
+                      ON 
+                          kak.kategori_id = kategori_program.kategori_id
+                      WHERE 
+                          kak.status = 'disetujui'; -- Hanya mengambil data dengan status 'disetujui'
+                  ";
+
+                      $result = mysqli_query($koneksi, $query);
+
+                      if (!$result) {
+                        die("Query failed: " . mysqli_error($koneksi));
+                      }
+
+                      while ($row = mysqli_fetch_assoc($result)) {
+                        $statusClass = 'status-disetujui'; // Karena hanya status 'disetujui', langsung atur class
+
+                        $kak_id = htmlspecialchars($row['kak_id']);
+                        echo "<tr>
+                            <td>{$row['no_doc_mak']}</td>
+                            <td>{$row['judul']}</td>
+                            <td>{$row['kategori_program']}</td>
+                            <td><span class='status {$statusClass}'>" . ucfirst($row['status']) . "</span></td>
+                            <td>{$row['tanggal_dibuat']}</td>
+                            <td>{$row['tanggal_diperbarui']}</td>
+                            <td>
+                                <div class='form-button-action button-group d-inline-flex'>
+                                    <a href='../../controllers/generate_kak.php?kak_id=$kak_id' class='btn btn-dark btn-round me-2' style='width: 120px;'><i class='fas fa-download'></i> WORD</a>
+                                    <button class='btn btn-dark btn-round me-2' style='width: 100px;'>
+                                        <i class='fa fa-download'></i> PDF
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>";
+                      }
+                    } else {
+                      echo "<tr><td colspan='7' class='text-center'>Data Tidak Ada</td></tr>";
+                    }
+                      ?>
                       </tbody>
                     </table>
                   </div>
-                <?php
-                } else {
-                  echo "<p>No data available</p>";
-                }
-                ?>
               </div>
             </div>
           </div>

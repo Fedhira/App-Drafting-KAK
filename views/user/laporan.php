@@ -283,6 +283,7 @@ require '../cek.php';
                         <input type="date" class="form-control" name="toDate" value="<?php echo htmlspecialchars($toDate); ?>" />
                       </div>
                       <button type="submit" class="btn btn-primary btn-round me-2" style="width: 167px;">Filter</button>
+                      <a href="laporan.php" class="btn btn-danger btn-round me-2" style="width: 167px;">Clear</a>
                     </div>
                   </form>
                 </div>
@@ -366,8 +367,11 @@ require '../cek.php';
                             </td>
                         </tr>";
                       }
+                    } else {
+                      echo "<tr><td colspan='7' class='text-center'>Data Tidak Ada</td></tr>";
                     }
                       ?>
+
 
                       </tbody>
                     </table>

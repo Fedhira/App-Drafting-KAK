@@ -11,12 +11,17 @@ function addUser($koneksi)
     if (isset($_POST['username'], $_POST['email'], $_POST['nik'], $_POST['role'], $_POST['kategori_id'], $_POST['password'])) {
         try {
             // Ambil data dari form
-            $username = $_POST['username'];
-            $email = $_POST['email'];
-            $nik = $_POST['nik'];
-            $role = $_POST['role'];
-            $kategori_id = (int)$_POST['kategori_id'];
-            $password = $_POST['password'];
+            $username = trim($_POST['username']);
+            $email = trim($_POST['email']);
+            $nik = trim($_POST['nik']);
+            $role = trim($_POST['role']);
+            $kategori_id = (int) $_POST['kategori_id'];
+            $password = trim($_POST['password']);
+
+            // Validasi apakah input tidak kosong
+            if (empty($username) || empty($email) || empty($nik) || empty($role) || empty($kategori_id) || empty($password)) {
+                throw new Exception("Data form tidak lengkap. Semua input harus diisi.");
+            }
 
             // Hash the password
             $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
@@ -31,7 +36,10 @@ function addUser($koneksi)
             }
 
             // Siapkan query untuk menambahkan data
-            $stmt = $koneksi->prepare("INSERT INTO `user` (username, email, nik, role, kategori_id, password, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, NOW(), NOW())");
+            $stmt = $koneksi->prepare(
+                "INSERT INTO `user` (username, email, nik, role, kategori_id, password, created_at, updated_at)
+                 VALUES (?, ?, ?, ?, ?, ?, NOW(), NOW())"
+            );
             $stmt->bind_param("ssssss", $username, $email, $nik, $role, $kategori_id, $hashedPassword);
 
             // Jalankan query
@@ -48,6 +56,7 @@ function addUser($koneksi)
         echo "Gagal! Data form tidak lengkap.";
     }
 }
+
 
 // Function to update a user
 function updateUser($koneksi)
@@ -119,4 +128,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
         addUser($koneksi);
     }
+}
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    addUser($koneksi);
 }

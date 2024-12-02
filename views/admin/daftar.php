@@ -2,6 +2,7 @@
 require '../../database/config.php';
 require '../../controllers/UserController.php';
 require '../../controllers/DaftarController.php';
+require '../../models/DaftarModel.php';
 require '../cek.php';
 ?>
 
@@ -247,6 +248,7 @@ require '../cek.php';
                           <input type="date" class="form-control" name="toDate" value="<?php echo htmlspecialchars($toDate); ?>" />
                         </div>
                         <button type="submit" class="btn btn-primary btn-round me-2" style="width: 167px;">Filter</button>
+                        <a href="daftar.php" class="btn btn-danger btn-round me-2" style="width: 167px;">Clear</a>
                       </div>
                     </form>
                   </div>
@@ -396,9 +398,34 @@ require '../cek.php';
 
 
                   <?php
-                  // Check if query returned results
-                  if ($result && mysqli_num_rows($result) > 0) {
+                  // Query untuk mengambil dokumen yang statusnya selain 'draft' (pending, disetujui, ditolak)
+                  $query = "
+SELECT 
+    kak.kak_id,
+    kak.no_doc_mak,
+    kak.judul,
+    kategori_program.nama_divisi AS kategori_program,
+    kak.status,
+    kak.created_at AS tanggal_dibuat,
+    kak.updated_at AS tanggal_diperbarui
+FROM 
+    kak
+LEFT JOIN 
+    kategori_program
+ON 
+    kak.kategori_id = kategori_program.kategori_id
+WHERE 
+    kak.status IN ('pending', 'disetujui', 'ditolak');
+";
+
+                  $result = mysqli_query($koneksi, $query);
+
+                  if (!$result) {
+                    die("Query failed: " . mysqli_error($koneksi));
+                  }
                   ?>
+
+                  <?php if ($result && mysqli_num_rows($result) > 0): ?>
                     <div class="table-responsive">
                       <table id="add-row" class="display table table-striped table-hover">
                         <thead>
@@ -424,50 +451,54 @@ require '../cek.php';
                           </tr>
                         </tfoot>
                         <tbody>
-                          <?php
-                          // Fetch and display each row of data
-                          while ($row = mysqli_fetch_assoc($result)) {
-                            // Define the status label class based on the document status
+                          <?php while ($row = mysqli_fetch_assoc($result)): ?>
+                            <?php
+                            // Menentukan kelas status
                             $statusClass = '';
                             switch ($row['status']) {
-                              case 'approved':
+                              case 'disetujui': // Gunakan 'disetujui', bukan 'approved'
                                 $statusClass = 'status-disetujui';
                                 break;
                               case 'pending':
                                 $statusClass = 'status-pending';
                                 break;
-                              case 'rejected':
+                              case 'ditolak': // Gunakan 'ditolak', bukan 'rejected'
                                 $statusClass = 'status-ditolak';
                                 break;
                               case 'draft':
                                 $statusClass = 'status-draft';
                                 break;
                             }
-                            echo "<tr>
-                  <td>{$row['no_doc_mak']}</td>
-                  <td>{$row['judul']}</td>
-                  <td>{$row['kategori_program']}</td>
-                  <td><span class='status {$statusClass}'>" . ucfirst($row['status']) . "</span></td>
-                  <td>{$row['tanggal_dibuat']}</td>
-                  <td>{$row['tanggal_diperbarui']}</td>
-                  <td>
-                    <div class='form-button-action'>
-                      <button class='btn btn-dark btn-round me-2' style='width: 100px;' data-bs-toggle='modal' data-bs-target='#detailRowModal'>
-                        <i class='fas fa-eye'></i> Detail
-                      </button>
-                    </div>
-                  </td>
-                </tr>";
-                          }
-                          ?>
+                            ?>
+                            <tr>
+                              <td><?= htmlspecialchars($row['no_doc_mak']); ?></td>
+                              <td><?= htmlspecialchars($row['judul']); ?></td>
+                              <td><?= htmlspecialchars($row['kategori_program']); ?></td>
+                              <td>
+                                <span class="status <?= $statusClass; ?>">
+                                  <?= ucfirst($row['status']); ?>
+                                </span>
+                              </td>
+                              <td><?= htmlspecialchars($row['tanggal_dibuat']); ?></td>
+                              <td><?= htmlspecialchars($row['tanggal_diperbarui']); ?></td>
+                              <td>
+                                <div class="form-button-action">
+                                  <a href="detail_draft.php?kak_id=<?= $row['kak_id']; ?>"
+                                    class="btn btn-dark btn-round me-2"
+                                    style="width: 110px;">
+                                    <i class="fa fa-eye"></i> Detail
+                                  </a>
+                                </div>
+                              </td>
+                            </tr>
+                          <?php endwhile; ?>
                         </tbody>
                       </table>
                     </div>
-                  <?php
-                  } else {
-                    echo "<p>No data available</p>";
-                  }
-                  ?>
+                  <?php else: ?>
+                    <p>No data available</p>
+                  <?php endif; ?>
+
 
 
                 </div>

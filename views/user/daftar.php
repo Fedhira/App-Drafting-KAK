@@ -228,7 +228,7 @@ require '../cek.php';
                   <div class="d-flex align-items-ceter">
 
                     <!-- Date Picker From and To -->
-                    <form method="GET" action="daftar.php">
+                    <form method="GET" action="../../controllers/DraftController.php">
                       <div class="d-flex">
                         <div class="input-group me-4">
                           <span class="input-group-text">From</span>
@@ -239,6 +239,7 @@ require '../cek.php';
                           <input type="date" class="form-control" name="toDate" value="<?php echo htmlspecialchars($toDate); ?>" />
                         </div>
                         <button type="submit" class="btn btn-primary btn-round me-2" style="width: 167px;">Filter</button>
+                        <a href="daftar.php" class="btn btn-danger btn-round me-2" style="width: 167px;">Clear</a>
                       </div>
                     </form>
 
@@ -447,17 +448,14 @@ require '../cek.php';
                           while ($row = mysqli_fetch_assoc($result)) {
                             $statusClass = '';
                             switch ($row['status']) {
-                              case 'approved':
+                              case 'disetujui': // Gunakan 'disetujui', bukan 'approved'
                                 $statusClass = 'status-disetujui';
                                 break;
                               case 'pending':
                                 $statusClass = 'status-pending';
                                 break;
-                              case 'rejected':
+                              case 'ditolak': // Gunakan 'ditolak', bukan 'rejected'
                                 $statusClass = 'status-ditolak';
-                                break;
-                              case 'draft':
-                                $statusClass = 'status-draft';
                                 break;
                             }
                             echo "<tr>
