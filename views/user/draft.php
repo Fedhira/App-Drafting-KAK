@@ -3,6 +3,17 @@ require '../../database/config.php';
 require '../../controllers/UserController.php';
 require '../../controllers/DraftController.php';
 require '../cek.php';
+checkLoginAndRole('user', $_SESSION['user_id']);
+
+
+// Periksa apakah pengguna sudah login
+if (!isset($_SESSION['user_id'])) {
+  header('Location: ../login.php');
+  exit();
+}
+
+// Ambil user_id dari sesi
+$user_id = $_SESSION['user_id'];
 ?>
 
 <!DOCTYPE html>
@@ -395,23 +406,24 @@ require '../cek.php';
                   <?php
                   // Query untuk mengambil data draft
                   $query = "
-                  SELECT
-                  kak.kak_id,
-                  kak.no_doc_mak,
-                  kak.judul,
-                  kategori_program.nama_divisi AS kategori_program,
-                  kak.status,
-                  kak.created_at AS tanggal_dibuat,
-                  kak.updated_at AS tanggal_diperbarui
-                  FROM
-                  kak
-                  LEFT JOIN
-                  kategori_program
-                  ON
-                  kak.kategori_id = kategori_program.kategori_id
-                  WHERE
-                  kak.status = 'draft'; -- Hanya data dengan status draft
-                  ";
+SELECT
+    kak.kak_id,
+    kak.no_doc_mak,
+    kak.judul,
+    kategori_program.nama_divisi AS kategori_program,
+    kak.status,
+    kak.created_at AS tanggal_dibuat,
+    kak.updated_at AS tanggal_diperbarui
+FROM
+    kak
+LEFT JOIN
+    kategori_program
+ON
+    kak.kategori_id = kategori_program.kategori_id
+WHERE
+    kak.status = 'draft'
+    AND kak.user_id = '$user_id'; -- Filter berdasarkan user_id
+";
 
                   $result = mysqli_query($koneksi, $query);
 

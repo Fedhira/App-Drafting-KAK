@@ -2,6 +2,8 @@
 require '../../database/config.php';
 require '../../controllers/UserController.php';
 require '../cek.php';
+checkLoginAndRole('user', $_SESSION['user_id']);
+
 ?>
 
 <!DOCTYPE html>

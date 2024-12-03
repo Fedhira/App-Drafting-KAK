@@ -14,6 +14,8 @@ require '../../controllers/UserController.php';
 require '../../controllers/DraftController.php';
 require '../cek.php';
 
+checkLoginAndRole('admin');
+
 $kak_id = isset($_GET['kak_id']) ? $_GET['kak_id'] : null;
 
 if ($kak_id) {

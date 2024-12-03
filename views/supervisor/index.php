@@ -2,6 +2,7 @@
 require '../../database/config.php';
 require '../../controllers/UserController.php';
 require '../cek.php';
+checkLoginAndRole('supervisor');
 ?>
 
 <!DOCTYPE html>

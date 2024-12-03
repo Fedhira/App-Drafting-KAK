@@ -4,6 +4,16 @@ require '../../controllers/UserController.php';
 require '../../controllers/DaftarController.php';
 require '../../models/DaftarModel.php';
 require '../cek.php';
+checkLoginAndRole('user', $_SESSION['user_id']);
+
+// Periksa apakah pengguna sudah login
+if (!isset($_SESSION['user_id'])) {
+  header('Location: ../login.php');
+  exit();
+}
+
+// Ambil user_id dari sesi
+$user_id = $_SESSION['user_id'];
 ?>
 
 <!DOCTYPE html>
@@ -463,7 +473,8 @@ LEFT JOIN
 ON 
     kak.kategori_id = kategori_program.kategori_id
 WHERE 
-    kak.status IN ('pending', 'disetujui', 'ditolak');  -- Mengambil dokumen dengan status selain 'draft'
+    kak.status IN ('pending', 'disetujui', 'ditolak') 
+    AND kak.user_id = '$user_id';  -- Filter berdasarkan user yang login
 ";
 
                 $result = mysqli_query($koneksi, $query);
@@ -472,87 +483,83 @@ WHERE
                   die("Query failed: " . mysqli_error($koneksi));
                 }
 
-                if ($result && mysqli_num_rows($result) > 0) {
                 ?>
-                  <div class="table-responsive">
-                    <table id="add-row" class="display table table-striped table-hover">
-                      <thead>
-                        <tr>
-                          <th>No Doc</th>
-                          <th>Judul KAK</th>
-                          <th>Kategori Program</th>
-                          <th>Status Dokumen</th>
-                          <th>Tanggal Dibuat</th>
-                          <th>Tanggal Diperbarui</th>
-                          <th style="width: 15%">Aksi</th>
-                        </tr>
-                      </thead>
-                      <tfoot>
-                        <tr>
-                          <th>No Doc</th>
-                          <th>Judul KAK</th>
-                          <th>Kategori Program</th>
-                          <th>Status Dokumen</th>
-                          <th>Tanggal Dibuat</th>
-                          <th>Tanggal Diperbarui</th>
-                          <th>Aksi</th>
-                        </tr>
-                      </tfoot>
-                      <tbody>
-                        <?php
-                        // Fetch and display each row of data
-                        while ($row = mysqli_fetch_assoc($result)) {
+
+                <div class="table-responsive">
+                  <table id="add-row" class="display table table-striped table-hover">
+                    <thead>
+                      <tr>
+                        <th>No Doc</th>
+                        <th>Judul KAK</th>
+                        <th>Kategori Program</th>
+                        <th>Status Dokumen</th>
+                        <th>Tanggal Dibuat</th>
+                        <th>Tanggal Diperbarui</th>
+                        <th style="width: 15%">Aksi</th>
+                      </tr>
+                    </thead>
+                    <tfoot>
+                      <tr>
+                        <th>No Doc</th>
+                        <th>Judul KAK</th>
+                        <th>Kategori Program</th>
+                        <th>Status Dokumen</th>
+                        <th>Tanggal Dibuat</th>
+                        <th>Tanggal Diperbarui</th>
+                        <th>Aksi</th>
+                      </tr>
+                    </tfoot>
+                    <tbody>
+                      <?php if (mysqli_num_rows($result) > 0): ?>
+                        <?php while ($row = mysqli_fetch_assoc($result)): ?>
+                          <?php
+                          // Menentukan kelas untuk status
                           $statusClass = '';
                           switch ($row['status']) {
-                            case 'disetujui': // Gunakan 'disetujui', bukan 'approved'
+                            case 'disetujui':
                               $statusClass = 'status-disetujui';
                               break;
                             case 'pending':
                               $statusClass = 'status-pending';
                               break;
-                            case 'ditolak': // Gunakan 'ditolak', bukan 'rejected'
+                            case 'ditolak':
                               $statusClass = 'status-ditolak';
                               break;
                           }
-                          echo "<tr>
-                        <td>{$row['no_doc_mak']}</td>
-                        <td>{$row['judul']}</td>
-                        <td>{$row['kategori_program']}</td>
-                        <td><span class='status {$statusClass}'>" . ucfirst($row['status']) . "</span></td>
-                        <td>{$row['tanggal_dibuat']}</td>
-                        <td>{$row['tanggal_diperbarui']}</td>
-                        <td>
-                            <div class='form-button-action'>";
-
-                          // Tombol "Detail"
-                          echo "<button class='btn btn-dark btn-round me-2' style='width: 100px;' data-bs-toggle='modal' data-bs-target='#detailRowModal'>
-                                <i class='fas fa-eye'></i> Detail
-                          </button>";
-
-                          // Tambahkan tombol "Revisi" jika statusnya 'ditolak'
-                          if ($row['status'] === 'ditolak') {
-                            echo "<button class='btn btn-danger btn-round' style='width: 100px;' data-bs-toggle='modal' data-bs-target='#tolakRowModal' onclick='handleRevisi({$row['kak_id']})'>
-                                  <i class='fas fa-edit'></i> Revisi
-                              </button>";
-                          }
-
-
-                          echo "</div>
-                        </td>
-                    </tr>";
-                        }
-                        ?>
-                      </tbody>
-                    </table>
-                  </div>
-                <?php
-                } else {
-                  echo "<p>No data available</p>";
-                }
-                ?>
-
-
-
+                          ?>
+                          <tr>
+                            <td><?= htmlspecialchars($row['no_doc_mak']); ?></td>
+                            <td><?= htmlspecialchars($row['judul']); ?></td>
+                            <td><?= htmlspecialchars($row['kategori_program']); ?></td>
+                            <td>
+                              <span class="status <?= $statusClass; ?>">
+                                <?= ucfirst($row['status']); ?>
+                              </span>
+                            </td>
+                            <td><?= htmlspecialchars($row['tanggal_dibuat']); ?></td>
+                            <td><?= htmlspecialchars($row['tanggal_diperbarui']); ?></td>
+                            <td>
+                              <div class="form-button-action">
+                                <button class="btn btn-dark btn-round me-2" style="width: 100px;" data-bs-toggle="modal" data-bs-target="#detailRowModal">
+                                  <i class="fas fa-eye"></i> Detail
+                                </button>
+                                <?php if ($row['status'] === 'ditolak'): ?>
+                                  <button class="btn btn-danger btn-round" style="width: 100px;" data-bs-toggle="modal" data-bs-target="#tolakRowModal" onclick="handleRevisi(<?= $row['kak_id']; ?>)">
+                                    <i class="fas fa-edit"></i> Revisi
+                                  </button>
+                                <?php endif; ?>
+                              </div>
+                            </td>
+                          </tr>
+                        <?php endwhile; ?>
+                      <?php else: ?>
+                        <tr>
+                          <td colspan="7" class="text-center">Tidak ada data daftar ditemukan.</td>
+                        </tr>
+                      <?php endif; ?>
+                    </tbody>
+                  </table>
+                </div>
               </div>
             </div>
           </div>

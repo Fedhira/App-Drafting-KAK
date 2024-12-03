@@ -3,6 +3,16 @@ require '../../database/config.php';
 require '../../controllers/UserController.php';
 require '../../controllers/DaftarController.php';
 require '../cek.php';
+checkLoginAndRole('user', $_SESSION['user_id']);
+
+// Periksa apakah pengguna sudah login
+if (!isset($_SESSION['user_id'])) {
+  header('Location: ../login.php');
+  exit();
+}
+
+// Ambil user_id dari sesi
+$user_id = $_SESSION['user_id'];
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -292,37 +302,9 @@ require '../cek.php';
 
                 <!-- START TABLE -->
                 <?php
-                // Check if query returned results
-                if ($result && mysqli_num_rows($result) > 0) {
-                ?>
-                  <div class="table-responsive">
-                    <table id="add-row" class="display table table-striped table-hover">
-                      <thead>
-                        <tr>
-                          <th>No Doc</th>
-                          <th>Judul KAK</th>
-                          <th>Kategori Program</th>
-                          <th>Status Dokumen</th>
-                          <th>Tanggal Dibuat</th>
-                          <th>Tanggal Diperbarui</th>
-                          <th style="width: 10%">Aksi</th>
-                        </tr>
-                      </thead>
-                      <tfoot>
-                        <tr>
-                          <th>No Doc</th>
-                          <th>Judul KAK</th>
-                          <th>Kategori Program</th>
-                          <th>Status Dokumen</th>
-                          <th>Tanggal Dibuat</th>
-                          <th>Tanggal Diperbarui</th>
-                          <th>Aksi</th>
-                        </tr>
-                      </tfoot>
-                      <tbody>
-                      <?php
-                      $query = "
-                      SELECT 
+                // Query untuk mengambil dokumen dengan status 'draft' atau lainnya yang relevan
+                $query = "
+ SELECT 
                           kak.kak_id,
                           kak.no_doc_mak,
                           kak.judul,
@@ -337,45 +319,73 @@ require '../cek.php';
                       ON 
                           kak.kategori_id = kategori_program.kategori_id
                       WHERE 
-                          kak.status = 'disetujui'; -- Hanya mengambil data dengan status 'disetujui'
-                  ";
+                          kak.status = 'disetujui' AND kak.user_id = '$user_id'; -- Hanya mengambil data dengan status 'disetujui'
+";
 
-                      $result = mysqli_query($koneksi, $query);
+                $result = mysqli_query($koneksi, $query);
 
-                      if (!$result) {
-                        die("Query failed: " . mysqli_error($koneksi));
+                if (!$result) {
+                  die("Query failed: " . mysqli_error($koneksi));
+                }
+
+                ?>
+                <div class="table-responsive">
+                  <table id="add-row" class="display table table-striped table-hover">
+                    <thead>
+                      <tr>
+                        <th>No Doc</th>
+                        <th>Judul KAK</th>
+                        <th>Kategori Program</th>
+                        <th>Status Dokumen</th>
+                        <th>Tanggal Dibuat</th>
+                        <th>Tanggal Diperbarui</th>
+                        <th style="width: 10%">Aksi</th>
+                      </tr>
+                    </thead>
+                    <tfoot>
+                      <tr>
+                        <th>No Doc</th>
+                        <th>Judul KAK</th>
+                        <th>Kategori Program</th>
+                        <th>Status Dokumen</th>
+                        <th>Tanggal Dibuat</th>
+                        <th>Tanggal Diperbarui</th>
+                        <th>Aksi</th>
+                      </tr>
+                    </tfoot>
+                    <tbody>
+                      <?php
+                      if (mysqli_num_rows($result) > 0) {
+                        while ($row = mysqli_fetch_assoc($result)) {
+                          $statusClass = 'status-disetujui'; // Status untuk draft, bisa diubah sesuai kebutuhan
+
+                          $kak_id = htmlspecialchars($row['kak_id']);
+                          echo "<tr>
+                  <td>{$row['no_doc_mak']}</td>
+                  <td>{$row['judul']}</td>
+                  <td>{$row['kategori_program']}</td>
+                  <td><span class='status {$statusClass}'>" . ucfirst($row['status']) . "</span></td>
+                  <td>{$row['tanggal_dibuat']}</td>
+                  <td>{$row['tanggal_diperbarui']}</td>
+                  <td>
+                      <div class='form-button-action button-group d-inline-flex'>
+                          <a href='../../controllers/generate_kak.php?kak_id=$kak_id' class='btn btn-dark btn-round me-2' style='width: 120px;'><i class='fas fa-download'></i> WORD</a>
+                          <button class='btn btn-dark btn-round me-2' style='width: 100px;'>
+                              <i class='fa fa-download'></i> PDF
+                          </button>
+                      </div>
+                  </td>
+              </tr>";
+                        }
+                      } else {
+                        // Jika tidak ada data, tampilkan pesan
+                        echo "<tr><td colspan='7' class='text-center'>Tidak ada laporan dengan status <strong>Disetujui</strong> yang ditemukan.</td></tr>";
                       }
-
-                      while ($row = mysqli_fetch_assoc($result)) {
-                        $statusClass = 'status-disetujui'; // Karena hanya status 'disetujui', langsung atur class
-
-                        $kak_id = htmlspecialchars($row['kak_id']);
-                        echo "<tr>
-                            <td>{$row['no_doc_mak']}</td>
-                            <td>{$row['judul']}</td>
-                            <td>{$row['kategori_program']}</td>
-                            <td><span class='status {$statusClass}'>" . ucfirst($row['status']) . "</span></td>
-                            <td>{$row['tanggal_dibuat']}</td>
-                            <td>{$row['tanggal_diperbarui']}</td>
-                            <td>
-                                <div class='form-button-action button-group d-inline-flex'>
-                                    <a href='../../controllers/generate_kak.php?kak_id=$kak_id' class='btn btn-dark btn-round me-2' style='width: 120px;'><i class='fas fa-download'></i> WORD</a>
-                                    <button class='btn btn-dark btn-round me-2' style='width: 100px;'>
-                                        <i class='fa fa-download'></i> PDF
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>";
-                      }
-                    } else {
-                      echo "<tr><td colspan='7' class='text-center'>Data Tidak Ada</td></tr>";
-                    }
                       ?>
+                    </tbody>
+                  </table>
+                </div>
 
-
-                      </tbody>
-                    </table>
-                  </div>
               </div>
             </div>
           </div>

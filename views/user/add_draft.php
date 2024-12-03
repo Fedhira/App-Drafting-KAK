@@ -13,6 +13,8 @@ require '../../models/DraftModel.php';
 require '../../controllers/UserController.php';
 require '../../controllers/DraftController.php';
 require '../cek.php';
+checkLoginAndRole('user', $_SESSION['user_id']);
+
 ?>
 
 <!DOCTYPE html>

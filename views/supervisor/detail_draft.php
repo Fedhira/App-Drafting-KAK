@@ -13,6 +13,8 @@ require '../../models/DraftModel.php';
 require '../../controllers/UserController.php';
 require '../../controllers/DraftController.php';
 require '../cek.php';
+checkLoginAndRole('supervisor');
+
 
 $kak_id = isset($_GET['kak_id']) ? $_GET['kak_id'] : null;
 

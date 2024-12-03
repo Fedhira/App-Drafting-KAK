@@ -4,6 +4,8 @@ require '../../controllers/UserController.php';
 require '../../controllers/DaftarController.php';
 require '../../models/DaftarModel.php';
 require '../cek.php';
+
+checkLoginAndRole('admin');
 ?>
 
 <!DOCTYPE html>

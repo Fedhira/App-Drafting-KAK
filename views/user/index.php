@@ -2,6 +2,16 @@
 require '../../database/config.php';
 require '../../controllers/UserController.php';
 require '../cek.php';
+checkLoginAndRole('user', $_SESSION['user_id']);
+
+// Periksa apakah pengguna sudah login
+if (!isset($_SESSION['user_id'])) {
+  header('Location: ../login.php');
+  exit();
+}
+
+// Ambil user_id dari sesi
+$user_id = $_SESSION['user_id'];
 ?>
 
 <!DOCTYPE html>

@@ -1,6 +1,8 @@
 <?php
 require '../../database/config.php';
+require '../../controllers/UserController.php';
 require '../cek.php';
+checkLoginAndRole('admin');
 
 // Check if the user is logged in
 $username = isset($_SESSION['username']) ? htmlspecialchars($_SESSION['username']) : 'Guest';

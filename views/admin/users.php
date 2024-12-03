@@ -3,6 +3,7 @@ require '../../database/config.php';
 require '../../models/CategoryModel.php';
 require '../../controllers/UserController.php';
 require '../cek.php';
+checkLoginAndRole('admin');
 ?>
 
 <!DOCTYPE html>
