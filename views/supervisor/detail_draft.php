@@ -335,10 +335,17 @@ if (isset($_GET['kak_id']) && is_numeric($_GET['kak_id'])) {
                                         <input type="file" id="lampiran" name="lampiran" class="form-control mb-3" accept=".pdf, image/*" disabled>
                                         <p>Current file: <?php echo htmlspecialchars($data['lampiran']); ?></p>
 
-                                        <div class="mt-4 text-end">
-                                            <button type="submit" class="btn btn-success me-2" value="Submit">Disetujui</button>
-                                            <button type="button" class="btn btn-danger" onclick="window.location.href='daftar.php';">Cancel</button>
-                                        </div>
+                                        <?php if ($data['status'] === 'pending'): ?>
+                                            <div class="mt-4 text-end">
+                                                <button type="submit" class="btn btn-success me-2" value="Submit">Disetujui</button>
+                                                <button type="button" class="btn btn-danger" onclick="window.location.href='daftar.php';">Cancel</button>
+                                            </div>
+                                        <?php else: ?>
+                                            <div class="mt-4 text-end">
+                                                <button type="button" class="btn btn-danger" onclick="window.location.href='daftar.php';">Cancel</button>
+                                            </div>
+                                        <?php endif; ?>
+
                                     </form>
 
                                 </div>

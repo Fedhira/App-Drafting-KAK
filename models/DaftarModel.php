@@ -2,12 +2,12 @@
 include $_SERVER['DOCUMENT_ROOT'] . '/App-Drafting-KAK/database/config.php';
 
 
-function addRevisi($koneksi, $kak_id, $alasan_penolakan, $saran)
+function addRevisi($koneksi, $kak_id, $user_id, $kategori_id, $alasan_penolakan, $saran)
 {
     // Query untuk memasukkan data ke tabel revisi
     $queryRevisi = "
-        INSERT INTO revisi (kak_id, alasan_penolakan, saran) 
-        VALUES (?, ?, ?)
+        INSERT INTO revisi (kak_id, user_id, kategori_id, alasan_penolakan, saran) 
+        VALUES (?, ?, ?, ?, ?)
     ";
 
     $stmtRevisi = $koneksi->prepare($queryRevisi);
@@ -16,7 +16,7 @@ function addRevisi($koneksi, $kak_id, $alasan_penolakan, $saran)
     }
 
     // Bind data untuk query revisi
-    $stmtRevisi->bind_param("iss", $kak_id, $alasan_penolakan, $saran);
+    $stmtRevisi->bind_param("iiiss", $kak_id, $user_id, $kategori_id, $alasan_penolakan, $saran);
 
     // Eksekusi query revisi
     if ($stmtRevisi->execute()) {
@@ -47,14 +47,17 @@ function addRevisi($koneksi, $kak_id, $alasan_penolakan, $saran)
 }
 
 
+
 if (isset($_POST['submit_penolakan'])) {
     // Ambil data dari form
     $kak_id = $_POST['kak_id'];
+    $user_id = $_POST['user_id']; // Ambil user_id
+    $kategori_id = $_POST['kategori_id']; // Ambil kategori_id
     $alasan_penolakan = $_POST['alasan_penolakan'];
     $saran = $_POST['saran'];
 
     // Panggil fungsi untuk menyimpan revisi
-    addRevisi($koneksi, $kak_id, $alasan_penolakan, $saran);
+    addRevisi($koneksi, $kak_id, $user_id, $kategori_id, $alasan_penolakan, $saran);
 }
 
 
@@ -64,7 +67,9 @@ function getKAKDetails($koneksi, $kak_id)
         SELECT 
             kak.no_doc_mak, 
             kak.judul, 
-            kategori_program.nama_divisi AS kategori
+            kategori_program.nama_divisi AS kategori,
+            kak.user_id,            -- Menambahkan user_id
+            kak.kategori_id         -- Menambahkan kategori_id
         FROM kak
         JOIN kategori_program ON kak.kategori_id = kategori_program.kategori_id
         WHERE kak.kak_id = ?
@@ -83,15 +88,16 @@ function getKAKDetails($koneksi, $kak_id)
     return $result->fetch_assoc();
 }
 
-if (isset($_GET['kak_id'])) {
-    $kak_id = $_GET['kak_id'];
-    $kakDetails = getKAKDetails($koneksi, $kak_id);
 
-    // Kirim data dalam format JSON
-    header('Content-Type: application/json');
-    echo json_encode($kakDetails);
-    exit();
-}
+// if (isset($_GET['kak_id'])) {
+//     $kak_id = $_GET['kak_id'];
+//     $kakDetails = getKAKDetails($koneksi, $kak_id);
+
+//     // Kirim data dalam format JSON
+//     header('Content-Type: application/json');
+//     echo json_encode($kakDetails);
+//     exit();
+// }
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_POST['action'] == 'update') {
     // Ensure you are updating the correct entry based on the kak_id
@@ -111,4 +117,48 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_POST['action'] == 'update') {
     } else {
         echo "Error updating status.";
     }
+}
+
+function getRevisiByKakId($koneksi, $kak_id)
+{
+    // Query untuk mengambil data revisi berdasarkan kak_id
+    $query = "
+        SELECT 
+            alasan_penolakan, 
+            saran
+        FROM revisi
+        WHERE kak_id = ?
+        ORDER BY revisi_id DESC LIMIT 1
+    ";
+
+    $stmt = $koneksi->prepare($query);
+    if (!$stmt) {
+        die('Query Error: ' . $koneksi->error);
+    }
+
+    $stmt->bind_param("i", $kak_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    return $result->fetch_assoc();
+}
+
+
+
+if (isset($_GET['kak_id'])) {
+    $kak_id = $_GET['kak_id'];
+
+    // Ambil data KAK
+    $kakDetails = getKAKDetails($koneksi, $kak_id);
+
+    // Ambil data revisi berdasarkan kak_id
+    $revisiDetails = getRevisiByKakId($koneksi, $kak_id);
+
+    // Gabungkan data KAK dan revisi
+    $data = array_merge($kakDetails, $revisiDetails);
+
+    // Kirim data dalam format JSON
+    header('Content-Type: application/json');
+    echo json_encode($data);
+    exit();
 }

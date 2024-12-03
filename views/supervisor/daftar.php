@@ -430,6 +430,8 @@ require '../cek.php';
                               </div>
                               <!-- Hidden input for kak_id -->
                               <input type="hidden" name="kak_id" value="" />
+                              <input type="hidden" name="user_id" value="" />
+                              <input type="hidden" name="kategori_id" value="" />
                             </div>
                             <div class="modal-footer border-0">
                               <button type="submit" name="submit_penolakan" class="btn btn-primary">Simpan</button>
@@ -534,14 +536,16 @@ WHERE
                                     style="width: 110px;">
                                     <i class="fa fa-eye"></i> Detail
                                   </a>
-                                  <button
-                                    class="btn btn-danger btn-round me-2"
-                                    style="width: 110px;"
-                                    data-bs-toggle="modal"
-                                    data-bs-target="#tolakRowModal"
-                                    onclick="populateModal(<?php echo $row['kak_id']; ?>)">
-                                    <i class="fas fa-xmark"></i> Ditolak
-                                  </button>
+                                  <?php if ($row['status'] === 'pending'): ?>
+                                    <button
+                                      class="btn btn-danger btn-round me-2"
+                                      style="width: 110px;"
+                                      data-bs-toggle="modal"
+                                      data-bs-target="#tolakRowModal"
+                                      onclick="populateModal(<?php echo $row['kak_id']; ?>)">
+                                      <i class="fas fa-xmark"></i> Ditolak
+                                    </button>
+                                  <?php endif; ?>
                                 </div>
                               </td>
                             </tr>
@@ -654,6 +658,10 @@ WHERE
           document.querySelector("input[name='judul']").value = data.judul || '';
           document.querySelector("input[name='kategori']").value = data.kategori || '';
           document.querySelector("input[name='kak_id']").value = kakId; // Set hidden input kak_id
+
+          // Menambahkan user_id dan kategori_id
+          document.querySelector("input[name='user_id']").value = data.user_id || '';
+          document.querySelector("input[name='kategori_id']").value = data.kategori_id || '';
         })
         .catch(error => console.error('Error:', error));
     }
