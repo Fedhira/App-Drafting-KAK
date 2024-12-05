@@ -258,6 +258,7 @@ checkLoginAndRole('admin');
                     </form>
                   </div>
                 </div>
+
                 <div class="card-body">
                   <!-- Modal Tambah -->
                   <div class="modal fade" id="addRowModal" tabindex="-1" role="dialog" aria-hidden="true">
@@ -442,19 +443,39 @@ checkLoginAndRole('admin');
 
 
                   <?php
-                  // Function to fetch users from the database with optional date filtering
+                  // Function to fetch users with optional date filtering
                   function fetchUsers($koneksi, $fromDate = null, $toDate = null)
                   {
                     // Start building the SQL query
                     $sql = "SELECT * FROM user";
 
+                    // Initialize the query condition array
+                    $conditions = [];
+
                     // Add date filtering if both fromDate and toDate are provided
                     if ($fromDate && $toDate) {
-                      $sql .= " WHERE DATE(created_at) BETWEEN ? AND ?";
-                      $stmt = $koneksi->prepare($sql);
+                      $conditions[] = "DATE(created_at) BETWEEN ? AND ?";
+                    } elseif ($fromDate) {
+                      $conditions[] = "DATE(created_at) >= ?";
+                    } elseif ($toDate) {
+                      $conditions[] = "DATE(created_at) <= ?";
+                    }
+
+                    // Add conditions to the SQL query if any
+                    if (!empty($conditions)) {
+                      $sql .= " WHERE " . implode(" AND ", $conditions);
+                    }
+
+                    // Prepare the statement
+                    $stmt = $koneksi->prepare($sql);
+
+                    // Bind parameters if any
+                    if ($fromDate && $toDate) {
                       $stmt->bind_param("ss", $fromDate, $toDate);
-                    } else {
-                      $stmt = $koneksi->prepare($sql);
+                    } elseif ($fromDate) {
+                      $stmt->bind_param("s", $fromDate);
+                    } elseif ($toDate) {
+                      $stmt->bind_param("s", $toDate);
                     }
 
                     // Execute the query
@@ -466,26 +487,26 @@ checkLoginAndRole('admin');
                       // Loop through each user and output the data into table rows
                       while ($row = $result->fetch_assoc()) {
                         echo "<tr>
-                        <td>" . htmlspecialchars($row['username']) . "</td>
-                        <td>" . htmlspecialchars($row['email']) . "</td>
-                        <td>" . htmlspecialchars($row['nik']) . "</td>
-                        <td>" . htmlspecialchars($row['role']) . "</td>
-                        <td>" . htmlspecialchars($row['created_at']) . "</td>
-                        <td>" . htmlspecialchars($row['updated_at']) . "</td>
-                        <td>
-                            <div class='form-button-action'>
-                                <button class='btn btn-warning btn-round me-2' style='width: 100px;' 
-                                        data-bs-toggle='modal' data-bs-target='#editRowModal' 
-                                        onclick='populateEditModal(" . json_encode($row) . ")'>
-                                    <i class='fa fa-edit'></i> Ubah
-                                </button>
-                                <button class='btn btn-danger btn-round' style='width: 100px' 
-                                        onclick='confirmDelete(" . $row['user_id'] . ")'>
-                                    <i class='fa fa-trash'></i> Hapus
-                                </button>
-                            </div>
-                        </td>
-                    </tr>";
+                <td>" . htmlspecialchars($row['username']) . "</td>
+                <td>" . htmlspecialchars($row['email']) . "</td>
+                <td>" . htmlspecialchars($row['nik']) . "</td>
+                <td>" . htmlspecialchars($row['role']) . "</td>
+                <td>" . htmlspecialchars($row['created_at']) . "</td>
+                <td>" . htmlspecialchars($row['updated_at']) . "</td>
+                <td>
+                    <div class='form-button-action'>
+                        <button class='btn btn-warning btn-round me-2' style='width: 100px;' 
+                                data-bs-toggle='modal' data-bs-target='#editRowModal' 
+                                onclick='populateEditModal(" . json_encode($row) . ")'>
+                            <i class='fa fa-edit'></i> Ubah
+                        </button>
+                        <button class='btn btn-danger btn-round' style='width: 100px' 
+                                onclick='confirmDelete(" . $row['user_id'] . ")'>
+                            <i class='fa fa-trash'></i> Hapus
+                        </button>
+                    </div>
+                </td>
+            </tr>";
                       }
                     } else {
                       echo "<tr><td colspan='7'>No users found</td></tr>";
@@ -494,8 +515,8 @@ checkLoginAndRole('admin');
                     // Close the statement
                     $stmt->close();
                   }
-
                   ?>
+
 
                   <!-- HTML Table Code -->
                   <div class="table-responsive">

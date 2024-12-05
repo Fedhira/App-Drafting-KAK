@@ -400,7 +400,11 @@ checkLoginAndRole('admin');
 
 
                   <?php
-                  // Query untuk mengambil dokumen yang statusnya selain 'draft' (pending, disetujui, ditolak)
+                  // Ambil dan sanitasi parameter input
+                  $fromDate = isset($_GET['fromDate']) ? mysqli_real_escape_string($koneksi, $_GET['fromDate']) : null;
+                  $toDate = isset($_GET['toDate']) ? mysqli_real_escape_string($koneksi, $_GET['toDate']) : null;
+
+                  // Query dasar
                   $query = "
 SELECT 
     kak.kak_id,
@@ -417,58 +421,67 @@ LEFT JOIN
 ON 
     kak.kategori_id = kategori_program.kategori_id
 WHERE 
-    kak.status IN ('pending', 'disetujui', 'ditolak');
+    kak.status IN ('pending', 'disetujui', 'ditolak')
 ";
 
+                  // Tambahkan filter tanggal jika diberikan
+                  if (!empty($fromDate)) {
+                    $query .= " AND (DATE(kak.created_at) >= '$fromDate' OR DATE(kak.updated_at) >= '$fromDate')";
+                  }
+
+                  if (!empty($toDate)) {
+                    $query .= " AND (DATE(kak.created_at) <= '$toDate' OR DATE(kak.updated_at) <= '$toDate')";
+                  }
+
+                  // Jalankan query
                   $result = mysqli_query($koneksi, $query);
 
+                  // Periksa error
                   if (!$result) {
                     die("Query failed: " . mysqli_error($koneksi));
                   }
                   ?>
 
-                  <?php if ($result && mysqli_num_rows($result) > 0): ?>
-                    <div class="table-responsive">
-                      <table id="add-row" class="display table table-striped table-hover">
-                        <thead>
-                          <tr>
-                            <th>No Doc</th>
-                            <th>Judul KAK</th>
-                            <th>Kategori Program</th>
-                            <th>Status Dokumen</th>
-                            <th>Tanggal Dibuat</th>
-                            <th>Tanggal Diperbarui</th>
-                            <th style="width: 10%">Aksi</th>
-                          </tr>
-                        </thead>
-                        <tfoot>
-                          <tr>
-                            <th>No Doc</th>
-                            <th>Judul KAK</th>
-                            <th>Kategori Program</th>
-                            <th>Status Dokumen</th>
-                            <th>Tanggal Dibuat</th>
-                            <th>Tanggal Diperbarui</th>
-                            <th>Aksi</th>
-                          </tr>
-                        </tfoot>
-                        <tbody>
+
+                  <div class="table-responsive">
+                    <table id="add-row" class="display table table-striped table-hover">
+                      <thead>
+                        <tr>
+                          <th>No Doc</th>
+                          <th>Judul KAK</th>
+                          <th>Kategori Program</th>
+                          <th>Status Dokumen</th>
+                          <th>Tanggal Dibuat</th>
+                          <th>Tanggal Diperbarui</th>
+                          <th style="width: 10%">Aksi</th>
+                        </tr>
+                      </thead>
+                      <tfoot>
+                        <tr>
+                          <th>No Doc</th>
+                          <th>Judul KAK</th>
+                          <th>Kategori Program</th>
+                          <th>Status Dokumen</th>
+                          <th>Tanggal Dibuat</th>
+                          <th>Tanggal Diperbarui</th>
+                          <th>Aksi</th>
+                        </tr>
+                      </tfoot>
+                      <tbody>
+                        <?php if ($result && mysqli_num_rows($result) > 0): ?>
                           <?php while ($row = mysqli_fetch_assoc($result)): ?>
                             <?php
-                            // Menentukan kelas status
+                            // Menentukan kelas untuk status
                             $statusClass = '';
                             switch ($row['status']) {
-                              case 'disetujui': // Gunakan 'disetujui', bukan 'approved'
+                              case 'disetujui':
                                 $statusClass = 'status-disetujui';
                                 break;
                               case 'pending':
                                 $statusClass = 'status-pending';
                                 break;
-                              case 'ditolak': // Gunakan 'ditolak', bukan 'rejected'
+                              case 'ditolak':
                                 $statusClass = 'status-ditolak';
-                                break;
-                              case 'draft':
-                                $statusClass = 'status-draft';
                                 break;
                             }
                             ?>
@@ -494,15 +507,14 @@ WHERE
                               </td>
                             </tr>
                           <?php endwhile; ?>
-                        </tbody>
-                      </table>
-                    </div>
-                  <?php else: ?>
-                    <p>No data available</p>
-                  <?php endif; ?>
-
-
-
+                        <?php else: ?>
+                          <tr>
+                            <td colspan="7" class="text-center">Tidak ada data daftar ditemukan.</td>
+                          </tr>
+                        <?php endif; ?>
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
               </div>
             </div>
