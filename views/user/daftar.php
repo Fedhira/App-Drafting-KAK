@@ -1,7 +1,6 @@
 <?php
 require '../../database/config.php';
 require '../../controllers/UserController.php';
-require '../../controllers/DaftarController.php';
 require '../../models/DaftarModel.php';
 require '../cek.php';
 checkLoginAndRole('user', $_SESSION['user_id']);
@@ -239,7 +238,7 @@ $user_id = $_SESSION['user_id'];
                   <div class="d-flex align-items-ceter">
 
                     <!-- Date Picker From and To -->
-                    <form method="GET" action="../../controllers/DraftController.php">
+                    <form method="GET" action="daftar.php">
                       <div class="d-flex">
                         <div class="input-group me-4">
                           <span class="input-group-text">From</span>
@@ -275,189 +274,192 @@ $user_id = $_SESSION['user_id'];
                         <div class="modal-body" style="max-height: 400px; overflow-y: auto;">
                           <form>
                             <div class="row">
-
-                              <div class="form-group form-group-default">
-                                <label>No Doc</label>
-                                <input type="text" class="form-control" placeholder="fill" />
+                              <div class="col-sm-12">
+                                <div class="form-group form-group-default">
+                                  <label>No Doc</label>
+                                  <input type="text" class="form-control" placeholder="fill" />
+                                </div>
+                              </div>
+                              <div class="col-md-12">
+                                <div class="form-group form-group-default">
+                                  <label>Judul KAK</label>
+                                  <input type="text" class="form-control" placeholder="fill" />
+                                </div>
+                              </div>
+                              <div class="col-md-12">
+                                <div class="form-group form-group-default">
+                                  <label>Kategori Program</label>
+                                  <input type="text" class="form-control" placeholder="fill" />
+                                </div>
+                              </div>
+                              <div class="col-md-12">
+                                <div class="form-group form-group-default">
+                                  <label>Latar Belakang</label>
+                                  <label>A. Dasar Hukum</label>
+                                  <input type="text" class="form-control" placeholder="fill " />
+                                </div>
+                              </div>
+                              <div class="col-md-12">
+                                <div class="form-group form-group-default">
+                                  <label>B. Gambaran Umum</label>
+                                  <input type="text" class="form-control" placeholder="fill" />
+                                </div>
+                              </div>
+                              <div class="col-md-12">
+                                <div class="form-group form-group-default">
+                                  <label>Tujuan</label>
+                                  <input type="text" class="form-control" placeholder="fill" />
+                                </div>
+                              </div>
+                              <div class="col-md-12">
+                                <div class="form-group form-group-default">
+                                  <label>Target/Sasaran</label>
+                                  <input type="text" class="form-control" placeholder="fill" />
+                                </div>
+                              </div>
+                              <div class="col-md-12">
+                                <div class="form-group form-group-default">
+                                  <label>Unit Kerja Pelaksana</label>
+                                  <input type="text" class="form-control" placeholder="fill" />
+                                </div>
+                              </div>
+                              <div class="col-md-12">
+                                <div class="form-group form-group-default">
+                                  <label>Ruang Lingkup, Lokasi & Fasilitas Penunjang</label>
+                                  <input type="text" class="form-control" placeholder="fill" />
+                                </div>
+                              </div>
+                              <div class="col-md-12">
+                                <div class="form-group form-group-default">
+                                  <label>Produk/Jasa yang dihasilkan (Deliverable)</label>
+                                  <input type="text" class="form-control" placeholder="fill" />
+                                </div>
+                              </div>
+                              <div class="col-md-12">
+                                <div class="form-group form-group-default">
+                                  <label>Waktu Pelaksana</label>
+                                  <input type="text" class="form-control" placeholder="fill" />
+                                </div>
+                              </div>
+                              <div class="col-md-12">
+                                <div class="form-group form-group-default">
+                                  <label>Tenaga Ahli/Terampil</label>
+                                  <input type="text" class="form-control" placeholder="fill" />
+                                </div>
+                              </div>
+                              <div class="col-md-12">
+                                <div class="form-group form-group-default">
+                                  <label>Peralatan</label>
+                                  <input type="text" class="form-control" placeholder="fill" />
+                                </div>
+                              </div>
+                              <div class="col-md-12">
+                                <div class="form-group form-group-default">
+                                  <label>Metode Kerja</label>
+                                  <input type="text" class="form-control" placeholder="fill" />
+                                </div>
+                              </div>
+                              <div class="col-md-12">
+                                <div class="form-group form-group-default">
+                                  <label>Manajemen Resiko</label>
+                                  <input type="text" class="form-control" placeholder="fill" />
+                                </div>
+                              </div>
+                              <div class="col-md-12">
+                                <div class="form-group form-group-default">
+                                  <label>Laporan Pengajuan Pekerjaan</label>
+                                  <input type="text" class="form-control" placeholder="fill" />
+                                </div>
+                              </div>
+                              <div class="col-md-12">
+                                <div class="form-group form-group-default">
+                                  <label>Sumber Dana & Prakiraan Biaya</label>
+                                  <input type="text" class="form-control" placeholder="fill" />
+                                </div>
+                              </div>
+                              <div class="col-md-12">
+                                <div class="form-group form-group-default">
+                                  <label>Penutup</label>
+                                  <input type="text" class="form-control" placeholder="fill" />
+                                </div>
                               </div>
                             </div>
-                            <div class="col-md-12">
-                              <div class="form-group form-group-default">
-                                <label>Judul KAK</label>
-                                <input type="text" class="form-control" placeholder="fill" />
-                              </div>
-                            </div>
-                            <div class="col-md-12">
-                              <div class="form-group form-group-default">
-                                <label>Kategori Program</label>
-                                <input type="text" class="form-control" placeholder="fill" />
-                              </div>
-                            </div>
-                            <div class="col-md-12">
-                              <div class="form-group form-group-default">
-                                <label>Latar Belakang</label>
-                                <label>A. Dasar Hukum</label>
-                                <input type="text" class="form-control" placeholder="fill " />
-                              </div>
-                            </div>
-                            <div class="col-md-12">
-                              <div class="form-group form-group-default">
-                                <label>B. Gambaran Umum</label>
-                                <input type="text" class="form-control" placeholder="fill" />
-                              </div>
-                            </div>
-                            <div class="col-md-12">
-                              <div class="form-group form-group-default">
-                                <label>Tujuan</label>
-                                <input type="text" class="form-control" placeholder="fill" />
-                              </div>
-                            </div>
-                            <div class="col-md-12">
-                              <div class="form-group form-group-default">
-                                <label>Target/Sasaran</label>
-                                <input type="text" class="form-control" placeholder="fill" />
-                              </div>
-                            </div>
-                            <div class="col-md-12">
-                              <div class="form-group form-group-default">
-                                <label>Unit Kerja Pelaksana</label>
-                                <input type="text" class="form-control" placeholder="fill" />
-                              </div>
-                            </div>
-                            <div class="col-md-12">
-                              <div class="form-group form-group-default">
-                                <label>Ruang Lingkup, Lokasi & Fasilitas Penunjang</label>
-                                <input type="text" class="form-control" placeholder="fill" />
-                              </div>
-                            </div>
-                            <div class="col-md-12">
-                              <div class="form-group form-group-default">
-                                <label>Produk/Jasa yang dihasilkan (Deliverable)</label>
-                                <input type="text" class="form-control" placeholder="fill" />
-                              </div>
-                            </div>
-                            <div class="col-md-12">
-                              <div class="form-group form-group-default">
-                                <label>Waktu Pelaksana</label>
-                                <input type="text" class="form-control" placeholder="fill" />
-                              </div>
-                            </div>
-                            <div class="col-md-12">
-                              <div class="form-group form-group-default">
-                                <label>Tenaga Ahli/Terampil</label>
-                                <input type="text" class="form-control" placeholder="fill" />
-                              </div>
-                            </div>
-                            <div class="col-md-12">
-                              <div class="form-group form-group-default">
-                                <label>Peralatan</label>
-                                <input type="text" class="form-control" placeholder="fill" />
-                              </div>
-                            </div>
-                            <div class="col-md-12">
-                              <div class="form-group form-group-default">
-                                <label>Metode Kerja</label>
-                                <input type="text" class="form-control" placeholder="fill" />
-                              </div>
-                            </div>
-                            <div class="col-md-12">
-                              <div class="form-group form-group-default">
-                                <label>Manajemen Resiko</label>
-                                <input type="text" class="form-control" placeholder="fill" />
-                              </div>
-                            </div>
-                            <div class="col-md-12">
-                              <div class="form-group form-group-default">
-                                <label>Laporan Pengajuan Pekerjaan</label>
-                                <input type="text" class="form-control" placeholder="fill" />
-                              </div>
-                            </div>
-                            <div class="col-md-12">
-                              <div class="form-group form-group-default">
-                                <label>Sumber Dana & Prakiraan Biaya</label>
-                                <input type="text" class="form-control" placeholder="fill" />
-                              </div>
-                            </div>
-                            <div class="col-md-12">
-                              <div class="form-group form-group-default">
-                                <label>Penutup</label>
-                                <input type="text" class="form-control" placeholder="fill" />
-                              </div>
-                            </div>
+                          </form>
                         </div>
-                        </form>
-                      </div>
 
-                      <!-- Modal Footer with Fixed Buttons -->
-                      <div class="modal-footer border-0">
-                        <button type="button" class="btn btn-primary">Simpan</button>
-                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Batal</button>
+                        <!-- Modal Footer with Fixed Buttons -->
+                        <div class="modal-footer border-0">
+                          <button type="button" class="btn btn-primary">Simpan</button>
+                          <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Batal</button>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
 
-                <!-- Modal Tolak -->
-                <div class="modal fade" id="tolakRowModal" tabindex="-1" role="dialog" aria-hidden="true">
-                  <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                      <div class="modal-header border-0">
-                        <h5 class="modal-title">
-                          <span class="fw-mediumbold">Form Penolakan KAK</span>
-                        </h5>
-                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                          <span aria-hidden="true">&times;</span>
-                        </button>
+                  <!-- Modal Tolak -->
+                  <div class="modal fade" id="tolakRowModal" tabindex="-1" role="dialog" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                      <div class="modal-content">
+                        <div class="modal-header border-0">
+                          <h5 class="modal-title">
+                            <span class="fw-mediumbold">Form Penolakan KAK</span>
+                          </h5>
+                          <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+
+                        <!-- Modal Body with Scroll -->
+                        <div class="modal-body" style="max-height: 500px; overflow-y: auto;">
+                          <form method="POST" action="../../models/DaftarModel.php">
+                            <div style="margin-bottom: 15px;">
+                              <label for="no_doc_mak">No Doc</label>
+                              <input type="text" id="no_doc_mak" name="no_doc_mak" class="form-control" readonly />
+                            </div>
+
+                            <div style="margin-bottom: 15px;">
+                              <label for="judul">Judul KAK</label>
+                              <input type="text" id="judul" name="judul" class="form-control" readonly />
+                            </div>
+
+                            <div style="margin-bottom: 15px;">
+                              <label for="kategori">Kategori Program</label>
+                              <input type="text" id="kategori" name="kategori" class="form-control" readonly />
+                            </div>
+
+                            <div style="margin-bottom: 15px;">
+                              <label for="alasan_penolakan">Alasan Penolakan</label>
+                              <textarea id="alasan_penolakan" name="alasan_penolakan" class="form-control" readonly></textarea>
+                            </div>
+
+                            <div style="margin-bottom: 15px;">
+                              <label for="saran">Saran/Revisi</label>
+                              <textarea id="saran" name="saran" class="form-control" readonly></textarea>
+                            </div>
+
+                            <input type="hidden" name="kak_id" value="" />
+
+                            <div style="margin-top: 15px; text-align: right;">
+                              <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Batal</button>
+                            </div>
+                          </form>
+                        </div>
+
+
+
                       </div>
-
-                      <!-- Modal Body with Scroll -->
-                      <div class="modal-body" style="max-height: 500px; overflow-y: auto;">
-                        <form method="POST" action="../../models/DaftarModel.php">
-                          <div style="margin-bottom: 15px;">
-                            <label for="no_doc_mak">No Doc</label>
-                            <input type="text" id="no_doc_mak" name="no_doc_mak" class="form-control" readonly />
-                          </div>
-
-                          <div style="margin-bottom: 15px;">
-                            <label for="judul">Judul KAK</label>
-                            <input type="text" id="judul" name="judul" class="form-control" readonly />
-                          </div>
-
-                          <div style="margin-bottom: 15px;">
-                            <label for="kategori">Kategori Program</label>
-                            <input type="text" id="kategori" name="kategori" class="form-control" readonly />
-                          </div>
-
-                          <div style="margin-bottom: 15px;">
-                            <label for="alasan_penolakan">Alasan Penolakan</label>
-                            <textarea id="alasan_penolakan" name="alasan_penolakan" class="form-control" readonly></textarea>
-                          </div>
-
-                          <div style="margin-bottom: 15px;">
-                            <label for="saran">Saran/Revisi</label>
-                            <textarea id="saran" name="saran" class="form-control" readonly></textarea>
-                          </div>
-
-                          <input type="hidden" name="kak_id" value="" />
-
-                          <div style="margin-top: 15px; text-align: right;">
-                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Batal</button>
-                          </div>
-                        </form>
-                      </div>
-
-
-
                     </div>
                   </div>
-                </div>
+
+                  <!-- START TABLE -->
+                  <?php
+                  // Inisialisasi variabel filter tanggal
+                  $fromDate = isset($_GET['fromDate']) ? $_GET['fromDate'] : null;
+                  $toDate = isset($_GET['toDate']) ? $_GET['toDate'] : null;
 
 
-
-                <!-- START TABLE -->
-                <?php
-                // Query untuk mengambil dokumen yang statusnya selain 'draft' (pending, disetujui, ditolak)
-                $query = "
+                  // Query dasar
+                  $query = "
 SELECT 
     kak.kak_id,
     kak.no_doc_mak,
@@ -474,111 +476,122 @@ ON
     kak.kategori_id = kategori_program.kategori_id
 WHERE 
     kak.status IN ('pending', 'disetujui', 'ditolak') 
-    AND kak.user_id = '$user_id';  -- Filter berdasarkan user yang login
+    AND kak.user_id = '$user_id'
 ";
 
-                $result = mysqli_query($koneksi, $query);
+                  // Tambahkan filter tanggal jika diberikan
+                  if (!empty($fromDate)) {
+                    $query .= " AND (DATE(kak.created_at) >= '$fromDate' OR DATE(kak.updated_at) >= '$fromDate')";
+                  }
 
-                if (!$result) {
-                  die("Query failed: " . mysqli_error($koneksi));
-                }
+                  if (!empty($toDate)) {
+                    $query .= " AND (DATE(kak.created_at) <= '$toDate' OR DATE(kak.updated_at) <= '$toDate')";
+                  }
 
-                ?>
+                  // Eksekusi query
+                  $result = mysqli_query($koneksi, $query);
 
-                <div class="table-responsive">
-                  <table id="add-row" class="display table table-striped table-hover">
-                    <thead>
-                      <tr>
-                        <th>No Doc</th>
-                        <th>Judul KAK</th>
-                        <th>Kategori Program</th>
-                        <th>Status Dokumen</th>
-                        <th>Tanggal Dibuat</th>
-                        <th>Tanggal Diperbarui</th>
-                        <th style="width: 15%">Aksi</th>
-                      </tr>
-                    </thead>
-                    <tfoot>
-                      <tr>
-                        <th>No Doc</th>
-                        <th>Judul KAK</th>
-                        <th>Kategori Program</th>
-                        <th>Status Dokumen</th>
-                        <th>Tanggal Dibuat</th>
-                        <th>Tanggal Diperbarui</th>
-                        <th>Aksi</th>
-                      </tr>
-                    </tfoot>
-                    <tbody>
-                      <?php if (mysqli_num_rows($result) > 0): ?>
-                        <?php while ($row = mysqli_fetch_assoc($result)): ?>
-                          <?php
-                          // Menentukan kelas untuk status
-                          $statusClass = '';
-                          switch ($row['status']) {
-                            case 'disetujui':
-                              $statusClass = 'status-disetujui';
-                              break;
-                            case 'pending':
-                              $statusClass = 'status-pending';
-                              break;
-                            case 'ditolak':
-                              $statusClass = 'status-ditolak';
-                              break;
-                          }
-                          ?>
-                          <tr>
-                            <td><?= htmlspecialchars($row['no_doc_mak']); ?></td>
-                            <td><?= htmlspecialchars($row['judul']); ?></td>
-                            <td><?= htmlspecialchars($row['kategori_program']); ?></td>
-                            <td>
-                              <span class="status <?= $statusClass; ?>">
-                                <?= ucfirst($row['status']); ?>
-                              </span>
-                            </td>
-                            <td><?= htmlspecialchars($row['tanggal_dibuat']); ?></td>
-                            <td><?= htmlspecialchars($row['tanggal_diperbarui']); ?></td>
-                            <td>
-                              <div class="form-button-action">
-                                <button class="btn btn-dark btn-round me-2" style="width: 100px;" data-bs-toggle="modal" data-bs-target="#detailRowModal">
-                                  <i class="fas fa-eye"></i> Detail
-                                </button>
-                                <?php if ($row['status'] === 'ditolak'): ?>
-                                  <button class="btn btn-danger btn-round" style="width: 100px;" data-bs-toggle="modal" data-bs-target="#tolakRowModal" onclick="handleRevisi(<?= $row['kak_id']; ?>)">
-                                    <i class="fas fa-edit"></i> Revisi
-                                  </button>
-                                <?php endif; ?>
-                              </div>
-                            </td>
-                          </tr>
-                        <?php endwhile; ?>
-                      <?php else: ?>
+                  if (!$result) {
+                    die("Query failed: " . mysqli_error($koneksi));
+                  }
+
+                  ?>
+
+
+                  <div class="table-responsive">
+                    <table id="add-row" class="display table table-striped table-hover">
+                      <thead>
                         <tr>
-                          <td colspan="7" class="text-center">Tidak ada data daftar ditemukan.</td>
+                          <th>No Doc</th>
+                          <th>Judul KAK</th>
+                          <th>Kategori Program</th>
+                          <th>Status Dokumen</th>
+                          <th>Tanggal Dibuat</th>
+                          <th>Tanggal Diperbarui</th>
+                          <th style="width: 15%">Aksi</th>
                         </tr>
-                      <?php endif; ?>
-                    </tbody>
-                  </table>
+                      </thead>
+                      <tfoot>
+                        <tr>
+                          <th>No Doc</th>
+                          <th>Judul KAK</th>
+                          <th>Kategori Program</th>
+                          <th>Status Dokumen</th>
+                          <th>Tanggal Dibuat</th>
+                          <th>Tanggal Diperbarui</th>
+                          <th>Aksi</th>
+                        </tr>
+                      </tfoot>
+                      <tbody>
+                        <?php if (mysqli_num_rows($result) > 0): ?>
+                          <?php while ($row = mysqli_fetch_assoc($result)): ?>
+                            <?php
+                            // Menentukan kelas untuk status
+                            $statusClass = '';
+                            switch ($row['status']) {
+                              case 'disetujui':
+                                $statusClass = 'status-disetujui';
+                                break;
+                              case 'pending':
+                                $statusClass = 'status-pending';
+                                break;
+                              case 'ditolak':
+                                $statusClass = 'status-ditolak';
+                                break;
+                            }
+                            ?>
+                            <tr>
+                              <td><?= htmlspecialchars($row['no_doc_mak']); ?></td>
+                              <td><?= htmlspecialchars($row['judul']); ?></td>
+                              <td><?= htmlspecialchars($row['kategori_program']); ?></td>
+                              <td>
+                                <span class="status <?= $statusClass; ?>">
+                                  <?= ucfirst($row['status']); ?>
+                                </span>
+                              </td>
+                              <td><?= htmlspecialchars($row['tanggal_dibuat']); ?></td>
+                              <td><?= htmlspecialchars($row['tanggal_diperbarui']); ?></td>
+                              <td>
+                                <div class="form-button-action">
+                                  <button class="btn btn-dark btn-round me-2" style="width: 100px;" data-bs-toggle="modal" data-bs-target="#detailRowModal">
+                                    <i class="fas fa-eye"></i> Detail
+                                  </button>
+                                  <?php if ($row['status'] === 'ditolak'): ?>
+                                    <button class="btn btn-danger btn-round" style="width: 100px;" data-bs-toggle="modal" data-bs-target="#tolakRowModal" onclick="handleRevisi(<?= $row['kak_id']; ?>)">
+                                      <i class="fas fa-edit"></i> Revisi
+                                    </button>
+                                  <?php endif; ?>
+                                </div>
+                              </td>
+                            </tr>
+                          <?php endwhile; ?>
+                        <?php else: ?>
+                          <tr>
+                            <td colspan="7" class="text-center">Tidak ada data daftar ditemukan.</td>
+                          </tr>
+                        <?php endif; ?>
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
 
-    <footer class="footer">
-      <div class="container-fluid d-flex justify-content-between">
-        <div class="copyright">
-          © Copyright <strong>BAKTI</strong>. All Rights Reserved
+      <footer class="footer">
+        <div class="container-fluid d-flex justify-content-between">
+          <div class="copyright">
+            © Copyright <strong>BAKTI</strong>. All Rights Reserved
+          </div>
+          <div>
+            Designed by
+            <a target="_blank" href="">Dwf</a>.
+          </div>
         </div>
-        <div>
-          Designed by
-          <a target="_blank" href="">Dwf</a>.
-        </div>
-      </div>
-    </footer>
-  </div>
+      </footer>
+    </div>
   </div>
   <!--   Core JS Files   -->
   <script src="../../assets/js/core/jquery-3.7.1.min.js"></script>

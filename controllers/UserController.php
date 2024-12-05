@@ -8,30 +8,32 @@ if (session_status() === PHP_SESSION_NONE) {
 require __DIR__ . '/../database/config.php';
 
 // Fungsi untuk mengecek login dan hak akses
-function checkLoginAndRole($required_role = null, $required_user_id = null)
-{
-    // Cek apakah pengguna sudah login
-    if (!isset($_SESSION['log']) || $_SESSION['log'] !== 'True') {
-        echo "<script>alert('Anda belum login!'); window.location.href = '../views/login.php';</script>";
-        exit();
-    }
+if (!function_exists('checkLoginAndRole')) {
+    function checkLoginAndRole($required_role = null, $required_user_id = null)
+    {
+        // Cek apakah pengguna sudah login
+        if (!isset($_SESSION['log']) || $_SESSION['log'] !== 'True') {
+            echo "<script>alert('Anda belum login!'); window.location.href = '../views/login.php';</script>";
+            exit();
+        }
 
-    // Cek apakah pengguna sudah login
-    if (!isset($_SESSION['log']) || $_SESSION['log'] !== 'True') {
-        header('Location: ../views/login.php');
-        exit();
-    }
+        // Cek apakah pengguna sudah login
+        if (!isset($_SESSION['log']) || $_SESSION['log'] !== 'True') {
+            header('Location: ../views/login.php');
+            exit();
+        }
 
-    // Cek apakah role sesuai dengan yang diperlukan
-    if ($required_role && $_SESSION['role'] !== $required_role) {
-        echo "Akses ditolak! Anda tidak memiliki hak untuk mengakses halaman ini.";
-        exit();
-    }
+        // Cek apakah role sesuai dengan yang diperlukan
+        if ($required_role && $_SESSION['role'] !== $required_role) {
+            echo "Akses ditolak! Anda tidak memiliki hak untuk mengakses halaman ini.";
+            exit();
+        }
 
-    // Cek apakah user_id sesuai dengan yang diperlukan (misalnya untuk halaman profil)
-    if ($required_user_id && $_SESSION['user_id'] != $required_user_id) {
-        echo "Akses ditolak! Anda tidak dapat mengakses akun user lain.";
-        exit();
+        // Cek apakah user_id sesuai dengan yang diperlukan (misalnya untuk halaman profil)
+        if ($required_user_id && $_SESSION['user_id'] != $required_user_id) {
+            echo "Akses ditolak! Anda tidak dapat mengakses akun user lain.";
+            exit();
+        }
     }
 }
 

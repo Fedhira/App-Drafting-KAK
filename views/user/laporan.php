@@ -302,33 +302,49 @@ $user_id = $_SESSION['user_id'];
 
                 <!-- START TABLE -->
                 <?php
-                // Query untuk mengambil dokumen dengan status 'draft' atau lainnya yang relevan
+                // Ambil dan sanitasi parameter input
+                $fromDate = isset($_GET['fromDate']) ? mysqli_real_escape_string($koneksi, $_GET['fromDate']) : null;
+                $toDate = isset($_GET['toDate']) ? mysqli_real_escape_string($koneksi, $_GET['toDate']) : null;
+
+                // Query dasar
                 $query = "
- SELECT 
-                          kak.kak_id,
-                          kak.no_doc_mak,
-                          kak.judul,
-                          kategori_program.nama_divisi AS kategori_program,
-                          kak.status,
-                          kak.created_at AS tanggal_dibuat,
-                          kak.updated_at AS tanggal_diperbarui
-                      FROM 
-                          kak
-                      LEFT JOIN 
-                          kategori_program
-                      ON 
-                          kak.kategori_id = kategori_program.kategori_id
-                      WHERE 
-                          kak.status = 'disetujui' AND kak.user_id = '$user_id'; -- Hanya mengambil data dengan status 'disetujui'
+SELECT 
+    kak.kak_id,
+    kak.no_doc_mak,
+    kak.judul,
+    kategori_program.nama_divisi AS kategori_program,
+    kak.status,
+    kak.created_at AS tanggal_dibuat,
+    kak.updated_at AS tanggal_diperbarui
+FROM 
+    kak
+LEFT JOIN 
+    kategori_program
+ON 
+    kak.kategori_id = kategori_program.kategori_id
+WHERE 
+    kak.status = 'disetujui' 
+    AND kak.user_id = '$user_id'
 ";
 
+                // Tambahkan filter tanggal jika diberikan
+                if (!empty($fromDate)) {
+                  $query .= " AND (DATE(kak.created_at) >= '$fromDate' OR DATE(kak.updated_at) >= '$fromDate')";
+                }
+
+                if (!empty($toDate)) {
+                  $query .= " AND (DATE(kak.created_at) <= '$toDate' OR DATE(kak.updated_at) <= '$toDate')";
+                }
+
+                // Jalankan query
                 $result = mysqli_query($koneksi, $query);
 
+                // Periksa error
                 if (!$result) {
                   die("Query failed: " . mysqli_error($koneksi));
                 }
-
                 ?>
+
                 <div class="table-responsive">
                   <table id="add-row" class="display table table-striped table-hover">
                     <thead>

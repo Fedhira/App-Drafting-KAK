@@ -10,7 +10,7 @@ if (!isset($_SESSION['user_id'])) {
 require '../../database/config.php';
 require '../../models/CategoryModel.php';
 require '../../models/DraftModel.php';
-require '../../controllers/UserController.php';
+require_once '../../controllers/UserController.php';
 require '../../controllers/DraftController.php';
 require '../cek.php';
 checkLoginAndRole('user', $_SESSION['user_id']);

@@ -1,7 +1,6 @@
 <?php
 require '../../database/config.php';
 require '../../controllers/UserController.php';
-require '../../controllers/DraftController.php';
 require '../cek.php';
 checkLoginAndRole('user', $_SESSION['user_id']);
 
@@ -404,7 +403,11 @@ $user_id = $_SESSION['user_id'];
                     </div>
                   </div>
                   <?php
-                  // Query untuk mengambil data draft
+                  // Sanitasi dan ambil parameter input
+                  $fromDate = isset($_GET['fromDate']) ? mysqli_real_escape_string($koneksi, $_GET['fromDate']) : null;
+                  $toDate = isset($_GET['toDate']) ? mysqli_real_escape_string($koneksi, $_GET['toDate']) : null;
+
+                  // Query dasar
                   $query = "
 SELECT
     kak.kak_id,
@@ -422,15 +425,28 @@ ON
     kak.kategori_id = kategori_program.kategori_id
 WHERE
     kak.status = 'draft'
-    AND kak.user_id = '$user_id'; -- Filter berdasarkan user_id
+    AND kak.user_id = '$user_id'
 ";
 
+                  // Tambahkan filter tanggal jika diberikan
+                  if (!empty($fromDate)) {
+                    $query .= " AND (DATE(kak.created_at) >= '$fromDate' OR DATE(kak.updated_at) >= '$fromDate')";
+                  }
+
+                  if (!empty($toDate)) {
+                    $query .= " AND (DATE(kak.created_at) <= '$toDate' OR DATE(kak.updated_at) <= '$toDate')";
+                  }
+
+                  // Jalankan query
                   $result = mysqli_query($koneksi, $query);
 
+                  // Periksa error
                   if (!$result) {
                     die("Query failed: " . mysqli_error($koneksi));
                   }
                   ?>
+
+
 
                   <!-- START TABLE -->
                   <div class="table-responsive">
