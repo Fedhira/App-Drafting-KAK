@@ -88,10 +88,12 @@ if (isset($_POST['login'])) {
             }
             exit();
         } else {
-            echo "Password salah!";
+            header('Location: ../login.php?status=error');
+        exit();
         }
     } else {
-        echo "Email tidak ditemukan!";
+        header('Location: ../login.php?status=error');
+        exit();
     }
 }
 
