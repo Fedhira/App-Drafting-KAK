@@ -66,10 +66,11 @@ function addKak($koneksi, $data, $lampiran = null)
     );
 
     if ($stmt->execute()) {
-        header("Location: ../views/user/draft.php");
+        header("Location: ../views/user/draft.php?status=success&action=add");
         exit;
     } else {
-        return $stmt->error;
+        header("Location: ../views/user/draft.php?status=error&action=add");
+        exit;
     }
 }
 
@@ -132,10 +133,11 @@ function updateKak($koneksi, $data, $lampiran = null)
     );
 
     if ($stmt->execute()) {
-        header("Location: ../views/user/draft.php");
+        header("Location: ../views/user/draft.php?status=success&action=update");
         exit;
     } else {
-        return $stmt->error;
+        header("Location: ../views/user/draft.php?status=error&action=update");
+        exit;
     }
 }
 

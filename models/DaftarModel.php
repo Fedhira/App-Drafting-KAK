@@ -145,6 +145,25 @@ function getRevisiByKakId($koneksi, $kak_id)
 
 
 
+// if (isset($_GET['kak_id'])) {
+//     $kak_id = $_GET['kak_id'];
+
+//     // Ambil data KAK
+//     $kakDetails = getKAKDetails($koneksi, $kak_id);
+
+//     // Ambil data revisi berdasarkan kak_id
+//     $revisiDetails = getRevisiByKakId($koneksi, $kak_id);
+
+//     // Gabungkan data KAK dan revisi
+//     $data = array_merge($kakDetails, $revisiDetails);
+
+//     // Kirim data dalam format JSON
+//     header('Content-Type: application/json');
+//     echo json_encode($data);
+//     exit();
+// }
+
+
 if (isset($_GET['kak_id'])) {
     $kak_id = $_GET['kak_id'];
 
@@ -155,7 +174,7 @@ if (isset($_GET['kak_id'])) {
     $revisiDetails = getRevisiByKakId($koneksi, $kak_id);
 
     // Gabungkan data KAK dan revisi
-    $data = array_merge($kakDetails, $revisiDetails);
+    $data = array_merge($kakDetails ?? [], $revisiDetails ?? []);
 
     // Kirim data dalam format JSON
     header('Content-Type: application/json');

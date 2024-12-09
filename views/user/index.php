@@ -380,6 +380,20 @@ $user_id = $_SESSION['user_id'];
     }
   </script>
 
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const status = urlParams.get('status');
+        if (status === 'success') {
+            Swal.fire({
+                icon: 'success',
+                title: 'Login Berhasil!',
+                text: 'Anda berhasil masuk.',
+                confirmButtonText: 'OK'
+            });
+        }
+    });
+</script>
 </body>
 
 </html>
