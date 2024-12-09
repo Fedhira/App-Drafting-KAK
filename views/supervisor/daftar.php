@@ -244,6 +244,145 @@ checkLoginAndRole('supervisor');
                 </div>
                 <div class="card-body">
 
+                  <!-- Modal Detail -->
+                  <div class="modal fade" id="detailRowModal" tabindex="-1" role="dialog" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                      <div class="modal-content">
+                        <div class="modal-header border-0">
+                          <h5 class="modal-title">
+                            <span class="fw-mediumbold">Detail Daftar KAK</span>
+                          </h5>
+                          <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+
+                        <!-- Modal Body with Scroll -->
+                        <div class="modal-body" style="max-height: 400px; overflow-y: auto;">
+                          <form>
+                            <div class="row">
+                              <div class="col-sm-12">
+                                <div class="form-group form-group-default">
+                                  <label>No Doc</label>
+                                  <input type="text" class="form-control" placeholder="fill" />
+                                </div>
+                              </div>
+                              <div class="col-md-12">
+                                <div class="form-group form-group-default">
+                                  <label>Judul KAK</label>
+                                  <input type="text" class="form-control" placeholder="fill" />
+                                </div>
+                              </div>
+                              <div class="col-md-12">
+                                <div class="form-group form-group-default">
+                                  <label>Kategori Program</label>
+                                  <input type="text" class="form-control" placeholder="fill" />
+                                </div>
+                              </div>
+                              <div class="col-md-12">
+                                <div class="form-group form-group-default">
+                                  <label>Latar Belakang</label>
+                                  <label>A. Dasar Hukum</label>
+                                  <input type="text" class="form-control" placeholder="fill " />
+                                </div>
+                              </div>
+                              <div class="col-md-12">
+                                <div class="form-group form-group-default">
+                                  <label>B. Gambaran Umum</label>
+                                  <input type="text" class="form-control" placeholder="fill" />
+                                </div>
+                              </div>
+                              <div class="col-md-12">
+                                <div class="form-group form-group-default">
+                                  <label>Tujuan</label>
+                                  <input type="text" class="form-control" placeholder="fill" />
+                                </div>
+                              </div>
+                              <div class="col-md-12">
+                                <div class="form-group form-group-default">
+                                  <label>Target/Sasaran</label>
+                                  <input type="text" class="form-control" placeholder="fill" />
+                                </div>
+                              </div>
+                              <div class="col-md-12">
+                                <div class="form-group form-group-default">
+                                  <label>Unit Kerja Pelaksana</label>
+                                  <input type="text" class="form-control" placeholder="fill" />
+                                </div>
+                              </div>
+                              <div class="col-md-12">
+                                <div class="form-group form-group-default">
+                                  <label>Ruang Lingkup, Lokasi & Fasilitas Penunjang</label>
+                                  <input type="text" class="form-control" placeholder="fill" />
+                                </div>
+                              </div>
+                              <div class="col-md-12">
+                                <div class="form-group form-group-default">
+                                  <label>Produk/Jasa yang dihasilkan (Deliverable)</label>
+                                  <input type="text" class="form-control" placeholder="fill" />
+                                </div>
+                              </div>
+                              <div class="col-md-12">
+                                <div class="form-group form-group-default">
+                                  <label>Waktu Pelaksana</label>
+                                  <input type="text" class="form-control" placeholder="fill" />
+                                </div>
+                              </div>
+                              <div class="col-md-12">
+                                <div class="form-group form-group-default">
+                                  <label>Tenaga Ahli/Terampil</label>
+                                  <input type="text" class="form-control" placeholder="fill" />
+                                </div>
+                              </div>
+                              <div class="col-md-12">
+                                <div class="form-group form-group-default">
+                                  <label>Peralatan</label>
+                                  <input type="text" class="form-control" placeholder="fill" />
+                                </div>
+                              </div>
+                              <div class="col-md-12">
+                                <div class="form-group form-group-default">
+                                  <label>Metode Kerja</label>
+                                  <input type="text" class="form-control" placeholder="fill" />
+                                </div>
+                              </div>
+                              <div class="col-md-12">
+                                <div class="form-group form-group-default">
+                                  <label>Manajemen Resiko</label>
+                                  <input type="text" class="form-control" placeholder="fill" />
+                                </div>
+                              </div>
+                              <div class="col-md-12">
+                                <div class="form-group form-group-default">
+                                  <label>Laporan Pengajuan Pekerjaan</label>
+                                  <input type="text" class="form-control" placeholder="fill" />
+                                </div>
+                              </div>
+                              <div class="col-md-12">
+                                <div class="form-group form-group-default">
+                                  <label>Sumber Dana & Prakiraan Biaya</label>
+                                  <input type="text" class="form-control" placeholder="fill" />
+                                </div>
+                              </div>
+                              <div class="col-md-12">
+                                <div class="form-group form-group-default">
+                                  <label>Penutup</label>
+                                  <input type="text" class="form-control" placeholder="fill" />
+                                </div>
+                              </div>
+                            </div>
+                          </form>
+                        </div>
+
+                        <!-- Modal Footer with Fixed Buttons -->
+                        <div class="modal-footer border-0">
+                          <button type="button" class="btn btn-success">Disetujui</button>
+                          <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Batal</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
                   <!-- Modal Ditolak -->
                   <div class="modal fade" id="tolakRowModal" tabindex="-1" role="dialog" aria-hidden="true">
                     <div class="modal-dialog" role="document">
@@ -406,11 +545,14 @@ WHERE
                               <td><?= htmlspecialchars($row['tanggal_dibuat']); ?></td>
                               <td><?= htmlspecialchars($row['tanggal_diperbarui']); ?></td>
                               <td>
-                                <div class="form-button-action">
-                                  <a href="../../controllers/generate_pdf.php?kak_id=<?= $row['kak_id']; ?>" target="_blank"
+                                <div class="form-button-action d-inline-flex">
+                                  <a href="detail_draft.php?kak_id=<?= $row['kak_id']; ?>"
                                     class="btn btn-dark btn-round me-2"
                                     style="width: 110px;">
                                     <i class="fa fa-eye"></i> Detail
+                                  </a>
+                                  <a href="../../controllers/generate_pdf.php?kak_id=<?= $row['kak_id']; ?>" target="_blank" class="btn btn-dark btn-round me-2" style="width: 110px;">
+                                    <i class="fas fa-file-pdf"></i> Preview
                                   </a>
                                   <?php if ($row['status'] === 'pending'): ?>
                                     <button
@@ -573,6 +715,46 @@ WHERE
         }
       });
     }
+  </script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const status = urlParams.get('status');
+      const action = urlParams.get('action');
+
+      if (status === 'success') {
+        if (action === 'setuju') {
+          Swal.fire({
+            icon: 'success',
+            title: 'Berhasil!',
+            text: 'KAK berhasil disetujui.',
+            confirmButtonText: 'OK'
+          });
+        } else if (action === 'tolak') {
+          Swal.fire({
+            icon: 'success',
+            title: 'Berhasil!',
+            text: 'KAK berhasil ditolak.',
+            confirmButtonText: 'OK'
+          });
+        } else if (action === 'delete') {
+          Swal.fire({
+            icon: 'success',
+            title: 'Berhasil!',
+            text: 'Draft berhasil dihapus.',
+            confirmButtonText: 'OK'
+          });
+        }
+      } else if (status === 'error') {
+        Swal.fire({
+          icon: 'error',
+          title: 'Gagal!',
+          text: 'Terjadi kesalahan saat memproses permintaan, Silakan coba lagi.',
+          confirmButtonText: 'OK'
+        });
+      }
+    });
   </script>
 </body>
 

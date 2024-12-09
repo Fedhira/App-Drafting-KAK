@@ -218,7 +218,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (isset($_POST['action']) && $_POST['action'] == 'upload') {
         if (isset($_POST['kak_id'])) {
             $kak_id = intval($_POST['kak_id']);
-            $new_status = 'pending'; // Status baru otomatis menjadi pending
+            $new_status = 'pending'; // Status baru otomatis menjadi 'pending'
 
             // Query untuk update status
             $query = "UPDATE kak SET status = ? WHERE kak_id = ?";
@@ -226,20 +226,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             mysqli_stmt_bind_param($stmt, "si", $new_status, $kak_id);
 
             if (mysqli_stmt_execute($stmt)) {
-                echo "Draft berhasil diunggah, status telah diubah menjadi 'pending'.";
-                // Redirect ke halaman lain jika perlu
-                header("Location: ../views/user/daftar.php");
+                // Redirect dengan status success
+                header("Location: ../views/user/daftar.php?status=success&action=upload");
                 exit();
             } else {
-                echo "Gagal mengubah status: " . mysqli_error($koneksi);
+                // Redirect dengan status error
+                header("Location: ../views/user/daftar.php?status=error&action=upload");
+                exit();
             }
 
             mysqli_stmt_close($stmt);
         } else {
-            echo "ID tidak ditemukan. Mohon pastikan form sudah benar.";
+            // Redirect dengan status error jika ID tidak ditemukan
+            header("Location: ../views/user/daftar.php?status=error&action=upload");
+            exit();
         }
     }
 }
+
 
 
 if (isset($_GET['action']) && $_GET['action'] === 'delete' && isset($_GET['kak_id'])) {

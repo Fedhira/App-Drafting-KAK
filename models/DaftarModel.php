@@ -34,14 +34,14 @@ function addRevisi($koneksi, $kak_id, $user_id, $kategori_id, $alasan_penolakan,
         $stmtUpdate->bind_param("i", $kak_id);
         if ($stmtUpdate->execute()) {
             // Redirect jika berhasil
-            header("Location: ../views/supervisor/daftar.php?status=success&action=add");
+            header("Location: ../views/supervisor/daftar.php?status=success&action=tolak");
             exit();
         } else {
-            header("Location: ../views/supervisor/daftar.php?status=error&action=update_status");
+            header("Location: ../views/supervisor/daftar.php?status=error&action=tolak");
             exit();
         }
     } else {
-        header("Location: ../views/supervisor/daftar.php?status=error&action=add");
+        header("Location: ../views/supervisor/daftar.php?status=error&action=tolak");
         exit();
     }
 }
@@ -88,17 +88,6 @@ function getKAKDetails($koneksi, $kak_id)
     return $result->fetch_assoc();
 }
 
-
-// if (isset($_GET['kak_id'])) {
-//     $kak_id = $_GET['kak_id'];
-//     $kakDetails = getKAKDetails($koneksi, $kak_id);
-
-//     // Kirim data dalam format JSON
-//     header('Content-Type: application/json');
-//     echo json_encode($kakDetails);
-//     exit();
-// }
-
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_POST['action'] == 'update') {
     // Ensure you are updating the correct entry based on the kak_id
     $kak_id = $_POST['kak_id'];
@@ -112,10 +101,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_POST['action'] == 'update') {
 
     if ($stmt->execute()) {
         // Redirect to the daftar page after updating status
-        header("Location: ../views/supervisor/daftar.php");
+        header("Location: ../views/supervisor/daftar.php?status=success&action=setuju");
         exit();
     } else {
-        echo "Error updating status.";
+        header("Location: ../views/supervisor/daftar.php?status=error&action=setuju");
+        exit();
     }
 }
 
@@ -142,26 +132,6 @@ function getRevisiByKakId($koneksi, $kak_id)
 
     return $result->fetch_assoc();
 }
-
-
-
-// if (isset($_GET['kak_id'])) {
-//     $kak_id = $_GET['kak_id'];
-
-//     // Ambil data KAK
-//     $kakDetails = getKAKDetails($koneksi, $kak_id);
-
-//     // Ambil data revisi berdasarkan kak_id
-//     $revisiDetails = getRevisiByKakId($koneksi, $kak_id);
-
-//     // Gabungkan data KAK dan revisi
-//     $data = array_merge($kakDetails, $revisiDetails);
-
-//     // Kirim data dalam format JSON
-//     header('Content-Type: application/json');
-//     echo json_encode($data);
-//     exit();
-// }
 
 
 if (isset($_GET['kak_id'])) {

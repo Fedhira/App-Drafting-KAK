@@ -581,6 +581,31 @@ WHERE
     }
   </script>
 
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const status = urlParams.get('status');
+      const action = urlParams.get('action');
+
+      if (status === 'success' && action === 'upload') {
+        Swal.fire({
+          icon: 'success',
+          title: 'Berhasil!',
+          text: 'Draft berhasil diunggah dan status diubah menjadi pending.',
+          confirmButtonText: 'OK'
+        });
+      } else if (status === 'error' && action === 'upload') {
+        Swal.fire({
+          icon: 'error',
+          title: 'Gagal!',
+          text: 'Terjadi kesalahan saat mengunggah draft. Mohon coba lagi.',
+          confirmButtonText: 'OK'
+        });
+      }
+    });
+  </script>
+
+
 
 </body>
 
