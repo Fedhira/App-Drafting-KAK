@@ -386,9 +386,9 @@ WHERE
                   <td>
                       <div class='form-button-action button-group d-inline-flex'>
                           <a href='../../controllers/generate_kak.php?kak_id=$kak_id' class='btn btn-dark btn-round me-2' style='width: 120px;'><i class='fas fa-download'></i> WORD</a>
-                          <button class='btn btn-dark btn-round me-2' style='width: 100px;'>
+                           <a href='../../controllers/generate_pdf.php?kak_id=$kak_id' target='blank' class='btn btn-dark btn-round me-2' style='width: 100px;'>
                               <i class='fa fa-download'></i> PDF
-                          </button>
+                          </a>
                       </div>
                   </td>
               </tr>";
