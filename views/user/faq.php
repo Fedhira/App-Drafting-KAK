@@ -287,10 +287,10 @@ checkLoginAndRole('user', $_SESSION['user_id']);
                                     <h6>Jika Anda memerlukan bantuan lebih lanjut, silakan hubungi tim dukungan kami:</h6>
                                     <ul>
                                         <li>
-                                            <h6><strong>Email:</strong> <a href="mailto:halobakti@baktikominfo.id">halobakti@baktikominfo.id</a></h6>
+                                            <h6><strong>Email:</strong> <a href="mailto:halobakti@baktikominfo.id">support@baktikominfo.id</a></h6>
                                         </li>
                                         <li>
-                                            <h6><strong>Phone:</strong> <a href="tel:021-30205834">021-30205834</a></h6>
+                                            <h6><strong>Phone:</strong> <a href="tel:(021) 31936590 ">(021) 31936590 </a></h6>
                                         </li>
                                     </ul>
                                 </div>

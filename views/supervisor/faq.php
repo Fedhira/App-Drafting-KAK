@@ -50,6 +50,10 @@ $email = isset($_SESSION['email']) ? htmlspecialchars($_SESSION['email']) : 'gue
 <!-- Ikon dari Font Awesome -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
+<!-- SweetAlert -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <!-- CSS File lainnya -->
 <link rel="stylesheet" href="../../assets/css/bootstrap.min.css" />
 <link rel="stylesheet" href="../../assets/css/plugins.min.css" />
@@ -305,10 +309,10 @@ $email = isset($_SESSION['email']) ? htmlspecialchars($_SESSION['email']) : 'gue
                                 <h6>Jika Anda memerlukan bantuan lebih lanjut, silakan hubungi tim dukungan kami:</h6>
                                 <ul>
                                     <li>
-                                        <h6><strong>Email:</strong> <a href="mailto:halobakti@baktikominfo.id">halobakti@baktikominfo.id</a></h6>
+                                        <h6><strong>Email:</strong> <a href="mailto:halobakti@baktikominfo.id">support@baktikominfo.id</a></h6>
                                     </li>
                                     <li>
-                                        <h6><strong>Phone:</strong> <a href="tel:021-30205834">021-30205834</a></h6>
+                                        <h6><strong>Phone:</strong> <a href="tel:(021) 31936590 ">(021) 31936590 </a></h6>
                                     </li>
                                 </ul>
                             </div>
@@ -377,6 +381,27 @@ $email = isset($_SESSION['email']) ? htmlspecialchars($_SESSION['email']) : 'gue
         <script src="../../assets/js/kaiadmin.min.js"></script>
         <script src="../../assets/js/setting-demo.js"></script>
         <script src="../../assets/js/demo.js"></script>
+
+        <script>
+            function logoutConfirm(event) {
+                event.preventDefault(); // Prevents the default link action
+
+                Swal.fire({
+                    title: 'Are you sure you want to logout?',
+                    text: "You will be logged out of the system.",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, logout'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Redirect to logout.php if confirmed
+                        window.location.href = '../../login.php';
+                    }
+                });
+            }
+        </script>
     </div>
 </body>
 

@@ -370,7 +370,7 @@ WHERE
                             <td><?= htmlspecialchars($row['tanggal_diperbarui']); ?></td>
                             <td>
                               <div class="form-button-action button-group d-inline-flex">
-                                <a href="../../controllers/generate_kak.php?kak_id=<?= htmlspecialchars($row['kak_id']); ?>"
+                                <a href="../../controllers/generate_word.php?kak_id=<?= htmlspecialchars($row['kak_id']); ?>"
                                   class="btn btn-dark btn-round me-2" style="width: 120px;">
                                   <i class="fas fa-download"></i> WORD
                                 </a>

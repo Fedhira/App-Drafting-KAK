@@ -284,6 +284,15 @@ if (isset($_GET['kak_id']) && is_numeric($_GET['kak_id'])) {
                                         <input type="text" id="judul" name="judul" class="form-control mb-3"
                                             value="<?php echo htmlspecialchars($data['judul']); ?>" readonly>
 
+                                        <label for="indikator"><strong>Indikator Kinerja Kegiatan</strong></label>
+                                        <input type="text" id="indikator" name="indikator" class="form-control mb-3" value="<?php echo htmlspecialchars($data['indikator']); ?>" readonly>
+
+                                        <label for="satuan_ukur"><strong>Satuan Ukur / Jenis Keluaran</strong></label>
+                                        <input type="text" id="satuan_ukur" name="satuan_ukur" class="form-control mb-3" value="<?php echo htmlspecialchars($data['satuan_ukur']); ?>" readonly>
+
+                                        <label for="volume"><strong>Volume</strong></label>
+                                        <input type="text" id="volume" name="volume" class="form-control mb-3" value="<?php echo htmlspecialchars($data['volume']); ?>" readonly>
+
                                         <label for="latar_belakang"><strong>Latar Belakang</strong></label>
                                         <textarea id="latar_belakang" name="latar_belakang" class="form-control mb-3" readonly><?php echo htmlspecialchars(strip_tags($data['latar_belakang'])); ?></textarea>
 

@@ -15,6 +15,23 @@ require '../../controllers/DraftController.php';
 require '../cek.php';
 checkLoginAndRole('user', $_SESSION['user_id']);
 
+$query = "
+    SELECT kp.nama_divisi 
+    FROM user u 
+    JOIN kategori_program kp ON u.kategori_id = kp.kategori_id 
+    WHERE u.user_id = ?";
+$stmt = $koneksi->prepare($query);
+$stmt->bind_param("i", $user_id);
+$stmt->execute();
+$result = $stmt->get_result();
+
+if ($result->num_rows > 0) {
+    $row = $result->fetch_assoc();
+    $nama_divisi = $row['nama_divisi'];
+} else {
+    $nama_divisi = "Kategori tidak ditemukan.";
+}
+
 
 $kak_id = isset($_GET['kak_id']) ? $_GET['kak_id'] : null;
 
@@ -270,23 +287,19 @@ if (isset($_GET['kak_id']) && is_numeric($_GET['kak_id'])) {
                                         <input type="text" id="no_doc_mak" name="no_doc_mak" class="form-control mb-3" value="<?php echo isset($data['no_doc_mak']) ? htmlspecialchars($data['no_doc_mak']) : ''; ?>" readonly>
 
                                         <label for="kategori_id"><strong>Kategori Program</strong></label>
-                                        <select id="kategori_id" name="kategori_id" class="form-control mb-3" readonly>
-                                            <option value="">Pilih Kategori</option>
-                                            <?php
-                                            $categories = fetchAllKategori($koneksi);
-                                            if (!empty($categories)) {
-                                                foreach ($categories as $category) {
-                                                    $selected = $category['kategori_id'] == $data['kategori_id'] ? 'selected' : '';
-                                                    echo '<option value="' . htmlspecialchars($category['kategori_id']) . '" ' . $selected . '>' . htmlspecialchars($category['nama_divisi']) . '</option>';
-                                                }
-                                            } else {
-                                                echo '<option value="">Tidak ada kategori tersedia</option>';
-                                            }
-                                            ?>
-                                        </select>
+                                        <input type="text" id="kategori_id" name="kategori_id" class="form-control mb-3" autofocus value="<?= htmlspecialchars($nama_divisi); ?>" readonly>
 
                                         <label for="judul"><strong>Judul KAK</strong></label>
                                         <input type="text" id="judul" name="judul" class="form-control mb-3" value="<?php echo htmlspecialchars($data['judul']); ?>" readonly>
+
+                                        <label for="indikator"><strong>Indikator Kinerja Kegiatan</strong></label>
+                                        <input type="text" id="indikator" name="indikator" class="form-control mb-3" value="<?php echo htmlspecialchars($data['indikator']); ?>" readonly>
+
+                                        <label for="satuan_ukur"><strong>Satuan Ukur / Jenis Keluaran</strong></label>
+                                        <input type="text" id="satuan_ukur" name="satuan_ukur" class="form-control mb-3" value="<?php echo htmlspecialchars($data['satuan_ukur']); ?>" readonly>
+
+                                        <label for="volume"><strong>Volume</strong></label>
+                                        <input type="text" id="volume" name="volume" class="form-control mb-3" value="<?php echo htmlspecialchars($data['volume']); ?>" readonly>
 
                                         <label for="latar_belakang"><strong>Latar Belakang</strong></label>
                                         <textarea class="form-control mb-3" id="latar_belakang" name="latar_belakang" readonly><?php echo isset($data['latar_belakang']) ? htmlspecialchars(strip_tags($data['latar_belakang'])) : ''; ?></textarea>

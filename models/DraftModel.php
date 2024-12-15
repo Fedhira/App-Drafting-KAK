@@ -5,47 +5,64 @@ date_default_timezone_set('Asia/Jakarta');
 
 function addKak($koneksi, $data, $lampiran = null)
 {
-    // Tetapkan status default sebagai 'draft' jika tidak diatur
+    // Tetapkan status default
     $status = isset($data['status']) ? $data['status'] : 'draft';
 
-    $targetDir = "uploads/";
+    // Ambil kategori_id berdasarkan user_id
+    $user_id = $_SESSION['user_id'] ?? null;
+    if (!$user_id) {
+        die("User ID tidak ditemukan dalam sesi.");
+    }
 
-    // Pastikan direktori uploads ada
+    $query = "SELECT kategori_id FROM user WHERE user_id = ?";
+    $stmt = $koneksi->prepare($query);
+    $stmt->bind_param("i", $user_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $user = $result->fetch_assoc();
+    $data['kategori_id'] = $user['kategori_id'] ?? die("Kategori ID tidak ditemukan.");
+
+    // Validasi indikator
+    if (!isset($data['indikator']) || trim($data['indikator']) === '') {
+        $data['indikator'] = 'Default Value'; // Atur nilai default
+    }
+
+    // Validasi file upload
+    $targetDir = "uploads/";
     if (!is_dir($targetDir)) {
         mkdir($targetDir, 0755, true);
     }
 
-    // Cek apakah file diunggah
-    if (isset($_FILES['lampiran']) && $_FILES['lampiran']['error'] == 0) {
-        $fileName = basename($_FILES['lampiran']['name']);
-        $fileName = preg_replace('/\s+/', '_', $fileName); // Ganti spasi dengan underscore
+    if (isset($_FILES['lampiran']) && $_FILES['lampiran']['error'] === UPLOAD_ERR_OK) {
+        $fileName = preg_replace('/\s+/', '_', basename($_FILES['lampiran']['name']));
         $targetFilePath = $targetDir . $fileName;
-
-        // Pindahkan file yang diunggah
         if (move_uploaded_file($_FILES['lampiran']['tmp_name'], $targetFilePath)) {
-            $lampiran = $fileName; // Set lampiran jika upload berhasil
+            $lampiran = $fileName;
         } else {
-            $lampiran = null; // Jika upload gagal, set lampiran menjadi null
+            $lampiran = null;
         }
     }
 
+    // Simpan ke database
     $query = "INSERT INTO kak (
-        user_id, kategori_id, no_doc_mak, judul, status, latar_belakang,
-        dasar_hukum, gambaran_umum, tujuan, target_sasaran, unit_kerja,
-        ruang_lingkup, produk_jasa_dihasilkan, waktu_pelaksanaan,
-        tenaga_ahli_terampil, peralatan, metode_kerja, manajemen_resiko,
-        laporan_pengajuan_pekerjaan, sumber_dana_prakiraan_biaya, lampiran,
-        penutup, created_at, updated_at
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())";
+        user_id, kategori_id, no_doc_mak, judul, status, indikator, satuan_ukur, volume,
+        latar_belakang, dasar_hukum, gambaran_umum, tujuan, target_sasaran, unit_kerja,
+        ruang_lingkup, produk_jasa_dihasilkan, waktu_pelaksanaan, tenaga_ahli_terampil,
+        peralatan, metode_kerja, manajemen_resiko, laporan_pengajuan_pekerjaan,
+        sumber_dana_prakiraan_biaya, lampiran, penutup, created_at, updated_at
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())";
 
     $stmt = $koneksi->prepare($query);
     $stmt->bind_param(
-        "iissssssssssssssssssss",
+        "iisssssssssssssssssssssss",
         $data['user_id'],
         $data['kategori_id'],
         $data['no_doc_mak'],
         $data['judul'],
         $status,
+        $data['indikator'],
+        $data['satuan_ukur'],
+        $data['volume'],
         $data['latar_belakang'],
         $data['dasar_hukum'],
         $data['gambaran_umum'],
@@ -69,13 +86,43 @@ function addKak($koneksi, $data, $lampiran = null)
         header("Location: ../views/user/draft.php?status=success&action=add");
         exit;
     } else {
-        header("Location: ../views/user/draft.php?status=error&action=add");
-        exit;
+        die("Error saat menambahkan data: " . $stmt->error);
     }
 }
 
+
 function updateKak($koneksi, $data, $lampiran = null)
 {
+    $status = isset($data['status']) ? $data['status'] : 'draft';
+
+    // Ambil kategori_id dari user yang sedang login
+    $user_id = $_SESSION['user_id'];
+    $query = "SELECT kategori_id FROM user WHERE user_id = ?";
+    $stmt = $koneksi->prepare($query);
+    $stmt->bind_param("i", $user_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $user = $result->fetch_assoc();
+
+    if ($user) {
+        $data['kategori_id'] = $user['kategori_id'];
+    } else {
+        die("User tidak ditemukan.");
+    }
+
+    // Validasi kategori_id
+    $kategori_id = $data['kategori_id'];
+    $query = "SELECT COUNT(*) AS count FROM kategori_program WHERE kategori_id = ?";
+    $stmt = $koneksi->prepare($query);
+    $stmt->bind_param("i", $kategori_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $row = $result->fetch_assoc();
+
+    if ($row['count'] == 0) {
+        die("Invalid kategori_id: $kategori_id.");
+    }
+
     $targetDir = "uploads/";
 
     // Cek apakah file lampiran baru diunggah
@@ -97,7 +144,7 @@ function updateKak($koneksi, $data, $lampiran = null)
     $status = isset($data['status']) && !empty($data['status']) ? $data['status'] : $data['current_status'];
 
     $query = "UPDATE kak SET
-        kategori_id = ?, no_doc_mak = ?, judul = ?, status = ?, latar_belakang = ?,
+        kategori_id = ?, no_doc_mak = ?, judul = ?, status = ?, indikator = ?, satuan_ukur = ?, volume = ?, latar_belakang = ?,
         dasar_hukum = ?, gambaran_umum = ?, tujuan = ?, target_sasaran = ?,
         unit_kerja = ?, ruang_lingkup = ?, produk_jasa_dihasilkan = ?, waktu_pelaksanaan = ?,
         tenaga_ahli_terampil = ?, peralatan = ?, metode_kerja = ?, manajemen_resiko = ?,
@@ -107,11 +154,14 @@ function updateKak($koneksi, $data, $lampiran = null)
 
     $stmt = $koneksi->prepare($query);
     $stmt->bind_param(
-        "issssssssssssssssssssi",
+        "isssssssssssssssssssssssi",
         $data['kategori_id'],
         $data['no_doc_mak'],
         $data['judul'],
         $status,
+        $data['indikator'],
+        $data['satuan_ukur'],
+        $data['volume'],
         $data['latar_belakang'],
         $data['dasar_hukum'],
         $data['gambaran_umum'],
